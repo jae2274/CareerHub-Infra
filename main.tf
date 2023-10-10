@@ -26,3 +26,6 @@ locals {
 data "local_file" "check_backend_config"{
   filename = "${path.root}/${local.backend_config_file}"
 }
+
+
+
