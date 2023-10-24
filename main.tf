@@ -19,6 +19,7 @@ module "git_branch" {
 locals {
   prefix = module.git_branch.prefix
   branch = module.git_branch.branch
+  env = module.git_branch.branch
   backend_config_file = "${local.prefix}backend.tf"
 }
 
@@ -26,6 +27,4 @@ locals {
 data "local_file" "check_backend_config"{
   filename = "${path.root}/${local.backend_config_file}"
 }
-
-
 

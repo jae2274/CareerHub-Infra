@@ -6,6 +6,41 @@ locals {
   }
 }
 
+variable "terraform_role" {
+  type = string
+}
+
+
+provider "aws" {
+  assume_role {
+    role_arn = var.terraform_role
+    policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "*",
+      "Resource": "*",
+      "Effect": "Allow",
+      "Condition": {
+        "StringEqualsIfExists": {
+          "aws:ResourceTag/env": "${local.env}",
+          "aws:RequestTag/env": "${local.env}"
+        }
+      },
+      "Sid": "RequireEnvTagForReadActions"
+    }
+  ]
+}
+EOF
+  }
+
+  default_tags {
+    tags = {
+      env = local.env
+    }
+  }
+}
 
 
 module "lambda_function_existing_package_local" {
@@ -26,11 +61,6 @@ module "lambda_function_existing_package_local" {
     SPRING_PROFILES_ACTIVE = "aws"
     jasyptPassword = "rM5zjyl09gtYucJ"
   }
-  tags = {
-    monitoring = "false"
-    env = local.branch
-  }
-
 
 
   cloudwatch_logs_retention_in_days = 3
