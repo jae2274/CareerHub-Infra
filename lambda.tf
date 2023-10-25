@@ -1,5 +1,3 @@
-
-
 locals {
   lambda = {
     function_name = "${local.prefix}jobposting_provider"
@@ -10,29 +8,12 @@ variable "terraform_role" {
   type = string
 }
 
-
 provider "aws" {
   assume_role {
     role_arn = var.terraform_role
-    policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "*",
-      "Resource": "*",
-      "Effect": "Allow",
-      "Condition": {
-        "StringEqualsIfExists": {
-          "aws:ResourceTag/env": "${local.env}",
-          "aws:RequestTag/env": "${local.env}"
-        }
-      },
-      "Sid": "RequireEnvTagForReadActions"
+    tags = {
+        env = local.env
     }
-  ]
-}
-EOF
   }
 
   default_tags {
