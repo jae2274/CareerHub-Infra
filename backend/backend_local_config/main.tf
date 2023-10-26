@@ -33,7 +33,7 @@ locals {
 }
 
 resource "local_file" "backend_config" {
-  filename = "${local.terraform_root_dir}${local.backend_file}"
+  filename = "${local.terraform_root_dir}infra/${local.backend_file}"
   content = <<EOF
 terraform {
   backend "s3" {
@@ -44,12 +44,9 @@ terraform {
     dynamodb_table = "${local.backend.dynamodb_table}"
   }
 }
-EOF
-}
+// This file is generated automatically by backend/backend_local_config and should not be modified manually
+// 이 파일은 backend/backend_local_config에 의해 자동으로 생성되며 수동으로 수정하지 마십시오.
 
-resource "local_file" "gitattributes"{
-  filename = "${local.project_root_dir}.gitattributes"
-  content = <<EOF
-*${local.backend_file_without_prefix} merge=ours
+// 이와 같이 해당 파일을 생성하는 이유는, terraform backend의 속성에 상수 이외의 변수를 사용할 수 없기 때문입니다.
 EOF
 }

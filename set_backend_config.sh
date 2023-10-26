@@ -9,7 +9,7 @@ echo "start local file apply"
 terraform apply --auto-approve
 echo "end local file apply"
 
-cd ../../
+cd ../../infra
 echo  "start backend config"
 terraform init -reconfigure
 echo  "end backend config"
