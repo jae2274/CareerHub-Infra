@@ -1,7 +1,7 @@
 
 
 module "git_branch" {
-  source = "../../module/git_branch"
+  source = "github.com/jae2274/terraform_modules/git_branch"
   branch_to_prefix_map = {
     "main" = ""
   }

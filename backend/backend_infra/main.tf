@@ -18,7 +18,7 @@ provider "aws" {
 }
 
 module s3_backend{
-  source = "s3_backend"
+  source = "github.com/jae2274/terraform_modules/s3_backend"
   bucket = local.backend.bucket
   dynamodb_lock_table = local.backend.dynamodb_table
 }
