@@ -158,8 +158,8 @@ terraform.rc
 # End of https://www.toptal.com/developers/gitignore/api/terraform
 
 
-!backend_infra/terraform.tfstate
-!backend_infra/terraform.tfstate.backup
+!backend/backend_infra/terraform.tfstate
+!backend/backend_infra/terraform.tfstate.backup
 
 *backend.tf
 *.terraform.lock.hcl

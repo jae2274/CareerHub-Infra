@@ -1,7 +1,7 @@
 
 
 module "git_branch" {
-  source = "../module/git_branch"
+  source = "../../module/git_branch"
   branch_to_prefix_map = {
     "main" = ""
   }
@@ -11,7 +11,7 @@ module "git_branch" {
 locals {
   prefix = module.git_branch.prefix
 
-  terraform_root_dir = "${path.root}/../"
+  terraform_root_dir = "${path.root}/../../"
   project_root_dir = local.terraform_root_dir
   backend_file_without_prefix = "backend.tf"
 
@@ -23,7 +23,7 @@ data terraform_remote_state backend{
   backend = "local"
 
   config = {
-    path = "${local.terraform_root_dir}/backend_infra/terraform.tfstate"
+    path = "${local.terraform_root_dir}/backend/backend_infra/terraform.tfstate"
   }
 }
 

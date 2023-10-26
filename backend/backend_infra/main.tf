@@ -18,7 +18,7 @@ provider "aws" {
 }
 
 module s3_backend{
-  source = "../module/s3_backend"
+  source = "s3_backend"
   bucket = local.backend.bucket
   dynamodb_lock_table = local.backend.dynamodb_table
 }

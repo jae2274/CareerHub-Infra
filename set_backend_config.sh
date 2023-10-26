@@ -1,5 +1,5 @@
-cd backend_local_config/
+cd backend/backend_local_config/
 terraform init
 terraform apply --auto-approve
-cd ../
+cd ../../
 terraform init -reconfigure
