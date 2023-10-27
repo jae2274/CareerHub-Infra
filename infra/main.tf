@@ -21,6 +21,7 @@ locals {
   branch = module.git_branch.branch
   env = module.git_branch.branch
   backend_config_file = "${local.prefix}backend.tf"
+  service_name = "career-hub"
 }
 
 //CHECK BACKEND CONFIG FILE
@@ -28,3 +29,31 @@ data "local_file" "check_backend_config"{
   filename = "${path.root}/${local.backend_config_file}"
 }
 
+provider "aws" {
+  assume_role {
+    role_arn = var.terraform_role
+    tags = {
+      env = local.env
+    }
+  }
+
+  default_tags {
+    tags = {
+      env = local.env
+    }
+  }
+
+  region = var.region
+}
+
+module "mongodb_atlas_serverless" {
+  source = "./mongodb_atlas_serverless"
+
+  atlas_key = {
+    public_key= var.atlas_key.public_key
+    private_key= var.atlas_key.private_key
+  }
+
+  mongodb_region = var.region
+  service_name = local.service_name
+}

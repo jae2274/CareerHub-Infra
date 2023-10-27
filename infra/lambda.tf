@@ -4,24 +4,14 @@ locals {
   }
 }
 
+variable "region" {
+  type = string
+}
 variable "terraform_role" {
   type = string
 }
 
-provider "aws" {
-  assume_role {
-    role_arn = var.terraform_role
-    tags = {
-        env = local.env
-    }
-  }
 
-  default_tags {
-    tags = {
-      env = local.env
-    }
-  }
-}
 
 
 module "lambda_function_existing_package_local" {
@@ -40,7 +30,7 @@ module "lambda_function_existing_package_local" {
   environment_variables = {
     FUNCTION_NAME = "callLambda"
     SPRING_PROFILES_ACTIVE = "aws"
-    jasyptPassword = "rM5zjyl09gtYucJ"
+    jasyptPassword = var.jasypt_password
   }
 
 
