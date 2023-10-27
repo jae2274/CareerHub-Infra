@@ -17,6 +17,10 @@ variable mongodb_region{
   type = string
 }
 
-variable "service_name" {
+variable "project_name" {
   type = string
+}
+
+variable "serverless_databases" {
+  type = list(string)
 }

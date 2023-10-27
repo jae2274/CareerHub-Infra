@@ -22,7 +22,7 @@ data "mongodbatlas_roles_org_id" "organization" {
 }
 
 resource "mongodbatlas_project" "project" {
-  name   = "${var.service_name}-project"
+  name   = var.project_name
   org_id = data.mongodbatlas_roles_org_id.organization.id
 
 
@@ -36,14 +36,18 @@ resource "mongodbatlas_project" "project" {
 
 
 resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink" {
+  for_each = mongodbatlas_serverless_instance.mongodb_serverless
+
   project_id   = mongodbatlas_project.project.id
-  instance_name = mongodbatlas_serverless_instance.mongodb_serverless.name
+  instance_name = each.key
   provider_name = "AWS"
 }
 
 resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
+  for_each = toset(var.serverless_databases)
+
   project_id   = mongodbatlas_project.project.id
-  name         = "${var.service_name}-db"
+  name         = each.key
   provider_settings_backing_provider_name = "AWS"
   provider_settings_provider_name = "SERVERLESS"
   provider_settings_region_name = join("_",split("-",upper(var.mongodb_region)))

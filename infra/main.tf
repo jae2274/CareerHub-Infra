@@ -46,8 +46,8 @@ provider "aws" {
   region = var.region
 }
 
-module "mongodb_atlas_serverless" {
-  source = "./mongodb_atlas_serverless"
+module "mongodb_atlas" {
+  source = "./mongodb_atlas"
 
   atlas_key = {
     public_key= var.atlas_key.public_key
@@ -55,5 +55,9 @@ module "mongodb_atlas_serverless" {
   }
 
   mongodb_region = var.region
-  service_name = local.service_name
+  project_name = "${local.service_name}-project"
+
+  serverless_databases = [
+    "${local.service_name}-db"
+  ]
 }
