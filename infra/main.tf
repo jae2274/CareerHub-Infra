@@ -9,8 +9,11 @@ terraform {
 // GET CURRENT BRANCH
 module "git_branch" {
   source = "github.com/jae2274/terraform_modules/git_branch"
-  branch_to_prefix_map = {
-    "main" = ""
+  branch_map = {
+    main = {
+        prefix = ""
+        env = "prod"
+    }
   }
   prefix_separator = "-"
 }
@@ -19,7 +22,7 @@ module "git_branch" {
 locals {
   prefix = module.git_branch.prefix
   branch = module.git_branch.branch
-  env = module.git_branch.branch
+  env = module.git_branch.env
   backend_config_file = "${local.prefix}backend.tf"
   service_name = "career-hub"
 }
@@ -55,9 +58,18 @@ module "mongodb_atlas" {
   }
 
   mongodb_region = var.region
-  project_name = "${local.service_name}-project"
+  project_name = "${local.prefix}${local.service_name}-project"
+
+  admin_db_user = {
+    username = var.admin_db_user.username
+    password = var.admin_db_user.password
+  }
 
   serverless_databases = [
-    "${local.service_name}-db"
+    "${local.prefix}${local.service_name}-db"
   ]
+
+  tags = {
+    env = local.env
+  }
 }

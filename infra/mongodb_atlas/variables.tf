@@ -24,3 +24,15 @@ variable "project_name" {
 variable "serverless_databases" {
   type = list(string)
 }
+
+variable "tags" {
+  type = map(string)
+  default = {}
+}
+
+variable "admin_db_user"{
+  type = object({
+    username = string
+    password = string
+  })
+}

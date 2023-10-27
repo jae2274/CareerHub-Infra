@@ -52,4 +52,24 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   provider_settings_provider_name = "SERVERLESS"
   provider_settings_region_name = join("_",split("-",upper(var.mongodb_region)))
   continuous_backup_enabled = true
+
+  dynamic "tags" {
+    for_each = var.tags
+    content {
+      key   = tags.key
+      value = tags.value
+    }
+  }
+}
+
+resource "mongodbatlas_database_user" "admin_db_user" {
+  project_id = mongodbatlas_project.project.id
+  username   = var.admin_db_user.username
+  password   = var.admin_db_user.password
+  auth_database_name = "admin"
+
+  roles {
+    role_name     = "atlasAdmin"
+    database_name = "admin"
+  }
 }
