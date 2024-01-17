@@ -6,12 +6,12 @@ variable "vpc_cidr_block" {
   type = string
 }
 
-variable "pair_subnets" {
+variable "public_subnets" {
   type = map(object({
-    public_cidr_block  = string
-    private_cidr_block = string
-    az                 = string
+    public_cidr_block = string
+    az                = string
   }))
+
 
   default = {}
 }
