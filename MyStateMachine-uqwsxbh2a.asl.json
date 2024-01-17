@@ -1,0 +1,266 @@
+{
+  "Comment": "A description of my state machine",
+  "StartAt": "getSites",
+  "States": {
+    "getSites": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "OutputPath": "$.Payload",
+      "Parameters": {
+        "Payload.$": "$",
+        "FunctionName": "arn:aws:lambda:ap-northeast-2:986069063944:function:JobPostingProvider:$LATEST"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
+        }
+      ],
+      "Next": "Map"
+    },
+    "Map": {
+      "Type": "Map",
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "getPostingIds",
+        "States": {
+          "getPostingIds": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::lambda:invoke",
+            "Parameters": {
+              "FunctionName": "arn:aws:lambda:ap-northeast-2:986069063944:function:JobPostingProvider:$LATEST",
+              "Payload": {
+                "functionName": "getPostingIds",
+                "site.$": "$.site",
+                "page.$": "$.page",
+                "size.$": "$.size"
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
+            "Next": "Pass",
+            "ResultPath": "$.result",
+            "ResultSelector": {
+              "newJobPostingIds.$": "$.Payload.newJobPostingIds"
+            }
+          },
+          "Pass": {
+            "Type": "Pass",
+            "Next": "Wait",
+            "Parameters": {
+              "site.$": "$.site",
+              "page.$": "States.MathAdd($.page, 1)",
+              "size.$": "$.size",
+              "jobPostingIds.$": "States.Array($.result.newJobPostingIds, $.jobPostingIds )",
+              "newIdSize": "States.ArrayLength($.result.newJobPostingIds)"
+            }
+          },
+          "Wait": {
+            "Type": "Wait",
+            "Seconds": 5,
+            "Next": "IfNewPostingIdsEmpty"
+          },
+          "IfNewPostingIdsEmpty": {
+            "Type": "Choice",
+            "Choices": [
+              {
+                "Variable": "$.newIdSize",
+                "NumericEquals": 0,
+                "Next": "Map (1)"
+              }
+            ],
+            "Default": "getPostingIds"
+          },
+          "Map (1)": {
+            "Type": "Map",
+            "ItemProcessor": {
+              "ProcessorConfig": {
+                "Mode": "INLINE"
+              },
+              "StartAt": "getJobPostingDetail",
+              "States": {
+                "getJobPostingDetail": {
+                  "Type": "Task",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "OutputPath": "$.Payload",
+                  "Parameters": {
+                    "FunctionName": "arn:aws:lambda:ap-northeast-2:986069063944:function:JobPostingProvider:$LATEST",
+                    "Payload": {
+                      "functionName": "getJobPostingDetail",
+                      "site.$": "$.site",
+                      "jobPostingId.$": "$.jobPostingId",
+                      "etcInfo.$": "$.etcInfo"
+                    }
+                  },
+                  "Retry": [
+                    {
+                      "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                      ],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 6,
+                      "BackoffRate": 2
+                    }
+                  ],
+                  "Next": "Wait (2)",
+                  "Catch": [
+                    {
+                      "ErrorEquals": [
+                        "States.ALL"
+                      ],
+                      "Next": "End"
+                    }
+                  ]
+                },
+                "Wait (2)": {
+                  "Type": "Wait",
+                  "Seconds": 5,
+                  "Next": "Choice"
+                },
+                "Choice": {
+                  "Type": "Choice",
+                  "Choices": [
+                    {
+                      "Or": [
+                        {
+                          "Not": {
+                            "Variable": "$.company",
+                            "IsPresent": true
+                          }
+                        },
+                        {
+                          "Variable": "$.company",
+                          "IsNull": true
+                        }
+                      ],
+                      "Next": "getCompanyDetail"
+                    }
+                  ],
+                  "Default": "SQS SendMessage"
+                },
+                "getCompanyDetail": {
+                  "Type": "Task",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "FunctionName": "arn:aws:lambda:ap-northeast-2:986069063944:function:JobPostingProvider:$LATEST",
+                    "Payload": {
+                      "functionName": "getCompanyDetail",
+                      "site.$": "$.site",
+                      "companyId.$": "$.companyId"
+                    }
+                  },
+                  "Retry": [
+                    {
+                      "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                      ],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 6,
+                      "BackoffRate": 2
+                    }
+                  ],
+                  "Next": "Wait (3)",
+                  "ResultPath": "$.company",
+                  "ResultSelector": {
+                    "name.$": "$.Payload.name",
+                    "companyUrl.$": "$.Payload.companyUrl",
+                    "companyImages.$": "$.Payload.companyImages",
+                    "description.$": "$.Payload.description",
+                    "companyLogo.$": "$.Payload.companyLogo"
+                  },
+                  "Catch": [
+                    {
+                      "ErrorEquals": [
+                        "States.ALL"
+                      ],
+                      "Next": "End"
+                    }
+                  ]
+                },
+                "Wait (3)": {
+                  "Type": "Wait",
+                  "Seconds": 5,
+                  "Next": "SQS SendMessage"
+                },
+                "SQS SendMessage": {
+                  "Type": "Task",
+                  "Resource": "arn:aws:states:::sqs:sendMessage",
+                  "Parameters": {
+                    "QueueUrl": "https://sqs.ap-northeast-2.amazonaws.com/986069063944/JobPostingInfoSQS.fifo",
+                    "MessageBody.$": "$"
+                  },
+                  "Next": "saveJobPosting",
+                  "ResultPath": null
+                },
+                "saveJobPosting": {
+                  "Type": "Task",
+                  "Resource": "arn:aws:states:::lambda:invoke",
+                  "Parameters": {
+                    "Payload.$": "$",
+                    "FunctionName": "arn:aws:lambda:ap-northeast-2:986069063944:function:JobPostingProvider:$LATEST"
+                  },
+                  "Retry": [
+                    {
+                      "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                      ],
+                      "IntervalSeconds": 2,
+                      "MaxAttempts": 6,
+                      "BackoffRate": 2
+                    }
+                  ],
+                  "Next": "End"
+                },
+                "End": {
+                  "Type": "Pass",
+                  "End": true,
+                  "Result": {}
+                }
+              }
+            },
+            "End": true,
+            "MaxConcurrency": 1,
+            "ItemsPath": "$.jobPostingIds"
+          }
+        }
+      },
+      "End": true,
+      "ItemsPath": "$.sites",
+      "ItemSelector": {
+        "site.$": "$$.Map.Item.Value.site",
+        "page": 1,
+        "size.$": "$$.Map.Item.Value.pageSize",
+        "jobPostingIds": []
+      }
+    }
+  }
+}

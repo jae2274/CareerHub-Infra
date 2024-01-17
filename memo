@@ -1,0 +1,10 @@
+
+
+
+terraform import 'module.mongodb_atlas_serverless.mongodbatlas_privatelink_endpoint_serverless.privatelink["career-hub-db"]'  653b54d380c15c39ddd20a11--career-hub-db--653b5ee97f73195827d2b706
+
+terraform import 'module.mongodb_atlas_serverless.mongodbatlas_serverless_instance.mongodb_serverless["career-hub-db"]' 653b54d380c15c39ddd20a11-career-hub-db
+
+
+terraform state rm module.mongodb_atlas_serverless.mongodbatlas_privatelink_endpoint_serverless.privatelink
+terraform state rm module.mongodb_atlas_serverless.mongodbatlas_serverless_instance.mongodb_serverless

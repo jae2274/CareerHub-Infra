@@ -99,7 +99,11 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_tables[each.key].id
 }
 
-output "public_subnets" {
+output "vpc" {
+  value = aws_vpc.vpc
+}
+
+output "public_subnet_ids" {
   value = aws_subnet.aws_public_subnets
 }
 

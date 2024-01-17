@@ -4,14 +4,16 @@ variable "jasypt_password" {
 
 variable "atlas_key" {
   type = object({
-    public_key = string
+    public_key  = string
     private_key = string
   })
 }
 
-variable "admin_db_user"{
+variable "admin_db_user" {
   type = object({
     username = string
     password = string
   })
 }
+
+

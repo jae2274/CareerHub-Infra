@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     mongodbatlas = {
-      source = "mongodb/mongodbatlas"
+      source  = "mongodb/mongodbatlas"
       version = "1.12.2"
     }
   }
@@ -38,7 +38,7 @@ resource "mongodbatlas_project" "project" {
 resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink" {
   for_each = mongodbatlas_serverless_instance.mongodb_serverless
 
-  project_id   = mongodbatlas_project.project.id
+  project_id    = mongodbatlas_project.project.id
   instance_name = each.key
   provider_name = "AWS"
 }
@@ -46,12 +46,12 @@ resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink" {
 resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   for_each = toset(var.serverless_databases)
 
-  project_id   = mongodbatlas_project.project.id
-  name         = each.key
+  project_id                              = mongodbatlas_project.project.id
+  name                                    = each.key
   provider_settings_backing_provider_name = "AWS"
-  provider_settings_provider_name = "SERVERLESS"
-  provider_settings_region_name = join("_",split("-",upper(var.mongodb_region)))
-  continuous_backup_enabled = true
+  provider_settings_provider_name         = "SERVERLESS"
+  provider_settings_region_name           = join("_", split("-", upper(var.mongodb_region)))
+  continuous_backup_enabled               = true
 
   dynamic "tags" {
     for_each = var.tags
@@ -62,10 +62,11 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   }
 }
 
+
 resource "mongodbatlas_database_user" "admin_db_user" {
-  project_id = mongodbatlas_project.project.id
-  username   = var.admin_db_user.username
-  password   = var.admin_db_user.password
+  project_id         = mongodbatlas_project.project.id
+  username           = var.admin_db_user.username
+  password           = var.admin_db_user.password
   auth_database_name = "admin"
 
   roles {
@@ -73,3 +74,7 @@ resource "mongodbatlas_database_user" "admin_db_user" {
     database_name = "admin"
   }
 }
+
+#output "privatelink_endpoint_service_name" {
+#  value = mongodbatlas_privatelink_endpoint_serverless.privatelink.endpoint_service_name
+#}
