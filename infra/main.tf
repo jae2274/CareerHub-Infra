@@ -38,6 +38,26 @@ module "vpc_infra" {
   }
 }
 
+module "eks_playground" {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "18.26.6"
+
+  cluster_name    = "${local.prefix}${local.service_name}-eks"
+  cluster_version = "1.28"
+  vpc_id          = module.vpc_infra.vpc.id
+  subnet_ids      = [for subnet in module.vpc_infra.public_subnet_ids : subnet.id]
+
+
+  eks_managed_node_groups = {
+    default_node_group = {
+      min_size       = 2
+      max_size       = 3
+      desired_size   = 2
+      instance_types = ["t3a.medium"]
+      capacity_type  = "SPOT"
+    }
+  }
+}
 
 # module "mongodb_atlas" {
 #   source = "./mongodb_atlas"
