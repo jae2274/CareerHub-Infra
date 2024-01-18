@@ -26,6 +26,9 @@ module "eks_infra" {
   subnet_ids        = [for subnet in module.vpc_infra.public_subnets : subnet.id]
   node_ssh_key_name = aws_key_pair.eks_keypair.key_name
 
-  instance_types = ["t3a.medium"]
-  capacity_type  = "ON_DEMAND"
+  # instance_types               = ["t3a.medium"]
+  instance_types               = ["t3a.small"]
+  capacity_type                = "ON_DEMAND"
+  eks_cluster_admin_role_names = var.eks_cluster_admin_role_names
+  eks_cluster_admin_user_names = var.eks_cluster_admin_user_names
 }

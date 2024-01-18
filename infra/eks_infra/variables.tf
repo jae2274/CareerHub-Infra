@@ -32,3 +32,11 @@ variable "cluster_version" {
   type    = string
   default = "1.28"
 }
+
+variable "eks_cluster_admin_role_names" {
+  type = list(string)
+}
+
+variable "eks_cluster_admin_user_names" {
+  type = list(string)
+}
