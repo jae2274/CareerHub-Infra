@@ -58,6 +58,6 @@ output "vpc" {
   value = aws_vpc.vpc
 }
 
-output "public_subnet_ids" {
+output "public_subnets" {
   value = aws_subnet.aws_public_subnets
 }
