@@ -2,7 +2,7 @@ terraform {
   required_providers {
     mongodbatlas = {
       source  = "mongodb/mongodbatlas"
-      version = "1.12.2"
+      version = "1.14.0"
     }
   }
 }
@@ -11,11 +11,6 @@ provider "mongodbatlas" {
   public_key  = var.atlas_key.public_key
   private_key = var.atlas_key.private_key
 }
-#
-#provider "mongodbatlas" {
-#  public_key = var.atlas_key.public_key
-#  private_key = var.atlas_key.private_key
-#}
 
 
 data "mongodbatlas_roles_org_id" "organization" {
@@ -34,15 +29,6 @@ resource "mongodbatlas_project" "project" {
   is_schema_advisor_enabled                        = true
 }
 
-
-resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink" {
-  for_each = mongodbatlas_serverless_instance.mongodb_serverless
-
-  project_id    = mongodbatlas_project.project.id
-  instance_name = each.key
-  provider_name = "AWS"
-}
-
 resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   for_each = toset(var.serverless_databases)
 
@@ -53,6 +39,7 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   provider_settings_region_name           = join("_", split("-", upper(var.mongodb_region)))
   continuous_backup_enabled               = true
 
+
   dynamic "tags" {
     for_each = var.tags
     content {
@@ -61,7 +48,6 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
     }
   }
 }
-
 
 resource "mongodbatlas_database_user" "admin_db_user" {
   project_id         = mongodbatlas_project.project.id
@@ -73,8 +59,21 @@ resource "mongodbatlas_database_user" "admin_db_user" {
     role_name     = "atlasAdmin"
     database_name = "admin"
   }
+
+  dynamic "roles" {
+    for_each = mongodbatlas_serverless_instance.mongodb_serverless
+
+    content {
+      role_name     = "atlasAdmin"
+      database_name = roles.value.name
+    }
+  }
 }
 
-#output "privatelink_endpoint_service_name" {
-#  value = mongodbatlas_privatelink_endpoint_serverless.privatelink.endpoint_service_name
-#}
+resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
+  for_each = mongodbatlas_serverless_instance.mongodb_serverless
+
+  project_id    = mongodbatlas_project.project.id
+  instance_name = each.value.name
+  provider_name = "AWS"
+}

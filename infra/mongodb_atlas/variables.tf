@@ -8,12 +8,12 @@
 #
 variable "atlas_key" {
   type = object({
-    public_key = string
+    public_key  = string
     private_key = string
   })
 }
 
-variable mongodb_region{
+variable "mongodb_region" {
   type = string
 }
 
@@ -26,11 +26,11 @@ variable "serverless_databases" {
 }
 
 variable "tags" {
-  type = map(string)
+  type    = map(string)
   default = {}
 }
 
-variable "admin_db_user"{
+variable "admin_db_user" {
   type = object({
     username = string
     password = string
