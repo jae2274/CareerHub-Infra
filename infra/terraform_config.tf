@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "5.19.0"
     }
+    mongodbatlas = {
+      source  = "mongodb/mongodbatlas"
+      version = "1.14.0"
+    }
   }
 }
 // GET CURRENT BRANCH
