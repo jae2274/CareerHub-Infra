@@ -59,15 +59,19 @@ resource "mongodbatlas_database_user" "admin_db_user" {
     role_name     = "atlasAdmin"
     database_name = "admin"
   }
-
-  dynamic "roles" {
-    for_each = mongodbatlas_serverless_instance.mongodb_serverless
-
-    content {
-      role_name     = "atlasAdmin"
-      database_name = roles.value.name
-    }
+  roles {
+    role_name     = "readWriteAnyDatabase"
+    database_name = "admin"
   }
+
+  # dynamic "roles" {
+  #   for_each = mongodbatlas_serverless_instance.mongodb_serverless
+
+  #   content {
+  #     role_name     = "readWrite"
+  #     database_name = roles.value.name
+  #   }
+  # }
 }
 
 resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
@@ -76,4 +80,39 @@ resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
   project_id    = mongodbatlas_project.project.id
   instance_name = each.value.name
   provider_name = "AWS"
+}
+
+# resource "aws_security_group" "mongodb_security_group" {
+#   name        = "mongodb_security_group"
+#   description = "mongodb_security_group"
+#   vpc_id      = aws_vpc.vpc.id
+
+#   ingress {
+#     description = "mongodb ingress"
+#     from_port   = 27017
+#     to_port     = 27017
+#     protocol    = "tcp"
+#     cidr_blocks = [""]
+#   }
+# }
+resource "aws_vpc_endpoint" "vpc_endpoint" {
+  for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
+
+  vpc_id            = var.vpc_id
+  service_name      = each.value.endpoint_service_name
+  vpc_endpoint_type = "Interface"
+  # private_dns_enabled = true
+  # security_group_ids  = [aws_security_group.mongodb_security_group.id]
+  subnet_ids = var.subnet_ids
+}
+
+resource "mongodbatlas_privatelink_endpoint_service_serverless" "privatelink_endpoint_service" {
+  for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
+
+  project_id                 = mongodbatlas_project.project.id
+  instance_name              = each.value.instance_name
+  endpoint_id                = each.value.endpoint_id
+  cloud_provider_endpoint_id = aws_vpc_endpoint.vpc_endpoint[each.key].id
+  provider_name              = "AWS"
+  comment                    = "New serverless endpoint"
 }

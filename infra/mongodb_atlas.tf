@@ -19,11 +19,11 @@ module "mongodb_atlas" {
 
   serverless_databases = [
     "${local.prefix}${local.service_name}-jobposting",
-    "${local.prefix}${local.service_name}-company",
-    "${local.prefix}${local.service_name}-stats",
+    "${local.prefix}${local.service_name}-log",
   ]
 
-
+  vpc_id     = module.vpc_infra.vpc.id
+  subnet_ids = [for subnet in module.vpc_infra.public_subnets : subnet.id]
   tags = {
     env = local.env
   }

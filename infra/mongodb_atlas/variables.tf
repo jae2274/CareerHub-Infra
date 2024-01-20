@@ -6,6 +6,14 @@
 #  })
 #}
 #
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
 variable "atlas_key" {
   type = object({
     public_key  = string
