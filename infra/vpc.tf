@@ -28,4 +28,7 @@ locals {
   subnet_ids = [
     for subnet in module.vpc_infra.public_subnets : subnet.id
   ]
+  subnet_arns = [
+    for subnet in module.vpc_infra.public_subnets : subnet.arn
+  ]
 }

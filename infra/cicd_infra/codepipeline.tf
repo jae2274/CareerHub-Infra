@@ -17,7 +17,7 @@ resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
 
 // start define code connection
 resource "aws_codestarconnections_connection" "codepipeline_connection" {
-  name          = "${var.cicd_name}-connection"
+  name          = "${var.cicd_name}-conn"
   provider_type = "GitHub"
 }
 // end define code connection

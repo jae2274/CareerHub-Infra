@@ -8,5 +8,6 @@ module "cicd_infra" {
   branch_name     = "main"
   vpc_id          = local.vpc_id
   subnet_ids      = local.subnet_ids
+  subnet_arns     = local.subnet_arns
 }
 

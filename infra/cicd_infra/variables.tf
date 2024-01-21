@@ -19,3 +19,7 @@ variable "vpc_id" {
 variable "subnet_ids" {
   type = list(string)
 }
+
+variable "subnet_arns" {
+  type = list(string)
+}
