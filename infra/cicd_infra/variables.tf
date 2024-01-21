@@ -1,18 +1,8 @@
-variable "role_arn" {
+
+variable "cicd_name" {
   type = string
 }
 
-variable "prefix_service_name" {
-  type = string
-}
-
-variable "s3_bucket" {
-  type = string
-}
-
-variable "code_connection_arn" {
-  type = string
-}
 
 variable "repository_path" {
   type = string

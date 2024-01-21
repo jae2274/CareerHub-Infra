@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "codebuild_assume_role_policy_doc" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name               = "${var.prefix_service_name}-codebuild-role"
+  name               = "${var.cicd_name}-codebuild-role"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role_policy_doc.json
 }
 
@@ -74,8 +74,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
 
 
 resource "aws_codebuild_project" "codebuild_project" {
-  name          = "${var.prefix_service_name}-codebuild"
-  description   = "CodeBuild for ${var.prefix_service_name}"
+  name          = "${var.cicd_name}-codebuild"
+  description   = "CodeBuild for ${var.cicd_name}"
   build_timeout = 30
   service_role  = aws_iam_role.codebuild_role.arn
 

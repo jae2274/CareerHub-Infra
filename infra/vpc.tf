@@ -23,4 +23,9 @@ module "vpc_infra" {
 }
 
 
-
+locals {
+  vpc_id = module.vpc_infra.vpc.id
+  subnet_ids = [
+    for subnet in module.vpc_infra.public_subnets : subnet.id
+  ]
+}

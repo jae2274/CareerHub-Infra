@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "codepipeline_policy" {
   statement {
     effect    = "Allow"
     actions   = ["codestar-connections:UseConnection"]
-    resources = [aws_codestarconnections_connection.example.arn]
+    resources = [aws_codestarconnections_connection.careerhub_connection.arn]
   }
 
   statement {

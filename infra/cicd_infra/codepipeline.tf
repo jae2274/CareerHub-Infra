@@ -1,6 +1,8 @@
+
+
 // start define s3 bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket = "${var.prefix_service_name}-codepipeline-bucket"
+  bucket = "${var.cicd_name}-codepipeline-bucket"
 }
 
 resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
@@ -15,7 +17,7 @@ resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
 
 // start define code connection
 resource "aws_codestarconnections_connection" "codepipeline_connection" {
-  name          = "${var.prefix_service_name}-connection"
+  name          = "${var.cicd_name}-connection"
   provider_type = "GitHub"
 }
 // end define code connection
@@ -37,7 +39,7 @@ data "aws_iam_policy_document" "codepipeline_assume_role_doc" {
 }
 
 resource "aws_iam_role" "codepipeline_role" {
-  name               = "${var.prefix_service_name}-codepipeline-role"
+  name               = "${var.cicd_name}-codepipeline-role"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assume_role_doc.json
 }
 
@@ -87,11 +89,11 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 
 // start define codebuild
 resource "aws_codepipeline" "codepipeline" {
-  name     = "${var.prefix_service_name}-codepipeline"
-  role_arn = var.role_arn
+  name     = "${var.cicd_name}-codepipeline"
+  role_arn = aws_iam_role.codepipeline_role.arn
 
   artifact_store {
-    location = var.s3_bucket
+    location = aws_s3_bucket.codepipeline_bucket.bucket
     type     = "S3"
   }
 
