@@ -1,5 +1,5 @@
 locals {
-  eks_cluster_name = "${local.prefix}${local.service_name}-eks"
+  eks_cluster_name = "${local.prefix_service_name}-eks"
 }
 
 resource "tls_private_key" "eks_node_key" {
