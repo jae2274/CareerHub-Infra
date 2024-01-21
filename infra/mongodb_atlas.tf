@@ -31,7 +31,7 @@ module "mongodb_atlas" {
   source = "./mongodb_atlas"
 
   mongodb_region = var.region
-  project_name   = "${local.prefix}${local.service_name}-project"
+  project_name   = "${local.prefix_service_name}-project"
 
   admin_db_user = {
     username = var.admin_db_username
@@ -44,8 +44,8 @@ module "mongodb_atlas" {
   }
 
   serverless_databases = [
-    "${local.prefix}${local.service_name}-jobposting",
-    "${local.prefix}${local.service_name}-log",
+    "${local.prefix_service_name}-jobposting",
+    "${local.prefix_service_name}-log",
   ]
 
   vpc_id        = module.vpc_infra.vpc.id

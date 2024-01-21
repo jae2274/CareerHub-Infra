@@ -67,6 +67,7 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
 
+  create_aws_auth_configmap = true
   manage_aws_auth_configmap = true
   aws_auth_roles = concat(
     [{
