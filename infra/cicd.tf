@@ -7,7 +7,7 @@ module "cicd_infra" {
   repository_path = "jae2274/Careerhub-dataProvider"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = local.subnet_ids
-  subnet_arns     = local.subnet_arns
+  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
+  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
 

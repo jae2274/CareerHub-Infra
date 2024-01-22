@@ -31,12 +31,8 @@ module "vpc_infra" {
 
 locals {
   vpc_id = module.vpc_infra.vpc.id
-  subnet_ids = [
-    for subnet in module.vpc_infra.public_subnets : subnet.id
-  ]
-  subnet_arns = [
-    for subnet in module.vpc_infra.public_subnets : subnet.arn
-  ]
+
+  public_subnets = module.vpc_infra.public_subnets
 }
 
 resource "aws_eip" "nat_eips" {
@@ -70,4 +66,8 @@ module "private_subnet_infra" {
       az             = module.vpc_infra.public_subnets[local.public_subnet_key_1].availability_zone
     }
   }
+}
+
+locals {
+  private_subnets = module.private_subnet_infra.private_subnets
 }
