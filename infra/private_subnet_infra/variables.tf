@@ -2,9 +2,23 @@ variable "subnet_prefix_name" {
   type = string
 }
 
+variable "vpc_id" {
+  type = string
+}
+
+variable "vpc_cidr_block" {
+  type = string
+}
+
 variable "private_subnets" {
   type = map(object({
-    paired_public_subnet_id = string
-    cidr_block              = string
+    nat_gateway_id = string
+    cidr_block     = string
+    az             = string
   }))
+}
+
+variable "tags" {
+  type    = map(string)
+  default = {}
 }
