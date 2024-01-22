@@ -54,8 +54,7 @@ resource "aws_nat_gateway" "nat_gateways" {
 module "private_subnet_infra" {
   source = "./private_subnet_infra"
 
-  vpc_id         = local.vpc_id
-  vpc_cidr_block = local.vpc_cidr_block
+  vpc_id = local.vpc_id
 
   subnet_prefix_name = local.prefix_service_name
 

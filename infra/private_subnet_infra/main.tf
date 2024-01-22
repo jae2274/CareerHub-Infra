@@ -21,15 +21,15 @@ resource "aws_route_table" "private_route_table" {
 
   vpc_id = var.vpc_id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = each.value.nat_gateway_id
-  }
+  tags = { Name = "${var.subnet_prefix_name}-${each.key}-private-route-table" }
+}
 
-  route {
-    cidr_block = var.vpc_cidr_block
-    gateway_id = "local"
-  }
+resource "aws_route" "nat_gateway_route" {
+  for_each = var.private_subnets
+
+  route_table_id         = aws_route_table.private_route_table[each.key].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = each.value.nat_gateway_id
 }
 
 resource "aws_route_table_association" "private_route_table_association" {
