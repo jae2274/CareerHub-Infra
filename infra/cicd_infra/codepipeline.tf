@@ -1,26 +1,8 @@
-
-
 // start define s3 bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "${var.cicd_name}-codepipeline-bucket"
 }
-
-resource "aws_s3_bucket_public_access_block" "codepipeline_bucket_pab" {
-  bucket = aws_s3_bucket.codepipeline_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
 // end define s3 bucket
-
-// start define code connection
-resource "aws_codestarconnections_connection" "codepipeline_connection" {
-  name          = "${var.cicd_name}-conn"
-  provider_type = "GitHub"
-}
-// end define code connection
 
 // start define iam role and policy
 data "aws_iam_policy_document" "codepipeline_assume_role_doc" {
@@ -45,23 +27,6 @@ resource "aws_iam_role" "codepipeline_role" {
 
 data "aws_iam_policy_document" "codepipeline_policy_doc" {
   statement {
-    effect = "Allow"
-
-    actions = [
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-      "s3:GetBucketVersioning",
-      "s3:PutObjectAcl",
-      "s3:PutObject",
-    ]
-
-    resources = [
-      aws_s3_bucket.codepipeline_bucket.arn,
-      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
-    ]
-  }
-
-  statement {
     effect    = "Allow"
     actions   = ["codestar-connections:UseConnection"]
     resources = [aws_codestarconnections_connection.codepipeline_connection.arn]
@@ -77,14 +42,42 @@ data "aws_iam_policy_document" "codepipeline_policy_doc" {
 
     resources = ["*"]
   }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectVersion",
+      "s3:GetBucketVersioning",
+      "s3:PutObjectAcl",
+      "s3:PutObject",
+    ]
+
+    resources = [
+      aws_s3_bucket.codepipeline_bucket.arn,
+      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+    ]
+  }
 }
+
+
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
   name   = "codepipeline_policy"
   role   = aws_iam_role.codepipeline_role.id
   policy = data.aws_iam_policy_document.codepipeline_policy_doc.json
 }
+
 // end define iam role and policy
+
+// start define code connection
+resource "aws_codestarconnections_connection" "codepipeline_connection" {
+  name          = "${var.cicd_name}-conn"
+  provider_type = "GitHub"
+}
+// end define code connection
+
 
 
 // start define codebuild

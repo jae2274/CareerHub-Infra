@@ -46,6 +46,27 @@ data "aws_iam_policy_document" "codebuild_policy_doc" {
       values   = ["codebuild.amazonaws.com"]
     }
   }
+
+  statement {
+    effect  = "Allow"
+    actions = ["s3:*"]
+    resources = [
+      aws_s3_bucket.codebuild_log_bucket.arn,
+      "${aws_s3_bucket.codebuild_log_bucket.arn}/*",
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:*"
+    ]
+
+    resources = [
+      aws_s3_bucket.codepipeline_bucket.arn,
+      "${aws_s3_bucket.codepipeline_bucket.arn}/*"
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "codebuild_assume_role_policy_doc" {
@@ -72,6 +93,19 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
 }
 // end define iam role and policy
 
+// start define log/cache bucket
+
+resource "aws_s3_bucket" "codebuild_log_bucket" {
+  bucket = "${var.cicd_name}-codebuild-log"
+}
+
+resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
+  bucket = aws_s3_bucket.codebuild_log_bucket.id
+  acl    = "private"
+}
+
+// end define log bucket
+
 
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.cicd_name}-codebuild"
@@ -95,6 +129,16 @@ resource "aws_codebuild_project" "codebuild_project" {
       group_name  = "${var.cicd_name}-lg"
       stream_name = "${var.cicd_name}-ls"
     }
+
+    s3_logs {
+      status   = "ENABLED"
+      location = "${aws_s3_bucket.codebuild_log_bucket.id}/build-log"
+    }
+  }
+
+  cache {
+    type     = "S3"
+    location = aws_s3_bucket.codebuild_log_bucket.bucket
   }
 
   source {
@@ -114,7 +158,7 @@ resource "aws_codebuild_project" "codebuild_project" {
 }
 
 resource "aws_security_group" "codebuild_sg" {
-  name        = "codebuild_sg"
+  name        = "${var.cicd_name}-codebuild-sg"
   description = "Security group for codebuild"
   vpc_id      = var.vpc_id
 }
