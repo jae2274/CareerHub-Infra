@@ -67,30 +67,7 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
 
-  create_aws_auth_configmap = true
-  manage_aws_auth_configmap = true
-  aws_auth_roles = concat(
-    [{
-      rolearn  = module.eks_managed_node_group.iam_role_arn
-      username = "system:node:{{EC2PrivateDNSName}}"
-      groups   = ["system:bootstrappers", "system:nodes"]
-    }],
-    [
-      for key, role in data.aws_iam_role.map_roles : {
-        rolearn  = role.arn
-        username = key
-        groups   = ["system:masters"]
-      }
-    ]
-  )
 
-  aws_auth_users = [
-    for key, user in data.aws_iam_user.map_users : {
-      userarn  = user.arn
-      username = key
-      groups   = ["system:masters"]
-    }
-  ]
 
   tags = merge(var.tags, { Name = var.eks_cluster_name })
 }
