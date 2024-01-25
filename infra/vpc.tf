@@ -1,5 +1,3 @@
-
-
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -27,7 +25,6 @@ module "vpc_infra" {
     }
   }
 }
-
 
 locals {
   vpc_id = module.vpc_infra.vpc.id

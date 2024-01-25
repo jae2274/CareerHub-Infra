@@ -142,8 +142,11 @@ resource "aws_codebuild_project" "codebuild_project" {
   }
 
   source {
-    type      = "CODEPIPELINE"
-    buildspec = "buildspec.yml"
+    type = "CODEPIPELINE"
+    buildspec = templatefile("${path.module}/buildspec_template.yml", {
+      image_repo_name = var.cicd_name
+      image_tag       = "latest"
+    })
   }
 
   vpc_config {
