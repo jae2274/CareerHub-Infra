@@ -6,14 +6,19 @@ resource "aws_instance" "workers" {
 
   subnet_id = each.value.subnet_id
   key_name  = aws_key_pair.k8s_keypair.key_name
-  user_data = templatefile("${path.module}/init_scripts/install_k8s.sh", {
-    additionals = templatefile("${path.module}/init_scripts/join_k8s.sh", { master_private_key = tls_private_key.k8s_private_key.private_key_pem, master_ip = aws_instance.master_instance.private_ip })
+  # user_data = file("${path.module}/init_scripts/install_k8s.sh")
+  user_data = templatefile("${path.module}/init_scripts/join_k8s.sh", {
+    install_k8s_sh     = file("${path.module}/init_scripts/install_k8s.sh"),
+    master_ip          = aws_instance.master_instance.private_ip
+    master_private_key = tls_private_key.k8s_private_key.private_key_pem,
   })
   vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id]
 
   tags = {
     Name = "${var.cluster_name}-worker-${each.key}"
   }
+
+  depends_on = [aws_instance.master_instance]
 }
 
 resource "aws_security_group" "k8s_worker_sg" {

@@ -1,5 +1,6 @@
 
 resource "aws_security_group" "k8s_master_sg" {
+  vpc_id      = var.vpc_id
   name        = "${var.cluster_name}-master-sg"
   description = "For k8s worker nodes"
 
@@ -49,10 +50,11 @@ resource "aws_instance" "master_instance" {
   ami           = var.ami
   instance_type = var.master.instance_type
 
-  availability_zone = var.master.subnet_id
-  key_name          = aws_key_pair.k8s_keypair.key_name
-  user_data = templatefile("${path.module}/init_scripts/install_k8s.sh", {
-    additionals = file("${path.module}/init_scripts/init_k8s_cluster.sh")
+  subnet_id = var.master.subnet_id
+  key_name  = aws_key_pair.k8s_keypair.key_name
+  # user_data = file("${path.module}/init_scripts/install_k8s.sh")
+  user_data = templatefile("${path.module}/init_scripts/init_k8s_cluster.sh", {
+    install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
   })
   vpc_security_group_ids = [aws_security_group.k8s_master_sg.id]
 

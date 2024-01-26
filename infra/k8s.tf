@@ -1,4 +1,3 @@
-
 module "k8s_infra" {
   source = "./k8s_infra"
 
@@ -7,12 +6,12 @@ module "k8s_infra" {
   cluster_name = local.prefix_service_name
 
   master = {
-    instance_type = "t3g.medium"
+    instance_type = "t4g.medium"
     subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
   workers = {
-    instance_type = "t3g.medium"
+    instance_type = "t4g.medium"
     worker = {
       "1" = {
         subnet_id = local.public_subnets[local.public_subnet_key_1].id

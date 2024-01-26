@@ -9,7 +9,7 @@ resource "aws_key_pair" "k8s_keypair" {
 }
 
 resource "local_file" "private_key_file" {
-  filename        = "./keypair/${var.cluster_name}-keypair.pem"
+  filename        = "${path.module}/keypair/${var.cluster_name}-keypair.pem"
   content         = tls_private_key.k8s_private_key.private_key_pem
   file_permission = "0600"
 }
