@@ -24,7 +24,5 @@ cp -i /etc/kubernetes/admin.conf $UBUNTU_HOME/.kube/config
 chmod 644 $UBUNTU_HOME/.kube/config
 
 
-echo "***Install network plugin***"
-curl -LO https://github.com/cilium/cilium-cli/releases/latest/download/cilium-linux-arm64.tar.gz
-tar xzvfC cilium-linux-arm64.tar.gz /usr/local/bin
-cilium install
+# echo "***Install network plugin***"
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml

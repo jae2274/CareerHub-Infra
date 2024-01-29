@@ -19,6 +19,9 @@ EOF
 # Apply sysctl params without reboot
 sysctl --system #someting wrong with this command
 
+swapoff /swap.img
+sed -i -e '/swap.img/d' /etc/fstab
+
 
 # check if the params are applied
 # sysctl net.bridge.bridge-nf-call-iptables net.bridge.bridge-nf-call-ip6tables net.ipv4.ip_forward
