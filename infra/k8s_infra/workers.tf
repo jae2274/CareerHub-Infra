@@ -1,8 +1,54 @@
+data "aws_iam_policy_document" "codebuild_policy_doc" {
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart"
+    ]
+    resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "assume_role_policy_doc" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "worker_role" {
+  name               = "${var.cluster_name}-worker-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_doc.json
+}
+
+resource "aws_iam_role_policy" "codebuild_role_policy" {
+  role   = aws_iam_role.worker_role.name
+  policy = data.aws_iam_policy_document.codebuild_policy_doc.json
+}
+
+resource "aws_iam_instance_profile" "iam_instance_profile" {
+  name = "${var.cluster_name}-worker-profile"
+  role = aws_iam_role.worker_role.name
+}
+
 resource "aws_instance" "workers" {
   for_each = var.workers.worker
 
-  ami           = var.ami
-  instance_type = var.workers.instance_type
+  ami                  = var.ami
+  instance_type        = var.workers.instance_type
+  iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 
   subnet_id = each.value.subnet_id
   key_name  = aws_key_pair.k8s_keypair.key_name

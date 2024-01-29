@@ -47,8 +47,9 @@ resource "aws_security_group" "k8s_master_sg" {
 }
 
 resource "aws_instance" "master_instance" {
-  ami           = var.ami
-  instance_type = var.master.instance_type
+  ami                  = var.ami
+  instance_type        = var.master.instance_type
+  iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 
   subnet_id = var.master.subnet_id
   key_name  = aws_key_pair.k8s_keypair.key_name
