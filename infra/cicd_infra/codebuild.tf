@@ -48,8 +48,15 @@ data "aws_iam_policy_document" "codebuild_policy_doc" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = ["ecr:GetAuthorizationToken"]
+    effect = "Allow"
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:GetAuthorizationToken",
+      "ecr:InitiateLayerUpload",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart"
+    ]
     resources = ["*"]
   }
 
@@ -154,7 +161,7 @@ resource "aws_codebuild_project" "codebuild_project" {
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
       region          = var.region
       aws_account_id  = data.aws_caller_identity.current.account_id
-      image_repo_name = var.cicd_name
+      image_repo_name = aws_ecr_repository.ecr_repo.name
       image_tag       = "latest"
     })
   }
