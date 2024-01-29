@@ -53,7 +53,7 @@ systemctl restart docker
 ## Install k8s
 
 # If the folder `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
-# mkdir -p -m 755 /etc/apt/keyrings
+mkdir -p -m 755 /etc/apt/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
 # This overwrites any existing configuration in /etc/apt/sources.list.d/kubernetes.list
