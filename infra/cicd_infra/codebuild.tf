@@ -48,6 +48,12 @@ data "aws_iam_policy_document" "codebuild_policy_doc" {
   }
 
   statement {
+    effect    = "Allow"
+    actions   = ["ecr:GetAuthorizationToken"]
+    resources = ["*"]
+  }
+
+  statement {
     effect  = "Allow"
     actions = ["s3:*"]
     resources = [
@@ -106,6 +112,7 @@ resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
 
 // end define log bucket
 
+data "aws_caller_identity" "current" {}
 
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.cicd_name}-codebuild"
@@ -122,6 +129,7 @@ resource "aws_codebuild_project" "codebuild_project" {
     type                        = "LINUX_CONTAINER"
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:4.0"
+    privileged_mode             = true
   }
 
   logs_config {
@@ -144,6 +152,8 @@ resource "aws_codebuild_project" "codebuild_project" {
   source {
     type = "CODEPIPELINE"
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
+      region          = var.region
+      aws_account_id  = data.aws_caller_identity.current.account_id
       image_repo_name = var.cicd_name
       image_tag       = "latest"
     })

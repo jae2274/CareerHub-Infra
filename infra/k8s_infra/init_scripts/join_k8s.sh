@@ -19,3 +19,5 @@ chmod +x k8s_join.sh
 
 echo "***Joining k8s cluster***"
 ./k8s_join.sh
+
+mv k8s_join.sh /etc/init.d/k8s_join.sh
