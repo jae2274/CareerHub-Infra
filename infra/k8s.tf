@@ -7,16 +7,16 @@ module "k8s_infra" {
 
   master = {
     instance_type = "t4g.medium"
-    subnet_id     = local.public_subnets[local.public_subnet_key_2].id
+    subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
   workers = {
     instance_type = "t4g.medium"
     worker = {
-      "3" = {
+      "1" = {
         subnet_id = local.public_subnets[local.public_subnet_key_1].id
       }
-      "4" = {
+      "2" = {
         subnet_id = local.public_subnets[local.public_subnet_key_2].id
       }
     }

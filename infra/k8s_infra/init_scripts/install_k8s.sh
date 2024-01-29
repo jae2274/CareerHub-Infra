@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# Disable firewall
+echo "***Setting general configuration***"
 ufw disable
-
-#Setting general configuration
 cat <<EOF | tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -27,7 +25,7 @@ sysctl --system #someting wrong with this command
 
 
 
-## Install Dockerapt-get update
+echo "***Install Dockerapt-get update***"
 apt-get update
 apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
 apt -y install net-tools
@@ -38,8 +36,6 @@ echo "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] 
 apt-get update
 
 apt-get install -y docker-ce docker-ce-cli containerd.io
-docker version
-docker info
 
 cat <<EOF | tee /etc/docker/daemon.json
 {
@@ -50,8 +46,8 @@ EOF
 systemctl daemon-reload
 systemctl restart docker
 
-## Install k8s
 
+echo "***Install kubernetes***"
 # If the folder `/etc/apt/keyrings` does not exist, it should be created before the curl command, read the note below.
 mkdir -p -m 755 /etc/apt/keyrings
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
