@@ -36,4 +36,18 @@ variable "ecr_domain" {
 data "aws_region" "current" {}
 locals {
   region = data.aws_region.current.name
+
+  install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
+
+  init_k8s_sh = file("${path.module}/init_scripts/init_k8s.sh")
+
+  join_k8s_sh = templatefile("${path.module}/init_scripts/join_k8s.sh", {
+    master_ip          = aws_instance.master_instance.private_ip
+    master_private_key = tls_private_key.k8s_private_key.private_key_pem,
+  })
+
+  login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
+    region     = local.region
+    ecr_domain = var.ecr_domain
+  })
 }

@@ -55,12 +55,17 @@ resource "aws_instance" "master_instance" {
 
   subnet_id = var.master.subnet_id
   key_name  = aws_key_pair.k8s_keypair.key_name
-  # user_data = file("${path.module}/init_scripts/install_k8s.sh")
-  user_data = templatefile("${path.module}/init_scripts/init_k8s_cluster.sh", {
-    install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
-    region         = local.region
-    ecr_domain     = var.ecr_domain
-  })
+
+  user_data = <<EOT
+#!/bin/bash
+
+${local.install_k8s_sh}
+
+${local.init_k8s_sh}
+
+${local.login_ecr_sh}
+  EOT
+
   vpc_security_group_ids = [aws_security_group.k8s_master_sg.id]
 
   tags = {

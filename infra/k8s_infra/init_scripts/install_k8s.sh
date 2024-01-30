@@ -1,5 +1,3 @@
-#!/bin/bash
-
 echo "***Setting general configuration***"
 ufw disable
 cat <<EOF | tee /etc/modules-load.d/k8s.conf
