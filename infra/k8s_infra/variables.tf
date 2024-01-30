@@ -1,6 +1,8 @@
 variable "vpc_id" {
   type = string
 }
+
+
 variable "ami" {
   type = string
   # default = "ami-077885f59ecb77b84" # ubuntu 22.04 LTS
@@ -27,5 +29,11 @@ variable "workers" {
   })
 }
 
+variable "ecr_domain" {
+  type = string
+}
 
-
+data "aws_region" "current" {}
+locals {
+  region = data.aws_region.current.name
+}

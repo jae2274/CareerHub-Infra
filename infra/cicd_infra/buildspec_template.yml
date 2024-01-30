@@ -4,16 +4,16 @@ phases:
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
-      - aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${aws_account_id}.dkr.ecr.${region}.amazonaws.com
+      - aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_domain}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t ${image_repo_name}:${image_tag} .
-      - docker tag ${image_repo_name}:${image_tag} ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${image_repo_name}:${image_tag}
+      - docker tag ${image_repo_name}:${image_tag} ${ecr_domain}/${image_repo_name}:${image_tag}
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push ${aws_account_id}.dkr.ecr.${region}.amazonaws.com/${image_repo_name}:${image_tag}
+      - docker push ${ecr_domain}/${image_repo_name}:${image_tag}

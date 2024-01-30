@@ -46,6 +46,8 @@ resource "aws_security_group" "k8s_master_sg" {
   }
 }
 
+
+
 resource "aws_instance" "master_instance" {
   ami                  = var.ami
   instance_type        = var.master.instance_type
@@ -56,6 +58,8 @@ resource "aws_instance" "master_instance" {
   # user_data = file("${path.module}/init_scripts/install_k8s.sh")
   user_data = templatefile("${path.module}/init_scripts/init_k8s_cluster.sh", {
     install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
+    region         = local.region
+    ecr_domain     = var.ecr_domain
   })
   vpc_security_group_ids = [aws_security_group.k8s_master_sg.id]
 

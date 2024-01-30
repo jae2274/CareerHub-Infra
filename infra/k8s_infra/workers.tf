@@ -1,15 +1,16 @@
-data "aws_iam_policy_document" "codebuild_policy_doc" {
+data "aws_iam_policy_document" "ec2_policy_doc" {
 
   statement {
     effect = "Allow"
     actions = [
-      "ecr:BatchGetImage",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:CompleteLayerUpload",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:InitiateLayerUpload",
-      "ecr:PutImage",
-      "ecr:UploadLayerPart"
+      "ecr:*"
+      # "ecr:GetAuthorizationToken",
+      # "ecr:BatchCheckLayerAvailability",
+      # "ecr:GetDownloadUrlForLayer",
+      # "ecr:GetRepositoryPolicy",
+      # "ecr:DescribeRepositories",
+      # "ecr:ListImages",
+      # "ecr:BatchGetImage"
     ]
     resources = ["*"]
   }
@@ -28,19 +29,19 @@ data "aws_iam_policy_document" "assume_role_policy_doc" {
   }
 }
 
-resource "aws_iam_role" "worker_role" {
-  name               = "${var.cluster_name}-worker-role"
+resource "aws_iam_role" "k8s_node_role" {
+  name               = "${var.cluster_name}-k8s_node-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_doc.json
 }
 
-resource "aws_iam_role_policy" "codebuild_role_policy" {
-  role   = aws_iam_role.worker_role.name
-  policy = data.aws_iam_policy_document.codebuild_policy_doc.json
+resource "aws_iam_role_policy" "ec2_role_policy" {
+  role   = aws_iam_role.k8s_node_role.name
+  policy = data.aws_iam_policy_document.ec2_policy_doc.json
 }
 
 resource "aws_iam_instance_profile" "iam_instance_profile" {
-  name = "${var.cluster_name}-worker-profile"
-  role = aws_iam_role.worker_role.name
+  name = "${var.cluster_name}-k8s_node-profile"
+  role = aws_iam_role.k8s_node_role.name
 }
 
 resource "aws_instance" "workers" {
@@ -57,6 +58,8 @@ resource "aws_instance" "workers" {
     install_k8s_sh     = file("${path.module}/init_scripts/install_k8s.sh"),
     master_ip          = aws_instance.master_instance.private_ip
     master_private_key = tls_private_key.k8s_private_key.private_key_pem,
+    region             = local.region
+    ecr_domain         = var.ecr_domain
   })
   vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id]
 

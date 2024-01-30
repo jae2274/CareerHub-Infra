@@ -119,7 +119,6 @@ resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
 
 // end define log bucket
 
-data "aws_caller_identity" "current" {}
 
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.cicd_name}-codebuild"
@@ -159,8 +158,8 @@ resource "aws_codebuild_project" "codebuild_project" {
   source {
     type = "CODEPIPELINE"
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
-      region          = var.region
-      aws_account_id  = data.aws_caller_identity.current.account_id
+      region          = local.region
+      ecr_domain      = local.ecr_domain
       image_repo_name = aws_ecr_repository.ecr_repo.name
       image_tag       = "latest"
     })
