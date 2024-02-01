@@ -9,11 +9,14 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t ${image_repo_name}:${image_tag} .
-      - docker tag ${image_repo_name}:${image_tag} ${ecr_domain}/${image_repo_name}:${image_tag}
+      - export DATE_TAG=$(date +%Y.%m.%d-%H.%M.%S)
+      - docker build -t ${image_repo_name}:latest . --label "${other_latest_tag}=$DATE_TAG"
+      - docker image tag ${image_repo_name}:latest ${ecr_domain}/${image_repo_name}:$DATE_TAG
+      - docker image tag ${image_repo_name}:latest ${ecr_domain}/${image_repo_name}:latest
 
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push ${ecr_domain}/${image_repo_name}:${image_tag}
+      - docker push ${ecr_domain}/${image_repo_name}:$DATE_TAG
+      - docker push ${ecr_domain}/${image_repo_name}:latest

@@ -8,6 +8,10 @@ variable "repository_path" {
   type = string
 }
 
+variable "other_latest_tag" {
+  type = string
+}
+
 variable "branch_name" {
   type = string
 }

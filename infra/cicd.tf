@@ -1,8 +1,11 @@
-
+locals {
+  other_latest_tag = "build-date-tag"
+}
 module "dataprovider_cicd" {
   source = "./cicd_infra"
 
-  cicd_name = "${local.prefix_service_name}-provider"
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix_service_name}-provider"
 
   repository_path = "jae2274/Careerhub-dataProvider"
   branch_name     = local.branch
@@ -14,7 +17,8 @@ module "dataprovider_cicd" {
 module "dataprocessor_cicd" {
   source = "./cicd_infra"
 
-  cicd_name = "${local.prefix_service_name}-processor"
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix_service_name}-processor"
 
   repository_path = "jae2274/Careerhub-dataProcessor"
   branch_name     = local.branch

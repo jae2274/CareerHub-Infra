@@ -118,8 +118,6 @@ resource "aws_s3_bucket" "codebuild_log_bucket" {
 # }
 
 // end define log bucket
-
-
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.cicd_name}-codebuild"
   description   = "CodeBuild for ${var.cicd_name}"
@@ -158,10 +156,10 @@ resource "aws_codebuild_project" "codebuild_project" {
   source {
     type = "CODEPIPELINE"
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
-      region          = local.region
-      ecr_domain      = local.ecr_domain
-      image_repo_name = aws_ecr_repository.ecr_repo.name
-      image_tag       = "latest"
+      region           = local.region
+      ecr_domain       = local.ecr_domain
+      image_repo_name  = aws_ecr_repository.ecr_repo.name
+      other_latest_tag = var.other_latest_tag
     })
   }
 
