@@ -43,7 +43,7 @@ locals {
 
 //CHECK BACKEND CONFIG FILE
 data "local_file" "check_remote_state_config" {
-  filename = "${local.k8s_backend_file}"
+  filename = "$${local.prefix}${local.k8s_backend_file_without_prefix}"
 }
 EOF
 }

@@ -45,7 +45,7 @@ locals {
 
 //CHECK BACKEND CONFIG FILE
 data "local_file" "check_backend_config" {
-  filename = "${local.backend_file}"
+  filename = "$${local.prefix}${local.backend_file_without_prefix}"
 }
 
 // This file is generated automatically by backend/backend_local_config and should not be modified manually
