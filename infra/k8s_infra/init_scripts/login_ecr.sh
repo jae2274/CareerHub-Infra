@@ -1,10 +1,15 @@
 echo "***Get login ecr automatically***"
 apt-get install -y awscli
-aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_domain}
+
+%{ for ecr in ecrs ~}
+aws ecr get-login-password --region ${ecr.region} | docker login --username AWS --password-stdin ${ecr.domain}
+%{ endfor ~}
 
 cat <<EOF | tee login_docker.sh > /dev/null
 #!/bin/bash
-aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${ecr_domain}
+%{ for ecr in ecrs ~}
+aws ecr get-login-password --region ${ecr.region} | docker login --username AWS --password-stdin ${ecr.domain}
+%{ endfor ~}
 EOF
 
 chmod +x login_docker.sh

@@ -29,8 +29,11 @@ variable "workers" {
   })
 }
 
-variable "ecr_domain" {
-  type = string
+variable "ecrs" {
+  type = list(object({
+    region = string
+    domain = string
+  }))
 }
 
 data "aws_region" "current" {}
@@ -47,7 +50,6 @@ locals {
   })
 
   login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
-    region     = local.region
-    ecr_domain = var.ecr_domain
+    ecrs = var.ecrs
   })
 }

@@ -98,7 +98,7 @@ resource "aws_vpc_endpoint" "vpc_endpoint" {
 }
 
 output "private_endpoint" {
-  value = [for mongodb in mongodbatlas_serverless_instance.mongodb_serverless : mongodb.connection_strings_private_endpoint_srv[0]]
+  value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_private_endpoint_srv[0] }
 }
 # resource "mongodbatlas_privatelink_endpoint_service_serverless" "privatelink_endpoint_service" {
 #   for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint

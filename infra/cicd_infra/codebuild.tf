@@ -112,10 +112,10 @@ resource "aws_s3_bucket" "codebuild_log_bucket" {
   bucket = "${var.cicd_name}-codebuild-log"
 }
 
-resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
-  bucket = aws_s3_bucket.codebuild_log_bucket.id
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
+#   bucket = aws_s3_bucket.codebuild_log_bucket.id
+#   acl    = "private"
+# }
 
 // end define log bucket
 

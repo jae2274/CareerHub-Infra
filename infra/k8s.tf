@@ -7,7 +7,7 @@ module "k8s_infra" {
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS
   cluster_name = local.prefix_service_name
 
-  ecr_domain = local.ecr_domain
+  ecrs = [for key, ecr in toset([local.dataprovider_ecr, local.dataprocessor_ecr]) : ecr]
 
   master = {
     instance_type = "t4g.medium"

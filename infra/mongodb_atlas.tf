@@ -26,6 +26,10 @@ resource "aws_security_group" "mongodb_security_group" {
   }
 }
 
+locals {
+  jobposting_db = "${local.prefix_service_name}-jobposting"
+  log_db        = "${local.prefix_service_name}-log"
+}
 
 module "mongodb_atlas" {
   source = "./mongodb_atlas"
@@ -43,10 +47,7 @@ module "mongodb_atlas" {
     private_key = var.atlas_private_key
   }
 
-  serverless_databases = [
-    "${local.prefix_service_name}-jobposting",
-    "${local.prefix_service_name}-log",
-  ]
+  serverless_databases = [local.jobposting_db, local.log_db]
 
   vpc_id        = module.vpc_infra.vpc.id
   subnet_ids    = [for subnet in module.vpc_infra.public_subnets : subnet.id]

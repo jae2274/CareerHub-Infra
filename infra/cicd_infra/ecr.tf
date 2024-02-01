@@ -16,3 +16,11 @@ locals {
 output "ecr_domain" {
   value = local.ecr_domain
 }
+
+output "ecr_region" {
+  value = local.region
+}
+
+output "ecr_url" {
+  value = "${local.ecr_domain}/${aws_ecr_repository.ecr_repo.name}"
+}
