@@ -39,6 +39,7 @@ module "git_branch" {
 // END CURRENT BRANCH
 
 locals {
+  env                 = module.git_branch.env
   prefix              = module.git_branch.prefix
   branch              = module.git_branch.branch
 }

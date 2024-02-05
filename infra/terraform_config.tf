@@ -13,7 +13,6 @@ terraform {
 
 
 locals {
-  env                 = module.git_branch.env
   service_name        = "career-hub"
   prefix_service_name = "${local.prefix}${local.service_name}"
 }

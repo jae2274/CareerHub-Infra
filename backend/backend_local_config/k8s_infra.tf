@@ -37,6 +37,7 @@ module "git_branch" {
 // END CURRENT BRANCH
 
 locals {
+  env                 = module.git_branch.env
   prefix              = module.git_branch.prefix
   branch              = module.git_branch.branch
 }
@@ -44,6 +45,17 @@ locals {
 //CHECK BACKEND CONFIG FILE
 data "local_file" "check_remote_state_config" {
   filename = "$${local.prefix}${local.k8s_backend_file_without_prefix}"
+}
+
+data "terraform_remote_state" "infra" {
+  backend = "s3"
+
+  config = {
+    bucket = "${local.backend_bucket}"
+    key = "${local.key}"
+    region = "${local.backend_region}"
+    encrypt= ${local.backend_encrypt}
+  }
 }
 EOF
 }
