@@ -6,7 +6,7 @@ echo  "***Initialize k8s cluster***"
 # CRI v1 runtime API is not implemented: ~~~~ 문구가 나오면 아래 명령어 실행
 # rm /etc/containerd/config.toml
 # systemctl restart containerd
-kubeadm init --pod-network-cidr=192.168.0.0/16
+kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-cert-extra-sans=${public_ip}
 
 
 echo "***Setting up kubectl config***"

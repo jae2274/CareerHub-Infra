@@ -42,7 +42,9 @@ locals {
 
   install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
 
-  init_k8s_sh = file("${path.module}/init_scripts/init_k8s.sh")
+  init_k8s_sh = templatefile("${path.module}/init_scripts/init_k8s.sh", {
+    public_ip = aws_eip.master_public_ip.public_ip
+  })
 
   join_k8s_sh = templatefile("${path.module}/init_scripts/join_k8s.sh", {
     master_ip          = aws_instance.master_instance.private_ip

@@ -53,8 +53,9 @@ resource "aws_instance" "master_instance" {
   instance_type        = var.master.instance_type
   iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 
-  subnet_id = var.master.subnet_id
-  key_name  = aws_key_pair.k8s_keypair.key_name
+  subnet_id                   = var.master.subnet_id
+  key_name                    = aws_key_pair.k8s_keypair.key_name
+  associate_public_ip_address = false
 
   user_data = <<EOT
 #!/bin/bash
@@ -76,3 +77,11 @@ ${local.login_ecr_sh}
 
 
 
+resource "aws_eip" "master_public_ip" {
+  domain = "vpc"
+}
+
+resource "aws_eip_association" "master_public_ip" {
+  instance_id   = aws_instance.master_instance.id
+  allocation_id = aws_eip.master_public_ip.id
+}
