@@ -62,3 +62,5 @@ apt-get install -y kubelet kubeadm kubectl
 
 rm /etc/containerd/config.toml
 systemctl restart containerd
+
+apt-get install -y awscli

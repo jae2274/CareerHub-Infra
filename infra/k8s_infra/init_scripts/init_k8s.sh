@@ -22,3 +22,35 @@ chmod 644 $UBUNTU_HOME/.kube/config
 
 echo "***Install network plugin***"
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+kubectl create serviceaccount default
+
+echo "***Get login ecr automatically***"
+
+%{ for ecr in ecrs ~}
+aws ecr get-login-password --region ${ecr.region} | docker login --username AWS --password-stdin ${ecr.domain}
+%{ endfor ~}
+
+mkdir $UBUNTU_HOME/.docker
+cp $HOME/.docker/config.json $UBUNTU_HOME/.docker/config.json
+
+kubectl create secret generic ecr-auth --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson
+
+kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "ecr-auth"}]}'
+
+cat <<EOF | tee replace_ecr_token.sh > /dev/null
+#!/bin/bash
+%{ for ecr in ecrs ~}
+aws ecr get-login-password --region ${ecr.region} | docker login --username AWS --password-stdin ${ecr.domain}
+%{ endfor ~}
+cp /root/.docker/config.json /home/ubuntu/.docker/config.json
+
+kubectl create secret generic ecr-auth --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson -o yaml --dry-run=client | kubectl replace -f -
+EOF
+
+chmod +x replace_ecr_token.sh
+
+mv replace_ecr_token.sh /etc/init.d/replace_ecr_token.sh
+cat <<EOF | tee /etc/cron.d/cron_docker > /dev/null
+*/10 * * * * root /etc/init.d/replace_ecr_token.sh
+EOF
