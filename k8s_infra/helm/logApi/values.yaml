@@ -1,0 +1,6 @@
+logApi:
+  name: log-api
+  image: log-api
+  tag: latest
+  API_PORT: 8080
+  mongoUri: mongodb://mongo:27017

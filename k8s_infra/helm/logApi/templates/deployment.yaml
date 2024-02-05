@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: { { .Values.logApi.name } }
+  labels:
+    app: { { .Values.logApi.name } }
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: { { .Values.logApi.name } }
+  template:
+    metadata:
+      labels:
+        app: { { .Values.logApi.name } }
+    spec:
+      containers:
+        - name: { { .Values.logApi.name } }
+          image: { { .Values.logApi.image } }:{{ .Values.logApi.tag } }
+          env:
+          - name: MONGO_URI
+            value: { { .Values.logApi.mongoUri } }
+          - name: DB_NAME
+            value: logs
+          - name: API_PORT
+            value: { { .Values.logApi.grpcPort } }
+          ports:
+            - containerPort: { { .Values.logApi.grpcPort } }

@@ -1,0 +1,7 @@
+processor:
+  name: processor
+  image: careerhub-dataprocessor
+  tag: latest
+  mongoUri: mongodb://localhost:27017
+  grpcPort: 50051
+  postLogUrl: http://localhost:8080/log
