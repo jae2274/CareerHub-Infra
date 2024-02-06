@@ -164,3 +164,4 @@ terraform.rc
 *backend.tf
 *.terraform.lock.hcl
 *.pem
+.DS_Store

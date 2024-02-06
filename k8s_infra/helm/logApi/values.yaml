@@ -1,6 +1,6 @@
 logApi:
   name: log-api
-  image: log-api
+  image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-career-hub-logapi-ecr
   tag: latest
-  API_PORT: 8080
-  mongoUri: mongodb://mongo:27017
+  apiPort: 8080
+  mongoUri: mongodb+srv://careerhub_db_admin:terraform_careerhub_db_admin@dev-career-hub-log-pe-0.njfu5gu.mongodb.net/?retryWrites=true&w=majority
