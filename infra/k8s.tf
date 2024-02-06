@@ -4,7 +4,6 @@ module "k8s_infra" {
   source = "./k8s_infra"
 
   vpc_id       = local.vpc_id
-  ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS
   cluster_name = local.prefix_service_name
 
   ecrs = [for key, ecr in toset([local.dataprovider_ecr, local.dataprocessor_ecr]) : ecr]

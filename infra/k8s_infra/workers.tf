@@ -47,7 +47,7 @@ resource "aws_iam_instance_profile" "iam_instance_profile" {
 resource "aws_instance" "workers" {
   for_each = var.workers.worker
 
-  ami                  = var.ami
+  ami                  = local.ami
   instance_type        = var.workers.instance_type
   iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 

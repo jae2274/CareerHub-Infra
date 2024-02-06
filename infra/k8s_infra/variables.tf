@@ -2,12 +2,6 @@ variable "vpc_id" {
   type = string
 }
 
-
-variable "ami" {
-  type = string
-  # default = "ami-077885f59ecb77b84" # ubuntu 22.04 LTS
-}
-
 variable "cluster_name" {
   type = string
 }
@@ -55,4 +49,6 @@ locals {
   login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
     ecrs = var.ecrs
   })
+
+  ami = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS
 }
