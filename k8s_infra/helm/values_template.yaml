@@ -1,0 +1,6 @@
+logApi:
+  name: log-api
+  image: ${logapi_image}
+  tag: ${logapi_tag}
+  apiPort: 8080
+  mongoUri: ${mongo_uri}

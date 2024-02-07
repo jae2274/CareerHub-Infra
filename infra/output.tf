@@ -12,6 +12,9 @@ output "dataprovider_ecr" {
 output "dataprocessor_ecr" {
   value = module.dataprocessor_cicd.ecr_url
 }
+output "logapi_ecr" {
+  value = module.logapi_cicd.ecr_url
+}
 
 output "other_latest_tag" {
   value = local.other_latest_tag
