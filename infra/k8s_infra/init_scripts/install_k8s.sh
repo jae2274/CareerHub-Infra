@@ -63,4 +63,16 @@ apt-get install -y kubelet kubeadm kubectl
 rm /etc/containerd/config.toml
 systemctl restart containerd
 
-apt-get install -y awscli
+echo "***Install awscli***"
+apt-get install -y unzip
+if $(dpkg --print-architecture) == "amd64"; then
+    ARCH="x86_64"
+else
+    ARCH="aarch64"
+fi
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-$ARCH.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+apt-get install -y jq
