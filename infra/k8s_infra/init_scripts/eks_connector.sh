@@ -5,9 +5,6 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 helm version
 
-apt-get install -y awscli
-
-
 echo "***Register EKS cluster***"
 aws eks register-cluster \
      --name ${eks_name} \
@@ -16,7 +13,6 @@ aws eks register-cluster \
 
 
 echo "***Install eks-connector helm chart***"
-apt-get install -y jq
 
 export ACTIVATE_ID= `cat eks_connector.log | jq '.["cluster"]["ConnectorConfig"]["activationId"]' | tr -d '"'`
 export ACTIVATE_CODE= `cat eks_connector.log | jq '.["cluster"]["ConnectorConfig"]["activationCode"]' | tr -d '"'`

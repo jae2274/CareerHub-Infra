@@ -65,7 +65,9 @@ systemctl restart containerd
 
 echo "***Install awscli***"
 apt-get install -y unzip
-if $(dpkg --print-architecture) == "amd64"; then
+
+if [ $(dpkg --print-architecture) = "amd64" ]
+then
     ARCH="x86_64"
 else
     ARCH="aarch64"
