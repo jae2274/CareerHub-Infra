@@ -76,29 +76,29 @@ resource "mongodbatlas_database_user" "admin_db_user" {
   # }
 }
 
-resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
-  for_each = mongodbatlas_serverless_instance.mongodb_serverless
+# resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
+#   for_each = mongodbatlas_serverless_instance.mongodb_serverless
 
-  project_id    = mongodbatlas_project.project.id
-  instance_name = each.value.name
-  provider_name = "AWS"
-}
+#   project_id    = mongodbatlas_project.project.id
+#   instance_name = each.value.name
+#   provider_name = "AWS"
+# }
 
 
-resource "aws_vpc_endpoint" "vpc_endpoint" {
-  for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
+# resource "aws_vpc_endpoint" "vpc_endpoint" {
+#   for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
 
-  vpc_id              = var.vpc_id
-  service_name        = each.value.endpoint_service_name
-  vpc_endpoint_type   = "Interface"
-  private_dns_enabled = false
+#   vpc_id              = var.vpc_id
+#   service_name        = each.value.endpoint_service_name
+#   vpc_endpoint_type   = "Interface"
+#   private_dns_enabled = false
 
-  security_group_ids = [var.mongodb_sg_id]
-  subnet_ids         = var.subnet_ids
-}
+#   security_group_ids = [var.mongodb_sg_id]
+#   subnet_ids         = var.subnet_ids
+# }
 
-output "private_endpoint" {
-  value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_private_endpoint_srv[0] }
+output "public_endpoint" {
+  value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_standard_srv }
 }
 # resource "mongodbatlas_privatelink_endpoint_service_serverless" "privatelink_endpoint_service" {
 #   for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
