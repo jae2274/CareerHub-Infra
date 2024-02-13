@@ -123,7 +123,7 @@ ${local.join_k8s_sh}
 
 ${local.login_ecr_sh}
   EOT
-  vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id]
+  vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id, aws_security_group.k8s_node_sg.id]
 
   tags = {
     Name = "${var.cluster_name}-worker-${each.key}"
@@ -140,20 +140,6 @@ resource "aws_security_group" "k8s_worker_sg" {
   ingress {
     from_port   = 22
     to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 10250
-    to_port     = 10250
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 30000
-    to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

@@ -5,6 +5,8 @@ overlay
 br_netfilter
 EOF
 
+sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
 modprobe overlay
 modprobe br_netfilter
 
@@ -17,8 +19,7 @@ EOF
 # Apply sysctl params without reboot
 sysctl --system #someting wrong with this command
 
-swapoff /swap.img
-sed -i -e '/swap.img/d' /etc/fstab
+
 
 
 # check if the params are applied
