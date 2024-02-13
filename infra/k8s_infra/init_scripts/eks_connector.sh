@@ -3,7 +3,6 @@ echo "***Install helm***"
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
-helm version
 
 echo "***Register EKS cluster***"
 aws eks register-cluster \
@@ -14,15 +13,15 @@ aws eks register-cluster \
 
 echo "***Install eks-connector helm chart***"
 
-export ACTIVATE_ID= `cat eks_connector.log | jq '.["cluster"]["ConnectorConfig"]["activationId"]' | tr -d '"'`
-export ACTIVATE_CODE= `cat eks_connector.log | jq '.["cluster"]["ConnectorConfig"]["activationCode"]' | tr -d '"'`
+export EKS_ACTIVATION_ID=`cat eks_connector.log | jq '.["cluster"]["connectorConfig"]["activationId"]' | tr -d '"'`
+export EKS_ACTIVATION_CODE=`cat eks_connector.log | jq '.["cluster"]["connectorConfig"]["activationCode"]' | tr -d '"'`
 
-echo $ACTIVATE_ID
-echo $ACTIVATE_CODE
+echo $EKS_ACTIVATION_ID
+echo $EKS_ACTIVATION_CODE
 
 helm install eks-connector \
   --namespace eks-connector \
   oci://public.ecr.aws/eks-connector/eks-connector-chart \
-  --set eks.activationCode=$ACTIVATE_ID \
-  --set eks.activationId=$ACTIVATE_CODE \
-  --set eks.agentRegion=${region}
+  --set eks.activationId=$EKS_ACTIVATION_ID \
+  --set eks.activationCode=$EKS_ACTIVATION_CODE \
+  --set eks.agentRegion=${region} --create-namespace

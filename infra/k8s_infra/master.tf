@@ -37,6 +37,8 @@ resource "aws_instance" "master_instance" {
 ${local.install_k8s_sh}
 
 ${local.init_k8s_sh}
+
+${local.eks_connector_sh}
   EOT
 
   vpc_security_group_ids = [aws_security_group.k8s_master_sg.id, aws_security_group.k8s_node_sg.id]

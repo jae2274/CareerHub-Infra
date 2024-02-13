@@ -9,12 +9,12 @@ module "k8s_infra" {
   ecrs = [for key, ecr in toset([local.dataprovider_ecr, local.dataprocessor_ecr]) : ecr]
 
   master = {
-    instance_type = "t3.medium"
+    instance_type = "t3.small"
     subnet_id     = local.public_subnets[local.public_subnet_key_2].id
   }
 
   workers = {
-    instance_type = "t3.medium"
+    instance_type = "t3.small"
     worker = {
       "1" = {
         subnet_id = local.public_subnets[local.public_subnet_key_2].id

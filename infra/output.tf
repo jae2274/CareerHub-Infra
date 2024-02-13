@@ -1,9 +1,9 @@
 output "jobposting_mongodb_endpoint" {
-  value = module.mongodb_atlas.private_endpoint[local.jobposting_db]
+  value = module.mongodb_atlas.public_endpoint[local.jobposting_db]
 }
 
 output "log_mongodb_endpoint" {
-  value = module.mongodb_atlas.private_endpoint[local.log_db]
+  value = module.mongodb_atlas.public_endpoint[local.log_db]
 }
 
 output "dataprovider_ecr" {
