@@ -30,6 +30,10 @@ variable "ecrs" {
   }))
 }
 
+variable "cluster_user_arn" {
+  type = string
+}
+
 data "aws_region" "current" {}
 locals {
   region = data.aws_region.current.name
@@ -55,6 +59,7 @@ locals {
     eks_name           = var.cluster_name
     region             = local.region
     connector_role_arn = aws_iam_role.eks_connector_role.arn
+    user_arn           = var.cluster_user_arn
   })
 
   ami = "ami-0a7cf821b91bcccbc" # ubuntu 20.04 LTS x86_64

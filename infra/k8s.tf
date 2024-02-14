@@ -10,19 +10,21 @@ module "k8s_infra" {
 
   master = {
     instance_type = "t3.small"
-    subnet_id     = local.public_subnets[local.public_subnet_key_2].id
+    subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
   workers = {
     instance_type = "t3.small"
     worker = {
       "1" = {
-        subnet_id = local.public_subnets[local.public_subnet_key_2].id
+        subnet_id = local.public_subnets[local.public_subnet_key_1].id
       }
       "2" = {
-        subnet_id = local.public_subnets[local.public_subnet_key_1].id
+        subnet_id = local.public_subnets[local.public_subnet_key_2].id
       }
     }
   }
+
+  cluster_user_arn = var.eks_cluster_user_arn
 }
 

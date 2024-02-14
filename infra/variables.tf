@@ -31,3 +31,7 @@ variable "eks_cluster_admin_user_names" {
   type    = list(string)
   default = []
 }
+
+variable "eks_cluster_user_arn" {
+  type = string
+}
