@@ -41,13 +41,13 @@ locals {
   install_k8s_sh = file("${path.module}/init_scripts/install_k8s.sh")
 
   init_k8s_sh = templatefile("${path.module}/init_scripts/init_k8s.sh", {
-    public_ip = aws_eip.master_public_ip.public_ip,
+    public_ip = aws_eip.master_public_ip.public_ip
     ecrs      = var.ecrs
   })
 
   join_k8s_sh = templatefile("${path.module}/init_scripts/join_k8s.sh", {
     master_ip          = aws_instance.master_instance.private_ip
-    master_private_key = tls_private_key.k8s_private_key.private_key_pem,
+    master_private_key = tls_private_key.k8s_private_key.private_key_pem
   })
 
   login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
@@ -60,6 +60,11 @@ locals {
     region             = local.region
     connector_role_arn = aws_iam_role.eks_connector_role.arn
     user_arn           = var.cluster_user_arn
+  })
+
+  set_secret_sh = templatefile("${path.module}/init_scripts/set_secret.sh", {
+    secret_id = aws_secretsmanager_secret.kubeconfig.id
+    master_ip = aws_eip.master_public_ip.public_ip
   })
 
   ami = "ami-0a7cf821b91bcccbc" # ubuntu 20.04 LTS x86_64
