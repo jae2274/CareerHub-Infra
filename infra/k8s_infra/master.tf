@@ -55,16 +55,6 @@ ${local.set_secret_sh}
   tags = {
     Name = "${var.cluster_name}-master"
   }
-
-  # self = {
-  #   region = var.region
-
-  # }
-
-  # provisioner "local-exec" {
-  #   when    = destroy
-  #   command = "aws eks deregister-cluster --name ${var.cluster_name} --region ${self.region} > deregister.log"
-  # }
 }
 
 resource "null_resource" "eks_connector" {
