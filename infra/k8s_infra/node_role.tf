@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "ec2_policy_doc" {
   statement {
     effect = "Allow"
     actions = [
-      "eks:RegisterCluster"
+      "eks:RegisterCluster",
     ]
     resources = ["*"]
   }

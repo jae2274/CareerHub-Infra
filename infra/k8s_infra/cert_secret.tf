@@ -1,5 +1,6 @@
 resource "aws_secretsmanager_secret" "kubeconfig" {
-  name = "${var.cluster_name}-kubeconfig"
+  name                    = "${var.cluster_name}-kubeconfig"
+  recovery_window_in_days = 0
 }
 
 

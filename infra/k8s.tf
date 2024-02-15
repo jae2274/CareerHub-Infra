@@ -28,3 +28,27 @@ module "k8s_infra" {
   cluster_user_arn = var.eks_cluster_user_arn
 }
 
+# resource "local_file" "temp" {
+#   filename = "temp"
+#   content  = "This is a temporary file"
+# }
+
+# resource "null_resource" "eks_connector" {
+#   depends_on = [local_file.temp]
+
+#   triggers = {
+#     create  = "create"
+#     destroy = "destroy"
+#   }
+
+#   provisioner "local-exec" {
+#     when    = create
+#     command = "echo ${self.triggers.create} > create.log"
+
+#   }
+
+#   provisioner "local-exec" {
+#     when    = destroy
+#     command = "echo ${self.triggers.destroy} > destroy.log"
+#   }
+# }
