@@ -165,4 +165,5 @@ terraform.rc
 *.terraform.lock.hcl
 *.pem
 .DS_Store
+*/.DS_Store
 *_chart.zip
