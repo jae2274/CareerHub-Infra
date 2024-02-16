@@ -8,7 +8,7 @@ locals {
 }
 
 data "external" "helm_charts" {
-  program = ["bash", "${path.module}/data_external/helm_charts.sh", "helm"]
+  program = ["bash", "${path.module}/data_external/helm_charts.sh", "helm_charts"]
 }
 
 locals {
