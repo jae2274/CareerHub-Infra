@@ -22,7 +22,9 @@ spec:
               value: {{.Values.mongoUri}}
             - name: DB_NAME
               value: logs
-            - name: API_PORT
-              value: "{{.Values.apiPort}}"
+            - name: GRPC_PORT
+              value: "{{.Values.grpcPort}}"
+            - name: POST_LOG_URL
+              value: "{{.Values.postLogUrl}}"
           ports:
-            - containerPort: {{.Values.apiPort}}
+            - containerPort: {{.Values.grpcPort}}

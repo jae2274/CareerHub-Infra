@@ -1,8 +1,19 @@
 locals {
   charts = {
     log_api = {
+      name      = "log-api"
       image     = local.logapi_ecr
+      tag       = "latest" #TODO: Change this to dynamic
       mongo_uri = local.log_mongodb_endpoint
+      api_port  = 8080
+    }
+
+    data_processor = {
+      name      = "data-processor"
+      image     = local.dataprocessor_ecr
+      tag       = "latest" #TODO: Change this to dynamic
+      mongo_uri = local.jobposting_mongodb_endpoint
+      grpc_port = 50051
     }
   }
 }

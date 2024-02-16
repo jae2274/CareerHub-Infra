@@ -1,0 +1,6 @@
+name: ${charts.data_processor.name}
+image: ${charts.data_processor.image}
+tag: ${charts.data_processor.tag}
+grpcPort: ${charts.data_processor.grpc_port}
+mongoUri: ${charts.data_processor.mongo_uri}
+postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
