@@ -1,5 +1,0 @@
-logApi:
-  name: log-api
-  image: ${logapi_image}
-  apiPort: 8080
-  mongoUri: ${logapi_mongo_uri}

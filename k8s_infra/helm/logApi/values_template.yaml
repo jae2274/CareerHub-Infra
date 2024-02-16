@@ -1,0 +1,5 @@
+logApi:
+  name: log-api
+  image: ${charts.log_api.image}
+  apiPort: 8080
+  mongoUri: ${charts.log_api.mongo_uri}
