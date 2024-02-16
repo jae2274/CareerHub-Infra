@@ -58,6 +58,6 @@ aws ecr get-login-password --region ${local.region} | helm registry login --user
 helm push ${local.chart_package} oci://${local.repo_domain}/
 
 rm -f ${local.chart_package}
-    EOF
+        EOF
   }
 }
