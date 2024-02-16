@@ -13,7 +13,7 @@ terraform {
 
 
 locals {
-  service_name        = "career-hub"
+  service_name        = "careerhub"
   prefix_service_name = "${local.prefix}${local.service_name}"
 }
 
