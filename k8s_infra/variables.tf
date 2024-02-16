@@ -6,6 +6,10 @@ locals {
   dataprovider_ecr            = local.infra_outputs.dataprovider_ecr
   dataprocessor_ecr           = local.infra_outputs.dataprocessor_ecr
   logapi_ecr                  = local.infra_outputs.logapi_ecr
+  region                      = local.infra_outputs.region
 
   other_latest_tag = local.infra_outputs.other_latest_tag
+}
+variable "terraform_role" {
+  type = string
 }
