@@ -19,3 +19,7 @@ output "logapi_ecr" {
 output "other_latest_tag" {
   value = local.other_latest_tag
 }
+
+output "region" {
+  value = var.region
+}
