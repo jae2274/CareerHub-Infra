@@ -2,4 +2,4 @@ name: log-api
 image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-logapi-ecr
 tag: latest
 apiPort: 8080
-mongoUri: mongodb+srv://dev-careerhub-log.aoojevm.mongodb.net
+mongoUri: mongodb+srv://dev-careerhub-log.iwggjgy.mongodb.net

@@ -45,3 +45,7 @@ resource "aws_security_group" "k8s_worker_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+output "worker_public_ips" {
+  value = [for worker in aws_instance.workers : worker.public_ip]
+}

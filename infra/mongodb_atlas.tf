@@ -1,9 +1,8 @@
-
-
 provider "mongodbatlas" {
   public_key  = var.atlas_key.public_key
   private_key = var.atlas_key.private_key
 }
+
 
 resource "aws_security_group" "mongodb_security_group" {
   name        = "mongodb_security_group"
@@ -36,6 +35,7 @@ module "mongodb_atlas" {
 
   mongodb_region = var.region
   project_name   = "${local.prefix_service_name}-project"
+  access_ip_list = concat(local.worker_ips, formatlist(local.master_ip))
 
   admin_db_user = {
     username = var.admin_db_username
@@ -49,16 +49,11 @@ module "mongodb_atlas" {
 
   serverless_databases = [local.jobposting_db, local.log_db]
 
-  vpc_id        = module.vpc_infra.vpc.id
-  subnet_ids    = [for subnet in module.vpc_infra.public_subnets : subnet.id]
-  mongodb_sg_id = aws_security_group.mongodb_security_group.id
   tags = {
     env = local.env
   }
 }
 
-# resource "aws_security_group" "mongodb_security_group" {
 
-# }
 
 

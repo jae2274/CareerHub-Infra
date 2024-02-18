@@ -5,9 +5,13 @@ terraform {
       version = "1.14.0"
     }
   }
-
 }
 
+
+
+locals {
+  mongodb_region = join("_", split("-", upper(var.mongodb_region)))
+}
 
 provider "mongodbatlas" {
   public_key  = var.atlas_key.public_key
@@ -38,7 +42,7 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   name                                    = each.key
   provider_settings_backing_provider_name = "AWS"
   provider_settings_provider_name         = "SERVERLESS"
-  provider_settings_region_name           = join("_", split("-", upper(var.mongodb_region)))
+  provider_settings_region_name           = local.mongodb_region
   continuous_backup_enabled               = true
 
 
@@ -66,36 +70,17 @@ resource "mongodbatlas_database_user" "admin_db_user" {
     database_name = "admin"
   }
 
-  # dynamic "roles" {
-  #   for_each = mongodbatlas_serverless_instance.mongodb_serverless
-
-  #   content {
-  #     role_name     = "readWrite"
-  #     database_name = roles.value.name
-  #   }
-  # }
 }
 
-# resource "mongodbatlas_privatelink_endpoint_serverless" "privatelink_endpoint" {
-#   for_each = mongodbatlas_serverless_instance.mongodb_serverless
-
-#   project_id    = mongodbatlas_project.project.id
-#   instance_name = each.value.name
-#   provider_name = "AWS"
-# }
 
 
-# resource "aws_vpc_endpoint" "vpc_endpoint" {
-#   for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
+resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
+  for_each   = toset(var.access_ip_list)
+  project_id = mongodbatlas_project.project.id
+  cidr_block = "${each.key}/32"
+  comment    = "Access from ${each.key}"
+}
 
-#   vpc_id              = var.vpc_id
-#   service_name        = each.value.endpoint_service_name
-#   vpc_endpoint_type   = "Interface"
-#   private_dns_enabled = false
-
-#   security_group_ids = [var.mongodb_sg_id]
-#   subnet_ids         = var.subnet_ids
-# }
 
 output "public_endpoint" {
   value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_standard_srv }

@@ -27,3 +27,9 @@ module "k8s_infra" {
 
   cluster_user_arn = var.eks_cluster_user_arn
 }
+
+
+locals {
+  master_ip  = module.k8s_infra.master_public_ip
+  worker_ips = module.k8s_infra.worker_public_ips
+}
