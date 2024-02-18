@@ -3,3 +3,5 @@ image: ${charts.log_api.image}
 tag: ${charts.log_api.tag}
 apiPort: ${charts.log_api.api_port}
 mongoUri: ${charts.log_api.mongo_uri}
+dbUsername: #known after the deployment
+dbPassword: #known after the deployment
