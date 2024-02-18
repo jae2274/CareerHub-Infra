@@ -1,3 +1,7 @@
+output "mongodb_user_secret_id" {
+  value = aws_secretsmanager_secret.secretmanager.id
+}
+
 output "jobposting_mongodb_endpoint" {
   value = module.mongodb_atlas.public_endpoint[local.jobposting_db]
 }

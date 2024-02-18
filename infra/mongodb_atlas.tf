@@ -54,6 +54,19 @@ module "mongodb_atlas" {
   }
 }
 
+resource "aws_secretsmanager_secret" "secretmanager" {
+  name = "mongodb_user"
+}
+
+locals {
+  mongodb_user = {
+    username = var.admin_db_username
+    password = var.admin_db_password
+  }
+}
 
 
-
+resource "aws_secretsmanager_secret_version" "mongodb_user" {
+  secret_id     = aws_secretsmanager_secret.secretmanager.id
+  secret_string = jsonencode(local.mongodb_user)
+}

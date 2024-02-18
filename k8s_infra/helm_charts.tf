@@ -1,3 +1,11 @@
+data "aws_secretsmanager_secret_version" "mongodb_user" {
+  secret_id = local.mongodb_user_secret_id
+}
+
+locals {
+  mongodb_user = jsondecode(data.aws_secretsmanager_secret_version.mongodb_user.secret_string)
+}
+
 locals {
   charts = {
     log_api = {

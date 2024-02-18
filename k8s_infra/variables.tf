@@ -1,6 +1,8 @@
 locals {
   infra_outputs = data.terraform_remote_state.infra.outputs
 
+  mongodb_user_secret_id = local.infra_outputs.mongodb_user_secret_id
+
   jobposting_mongodb_endpoint = local.infra_outputs.jobposting_mongodb_endpoint
   log_mongodb_endpoint        = local.infra_outputs.log_mongodb_endpoint
   dataprovider_ecr            = local.infra_outputs.dataprovider_ecr
