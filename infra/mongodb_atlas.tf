@@ -35,7 +35,7 @@ module "mongodb_atlas" {
 
   mongodb_region = var.region
   project_name   = "${local.prefix_service_name}-project"
-  access_ip_list = concat(local.worker_ips, formatlist(local.master_ip))
+  access_ip_list = local.worker_ips
 
   admin_db_user = {
     username = var.admin_db_username
