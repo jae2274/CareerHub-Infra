@@ -25,6 +25,14 @@ locals {
       db_name   = "careerhub"
       grpc_port = 50051
     }
+
+    data_provider = {
+      name      = "data-provider"
+      image     = local.dataprovider_ecr
+      tag       = "latest" #TODO: Change this to dynamic
+      mongo_uri = local.finded_history_mongodb_endpoint
+      db_name   = "finded-history"
+    }
   }
 }
 

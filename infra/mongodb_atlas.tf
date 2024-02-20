@@ -26,8 +26,9 @@ resource "aws_security_group" "mongodb_security_group" {
 }
 
 locals {
-  jobposting_db = "${local.prefix_service_name}-jobposting"
-  log_db        = "${local.prefix_service_name}-log"
+  finded_history_db = "${local.prefix_service_name}-finded-history"
+  jobposting_db     = "${local.prefix_service_name}-jobposting"
+  log_db            = "${local.prefix_service_name}-log"
 }
 
 module "mongodb_atlas" {
@@ -47,7 +48,7 @@ module "mongodb_atlas" {
     private_key = var.atlas_private_key
   }
 
-  serverless_databases = [local.jobposting_db, local.log_db]
+  serverless_databases = [local.finded_history_db, local.jobposting_db, local.log_db]
 
   tags = {
     env = local.env

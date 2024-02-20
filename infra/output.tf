@@ -2,6 +2,10 @@ output "mongodb_user_secret_id" {
   value = aws_secretsmanager_secret.secretmanager.id
 }
 
+output "finded_history_mongodb_endpoint" {
+  value = module.mongodb_atlas.public_endpoint[local.finded_history_db]
+}
+
 output "jobposting_mongodb_endpoint" {
   value = module.mongodb_atlas.public_endpoint[local.jobposting_db]
 }
