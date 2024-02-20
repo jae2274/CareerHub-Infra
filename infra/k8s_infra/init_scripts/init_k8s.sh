@@ -54,3 +54,11 @@ mv replace_ecr_token.sh /etc/init.d/replace_ecr_token.sh
 cat <<EOF | tee /etc/cron.d/cron_docker > /dev/null
 */10 * * * * root /etc/init.d/replace_ecr_token.sh
 EOF
+
+echo "***Install helm***"
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+echo "***Install metrics-server***"
+helm install metrics-server metrics-server/metrics-server --set args="{--kubelet-insecure-tls}" --namespace kube-metrics --create-namespace
