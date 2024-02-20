@@ -14,6 +14,7 @@ spec:
       labels:
         app: {{.Values.name}}
     spec:
+      restartPolicy: Always
       containers:
         - name: {{.Values.name}}
           image: {{ .Values.image }}:{{ .Values.tag }}
@@ -21,7 +22,7 @@ spec:
             - name: MONGO_URI
               value: {{.Values.mongoUri}}
             - name: DB_NAME
-              value: logs
+              value: {{.Values.dbName}}
             - name: DB_USERNAME
               value: {{.Values.dbUsername}}
             - name: DB_PASSWORD

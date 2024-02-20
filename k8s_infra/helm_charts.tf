@@ -13,6 +13,7 @@ locals {
       image     = local.logapi_ecr
       tag       = "latest" #TODO: Change this to dynamic
       mongo_uri = local.log_mongodb_endpoint
+      db_name   = "logs"
       api_port  = 8080
     }
 
@@ -21,6 +22,7 @@ locals {
       image     = local.dataprocessor_ecr
       tag       = "latest" #TODO: Change this to dynamic
       mongo_uri = local.jobposting_mongodb_endpoint
+      db_name   = "careerhub"
       grpc_port = 50051
     }
   }
