@@ -66,4 +66,5 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 
 echo "***Install metrics-server***"
+helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
 helm install metrics-server metrics-server/metrics-server --set args="{--kubelet-insecure-tls}" --namespace kube-metrics --create-namespace

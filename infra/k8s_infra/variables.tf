@@ -55,6 +55,6 @@ locals {
     master_ip = aws_eip.master_public_ip.public_ip
   })
 
-  ami = "ami-0a7cf821b91bcccbc" # ubuntu 20.04 LTS x86_64
-  # ami = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
+  # ami = "ami-0a7cf821b91bcccbc" # ubuntu 20.04 LTS x86_64
+  ami = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
 }

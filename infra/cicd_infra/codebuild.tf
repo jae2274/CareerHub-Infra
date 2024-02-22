@@ -117,6 +117,22 @@ resource "aws_s3_bucket" "codebuild_log_bucket" {
 #   acl    = "private"
 # }
 
+
+locals {
+  codebuild_enviroment = {
+    arm64 = {
+      type         = "ARM_CONTAINER"
+      compute_type = "BUILD_GENERAL1_SMALL"
+      image        = "aws/codebuild/amazonlinux2-aarch64-standard:3.0"
+    }
+    x86_64 = {
+      type         = "LINUX_CONTAINER"
+      compute_type = "BUILD_GENERAL1_SMALL"
+      image        = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+    }
+  }
+}
+
 // end define log bucket
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.cicd_name}-codebuild"
@@ -130,9 +146,9 @@ resource "aws_codebuild_project" "codebuild_project" {
 
   environment {
     image_pull_credentials_type = "CODEBUILD"
-    type                        = "LINUX_CONTAINER"
-    compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
+    type                        = local.codebuild_enviroment[var.build_arch].type
+    compute_type                = local.codebuild_enviroment[var.build_arch].compute_type
+    image                       = local.codebuild_enviroment[var.build_arch].image
     privileged_mode             = true
   }
 

@@ -6,6 +6,7 @@ module "dataprovider_cicd" {
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-provider"
+  build_arch       = "arm64"
 
   repository_path = "jae2274/Careerhub-dataProvider"
   branch_name     = local.branch
@@ -19,6 +20,7 @@ module "dataprocessor_cicd" {
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-processor"
+  build_arch       = "arm64"
 
   repository_path = "jae2274/Careerhub-dataProcessor"
   branch_name     = local.branch
@@ -32,6 +34,7 @@ module "logapi_cicd" {
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-logapi"
+  build_arch       = "arm64"
 
   repository_path = "jae2274/LogApi"
   branch_name     = local.branch
