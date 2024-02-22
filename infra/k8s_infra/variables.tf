@@ -30,10 +30,6 @@ variable "ecrs" {
   }))
 }
 
-variable "cluster_user_arn" {
-  type = string
-}
-
 data "aws_region" "current" {}
 locals {
   region = data.aws_region.current.name
@@ -52,14 +48,6 @@ locals {
 
   login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
     ecrs = var.ecrs
-  })
-
-  # eks_name = "${var.cluster_name}-eks"
-  eks_connector_sh = templatefile("${path.module}/init_scripts/eks_connector.sh", {
-    eks_name           = var.cluster_name
-    region             = local.region
-    connector_role_arn = aws_iam_role.eks_connector_role.arn
-    user_arn           = var.cluster_user_arn
   })
 
   set_secret_sh = templatefile("${path.module}/init_scripts/set_secret.sh", {

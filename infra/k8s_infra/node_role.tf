@@ -17,43 +17,6 @@ data "aws_iam_policy_document" "ec2_policy_doc" {
     resources = ["*"]
   }
 
-  statement {
-    effect = "Allow"
-    actions = [
-      "eks:RegisterCluster",
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:PassRole"
-    ]
-    resources = [aws_iam_role.eks_connector_role.arn]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:CreateServiceLinkedRole"
-    ]
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/eks-connector.amazonaws.com/AWSServiceRoleForAmazonEKSConnector"
-    ]
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "iam:AttachRolePolicy",
-      "iam:PutRolePolicy"
-    ]
-    resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/eks-connector.amazonaws.com/AWSServiceRoleForAmazonEKSConnector"
-    ]
-  }
-
   # statement {
   #   effect    = "Allow"
   #   actions   = ["ssm:UpdateInstanceInformation", "ssmmessages:CreateControlChannel", "ssm:ListInstanceAssociations"]
@@ -94,14 +57,6 @@ resource "aws_iam_role_policy" "ec2_role_policy" {
 resource "aws_iam_role_policy" "secrets_manager_policy" {
   role   = aws_iam_role.k8s_node_role.name
   policy = data.aws_iam_policy_document.cert_secret_policy_doc.json
-}
-
-data "aws_iam_policy" "eks_node_policy" {
-  name = "AmazonEKSLocalOutpostClusterPolicy"
-}
-resource "aws_iam_role_policy_attachment" "eks_connector_policy_attachment" {
-  role       = aws_iam_role.k8s_node_role.name
-  policy_arn = data.aws_iam_policy.eks_node_policy.arn
 }
 
 resource "aws_iam_instance_profile" "iam_instance_profile" {

@@ -20,18 +20,3 @@ variable "admin_db_username" {
 variable "admin_db_password" {
   type = string
 }
-
-
-variable "eks_cluster_admin_role_names" {
-  type    = list(string)
-  default = []
-}
-
-variable "eks_cluster_admin_user_names" {
-  type    = list(string)
-  default = []
-}
-
-variable "eks_cluster_user_arn" {
-  type = string
-}

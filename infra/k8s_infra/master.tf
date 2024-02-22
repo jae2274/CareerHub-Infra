@@ -45,8 +45,6 @@ ${local.install_k8s_sh}
 
 ${local.init_k8s_sh}
 
-${local.eks_connector_sh}
-
 ${local.set_secret_sh}
   EOT
 
@@ -57,20 +55,6 @@ ${local.set_secret_sh}
   }
 }
 
-resource "null_resource" "eks_connector" {
-  depends_on = [aws_instance.master_instance]
-
-  triggers = {
-    instance_id  = aws_instance.master_instance.id
-    cluster_name = var.cluster_name
-    region       = local.region
-  }
-
-  provisioner "local-exec" {
-    when    = destroy
-    command = "aws eks deregister-cluster --name ${self.triggers.cluster_name} --region ${self.triggers.region}"
-  }
-}
 
 
 

@@ -24,8 +24,6 @@ module "k8s_infra" {
       }
     }
   }
-
-  cluster_user_arn = var.eks_cluster_user_arn
 }
 
 
