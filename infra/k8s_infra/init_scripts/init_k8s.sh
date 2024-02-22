@@ -40,12 +40,17 @@ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "ecr-aut
 
 cat <<EOF | tee replace_ecr_token.sh > /dev/null
 #!/bin/bash
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+HOME=/root
+
 %{ for ecr in ecrs ~}
 aws ecr get-login-password --region ${ecr.region} | docker login --username AWS --password-stdin ${ecr.domain}
 %{ endfor ~}
-cp /root/.docker/config.json /home/ubuntu/.docker/config.json
+cp \$HOME/.docker/config.json /home/ubuntu/.docker/config.json
 
-kubectl create secret generic ecr-auth --from-file=.dockerconfigjson=$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson -o yaml --dry-run=client | kubectl replace -f -
+kubectl create secret generic ecr-auth --from-file=.dockerconfigjson=\$HOME/.docker/config.json --type=kubernetes.io/dockerconfigjson -o yaml --dry-run=client | kubectl replace -f -
 EOF
 
 chmod +x replace_ecr_token.sh
