@@ -7,3 +7,7 @@ grpcEndpoint: ${charts.data_processor.name}:${charts.data_processor.grpc_port}
 postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment
+sites:
+%{ for site in charts.data_provider.sites ~}
+  - ${site}
+%{ endfor ~}

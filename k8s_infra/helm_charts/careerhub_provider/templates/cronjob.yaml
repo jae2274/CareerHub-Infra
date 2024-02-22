@@ -1,7 +1,18 @@
+{{ $name := .Values.name }}
+{{ $image := .Values.image }}
+{{ $tag := .Values.tag }}
+{{ $mongoUri := .Values.mongoUri }}
+{{ $dbName := .Values.dbName }}
+{{ $grpcEndpoint := .Values.grpcEndpoint }}
+{{ $postLogUrl := .Values.postLogUrl }}
+{{ $dbUsername := .Values.dbUsername }}
+{{ $dbPassword := .Values.dbPassword }}
+
+{{- range $i, $site := .Values.sites }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{.Values.name}}
+  name: {{$name}}-{{$site}}
 spec:
   schedule: "*/30 * * * *"
   successfulJobsHistoryLimit: 1
@@ -12,20 +23,22 @@ spec:
         spec:
           restartPolicy: Never
           containers:
-            - name: {{.Values.name}}
-              image: {{ .Values.image }}:{{ .Values.tag }}
+            - name: {{$name}}
+              image: {{ $image }}:{{ $tag }}
+              args: ["-site={{ $site }}"]
               env:
                 - name: MONGO_URI
-                  value: {{.Values.mongoUri}}
+                  value: {{$mongoUri}}
                 - name: DB_NAME
-                  value: {{.Values.dbName}}
+                  value: {{$dbName}}
                 - name: DB_USERNAME
-                  value: {{.Values.dbUsername}}
+                  value: {{$dbUsername}}
                 - name: DB_PASSWORD
-                  value: {{.Values.dbPassword}}
+                  value: {{$dbPassword}}
                 - name: GRPC_ENDPOINT
-                  value: "{{.Values.grpcEndpoint}}"
+                  value: "{{$grpcEndpoint}}"
                 - name: POST_LOG_URL
-                  value: "{{.Values.postLogUrl}}"
-              # 애플리케이션 실행 설정
-  concurrencyPolicy: Forbid # 이전 작업이 종료될 때까지 다음 작업이 시작되지 않음
+                  value: "{{$postLogUrl}}"
+  concurrencyPolicy: Forbid
+---
+{{- end }}

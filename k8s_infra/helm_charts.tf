@@ -32,6 +32,7 @@ locals {
       tag       = "latest" #TODO: Change this to dynamic
       mongo_uri = local.finded_history_mongodb_endpoint
       db_name   = "finded-history"
+      sites     = ["jumpit", "wanted"]
     }
   }
 }
