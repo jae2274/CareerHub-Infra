@@ -2,7 +2,7 @@
 // MongoDB Playground
 // Use Ctrl+Space inside a snippet or a string literal to trigger completions.
 
-const database = "data-processor";
+const database = "careerhub";
 const collections = [
   {
     name: "jobPostingInfo",
@@ -32,9 +32,23 @@ const collections = [
         },
       },
       {
-        name: "skillNames.name_1",
+        name: "skillNames_1",
         index: {
-          "skillNames.name": 1,
+          skillNames: 1,
+        },
+        options: {
+          unique: true,
+        },
+      },
+    ],
+  },
+  {
+    name: "skillName",
+    indexes: [
+      {
+        name: "name_1",
+        index: {
+          name: 1,
         },
         options: {
           unique: true,
