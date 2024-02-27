@@ -3,7 +3,7 @@ image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-provider-ecr
 tag: latest
 mongoUri: mongodb+srv://dev-careerhub-finded-hi.xrcper1.mongodb.net
 dbName: finded-history
-grpcEndpoint: data-processor:50051
+grpcEndpoint: provider-grpc:50051
 postLogUrl: http://log-api:8080/logs
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment

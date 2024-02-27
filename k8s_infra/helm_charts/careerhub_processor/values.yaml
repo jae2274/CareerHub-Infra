@@ -1,9 +1,14 @@
 name: data-processor
 image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-processor-ecr
 tag: latest
-grpcPort: 50051
 mongoUri: mongodb+srv://dev-careerhub-jobpostin.whlcb4f.mongodb.net
 dbName: careerhub
 postLogUrl: http://log-api:8080/logs
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment
+provider:
+  name: provider-grpc
+  grpcPort: 50051
+scanner:
+  name: scanner-grpc
+  grpcPort: 50052

@@ -3,7 +3,7 @@ image: ${charts.data_provider.image}
 tag: ${charts.data_provider.tag}
 mongoUri: ${charts.data_provider.mongo_uri}
 dbName: ${charts.data_provider.db_name}
-grpcEndpoint: ${charts.data_processor.name}:${charts.data_processor.grpc_port}
+grpcEndpoint: ${charts.data_processor.provider.name}:${charts.data_processor.provider.grpc_port}
 postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment

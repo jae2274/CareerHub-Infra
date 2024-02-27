@@ -23,7 +23,14 @@ locals {
       tag       = "latest" #TODO: Change this to dynamic
       mongo_uri = local.jobposting_mongodb_endpoint
       db_name   = "careerhub"
-      grpc_port = 50051
+      provider = {
+        name      = "provider-grpc"
+        grpc_port = 50051
+      }
+      scanner = {
+        name      = "scanner-grpc"
+        grpc_port = 50052
+      }
     }
 
     data_provider = {

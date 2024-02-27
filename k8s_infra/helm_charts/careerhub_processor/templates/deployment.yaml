@@ -27,9 +27,12 @@ spec:
               value: {{.Values.dbUsername}}
             - name: DB_PASSWORD
               value: {{.Values.dbPassword}}
-            - name: GRPC_PORT
-              value: "{{.Values.grpcPort}}"
+            - name: PROVIDER_GRPC_PORT
+              value: "{{.Values.provider.grpcPort}}"
+            - name: SCANNER_GRPC_PORT
+              value: "{{.Values.scanner.grpcPort}}"
             - name: POST_LOG_URL
               value: "{{.Values.postLogUrl}}"
           ports:
-            - containerPort: {{.Values.grpcPort}}
+            - containerPort: {{.Values.provider.grpcPort}}
+            - containerPort: {{.Values.scanner.grpcPort}}
