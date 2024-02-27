@@ -20,6 +20,9 @@ output "dataprovider_ecr" {
 output "dataprocessor_ecr" {
   value = module.dataprocessor_cicd.ecr_url
 }
+output "skillscanner_ecr" {
+  value = module.skillscanner_cicd.ecr_url
+}
 output "logapi_ecr" {
   value = module.logapi_cicd.ecr_url
 }
