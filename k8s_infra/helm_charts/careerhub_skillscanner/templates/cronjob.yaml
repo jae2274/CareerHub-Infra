@@ -1,0 +1,28 @@
+{{ $name := .Values.name }}
+{{ $image := .Values.image }}
+{{ $tag := .Values.tag }}
+{{ $grpcEndpoint := .Values.grpcEndpoint }}
+{{ $postLogUrl := .Values.postLogUrl }}
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{$name}}
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: {{$name}}
+              image: {{ $image }}:{{ $tag }}
+              env:
+                - name: GRPC_ENDPOINT
+                  value: "{{$grpcEndpoint}}"
+                - name: POST_LOG_URL
+                  value: "{{$postLogUrl}}"
+  concurrencyPolicy: Forbid

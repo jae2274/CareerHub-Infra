@@ -1,0 +1,5 @@
+name: skill-scanner
+image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-skillscanner-ecr
+tag: latest
+grpcEndpoint: scanner-grpc:50052
+postLogUrl: http://log-api:8080/logs

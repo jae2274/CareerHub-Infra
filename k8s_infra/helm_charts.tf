@@ -41,6 +41,12 @@ locals {
       db_name   = "finded-history"
       sites     = ["jumpit", "wanted"]
     }
+
+    skill_scanner = {
+      name  = "skill-scanner"
+      image = local.skillscanner_ecr
+      tag   = "latest" #TODO: Change this to dynamic
+    }
   }
 }
 

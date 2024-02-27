@@ -1,0 +1,5 @@
+name: ${charts.skill_scanner.name}
+image: ${charts.skill_scanner.image}
+tag: ${charts.skill_scanner.tag}
+grpcEndpoint: ${charts.data_processor.scanner.name}:${charts.data_processor.scanner.grpc_port}
+postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs

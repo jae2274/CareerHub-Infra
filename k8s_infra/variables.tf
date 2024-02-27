@@ -8,6 +8,7 @@ locals {
   log_mongodb_endpoint            = local.infra_outputs.log_mongodb_endpoint
   dataprovider_ecr                = local.infra_outputs.dataprovider_ecr
   dataprocessor_ecr               = local.infra_outputs.dataprocessor_ecr
+  skillscanner_ecr                = local.infra_outputs.skillscanner_ecr
   logapi_ecr                      = local.infra_outputs.logapi_ecr
   region                          = local.infra_outputs.region
 
