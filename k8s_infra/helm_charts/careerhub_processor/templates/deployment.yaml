@@ -33,6 +33,8 @@ spec:
               value: "{{.Values.scanner.grpcPort}}"
             - name: POST_LOG_URL
               value: "{{.Values.postLogUrl}}"
+            - name: REST_API_PORT
+              value: "{{.Values.restApi.apiPort}}"
           ports:
             - containerPort: {{.Values.provider.grpcPort}}
             - containerPort: {{.Values.scanner.grpcPort}}

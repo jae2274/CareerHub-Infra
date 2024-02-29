@@ -12,3 +12,6 @@ provider:
 scanner:
   name: scanner-grpc
   grpcPort: 50052
+restApi:
+  name: rest-api
+  apiPort: 8080

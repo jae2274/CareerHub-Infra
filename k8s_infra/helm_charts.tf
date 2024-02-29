@@ -31,6 +31,10 @@ locals {
         name      = "scanner-grpc"
         grpc_port = 50052
       }
+      rest_api = {
+        name     = "rest-api"
+        api_port = 8080
+      }
     }
 
     data_provider = {

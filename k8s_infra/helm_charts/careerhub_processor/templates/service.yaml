@@ -23,3 +23,16 @@ spec:
     - protocol: TCP
       port: {{.Values.scanner.grpcPort}}
       targetPort: {{.Values.scanner.grpcPort}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.restApi.name}}
+spec:
+  type: LoadBalancer
+  selector:
+    app: {{.Values.name}}
+  ports:
+    - protocol: TCP
+      port: {{.Values.restApi.apiPort}}
+      targetPort: {{.Values.restApi.apiPort}}
