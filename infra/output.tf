@@ -34,3 +34,7 @@ output "other_latest_tag" {
 output "region" {
   value = var.region
 }
+
+output "k8s_node_ports" {
+  value = local.node_ports
+}

@@ -15,3 +15,4 @@ scanner:
 restApi:
   name: ${charts.data_processor.rest_api.name}
   apiPort: ${charts.data_processor.rest_api.api_port}
+  nodePort: ${charts.data_processor.rest_api.node_port}
