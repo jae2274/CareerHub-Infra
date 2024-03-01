@@ -16,3 +16,4 @@ restApi:
   name: rest-api
   apiPort: 8080
   nodePort: 30000
+  rootPath: /api
