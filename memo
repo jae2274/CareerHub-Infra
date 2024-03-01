@@ -1,10 +1,22 @@
 
-
-
-terraform import 'module.mongodb_atlas_serverless.mongodbatlas_privatelink_endpoint_serverless.privatelink["career-hub-db"]'  653b54d380c15c39ddd20a11--career-hub-db--653b5ee97f73195827d2b706
-
-terraform import 'module.mongodb_atlas_serverless.mongodbatlas_serverless_instance.mongodb_serverless["career-hub-db"]' 653b54d380c15c39ddd20a11-career-hub-db
-
-
-terraform state rm module.mongodb_atlas_serverless.mongodbatlas_privatelink_endpoint_serverless.privatelink
-terraform state rm module.mongodb_atlas_serverless.mongodbatlas_serverless_instance.mongodb_serverless
+kubectl delete pod skill-scanner-28486500-2j262
+kubectl delete pod skill-scanner-28486500-dvn5w
+kubectl delete pod skill-scanner-28486500-m4bdm
+kubectl delete pod skill-scanner-28486500-m9bz8
+kubectl delete pod skill-scanner-28486500-n2lht
+kubectl delete pod skill-scanner-28486500-tpg46
+kubectl delete pod skill-scanner-28486500-vf5xz
+kubectl delete pod skill-scanner-28486530-85jgm
+kubectl delete pod skill-scanner-28486530-dbmn7
+kubectl delete pod skill-scanner-28486530-dzvlf
+kubectl delete pod skill-scanner-28486530-nnhjl
+kubectl delete pod skill-scanner-28486530-nwqx7
+kubectl delete pod skill-scanner-28486530-qhcpz
+kubectl delete pod skill-scanner-28486530-v8b4q
+kubectl delete pod skill-scanner-28486560-5srn8
+kubectl delete pod skill-scanner-28486560-6rwwt
+kubectl delete pod skill-scanner-28486560-8vcs7
+kubectl delete pod skill-scanner-28486560-bj56v
+kubectl delete pod skill-scanner-28486560-chvqz
+kubectl delete pod skill-scanner-28486560-fbr5s
+kubectl delete pod skill-scanner-28486560-fz7fx
