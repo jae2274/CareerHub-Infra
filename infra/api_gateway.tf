@@ -12,7 +12,38 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
     }
 
     paths = {
-      "/api/{proxy+}" = {
+      "/" = {
+        get = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "ANY"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${local.frontend_website_endpoint}/"
+          }
+        }
+      }
+      "/{proxy+}" = {
+        x-amazon-apigateway-any-method = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "ANY"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${local.frontend_website_endpoint}/{proxy}"
+            requestParameters = {
+              "integration.request.path.proxy" = "method.request.path.proxy"
+            }
+          }
+          parameters = [
+            {
+              name     = "proxy"
+              in       = "path"
+              required = true
+              type     = "string"
+            }
+          ]
+        }
+      }
+      "${local.backend_root_path}/{proxy+}" = {
         x-amazon-apigateway-any-method = {
           x-amazon-apigateway-integration = {
             httpMethod           = "ANY"

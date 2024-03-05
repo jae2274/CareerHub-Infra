@@ -1,3 +1,7 @@
+locals {
+  backend_root_path = "/api"
+}
+
 module "frontend_cicd" {
   source = "./frontend_cicd_infra"
 
@@ -11,7 +15,11 @@ module "frontend_cicd" {
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 
   build_env_vars = {
-    "BACKEND_URL" = "/api" //TODO: change this to the backend url
+    "BACKEND_URL" = local.backend_root_path
   }
 
+}
+
+locals {
+  frontend_website_endpoint = module.frontend_cicd.frontend_website_endpoint
 }
