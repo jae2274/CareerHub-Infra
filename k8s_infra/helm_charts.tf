@@ -34,7 +34,7 @@ locals {
       rest_api = {
         name      = "rest-api"
         api_port  = 8080
-        node_port = local.node_ports[0]
+        node_port = local.node_port
       }
     }
 

@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  node_ports = [30000]
+  node_port = 30000
 }
 
 module "k8s_infra" {
@@ -17,7 +17,7 @@ module "k8s_infra" {
     subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
-  node_ports = local.node_ports
+  node_ports = [local.node_port]
 
   workers = {
     instance_type = "t4g.small"

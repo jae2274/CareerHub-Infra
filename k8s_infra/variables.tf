@@ -12,7 +12,7 @@ locals {
   logapi_ecr                      = local.infra_outputs.logapi_ecr
   region                          = local.infra_outputs.region
 
-  node_ports = local.infra_outputs.k8s_node_ports
+  node_port = local.infra_outputs.k8s_node_port
 
   other_latest_tag = local.infra_outputs.other_latest_tag
 }

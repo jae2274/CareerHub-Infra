@@ -35,6 +35,6 @@ output "region" {
   value = var.region
 }
 
-output "k8s_node_ports" {
-  value = local.node_ports
+output "k8s_node_port" {
+  value = local.node_port
 }
