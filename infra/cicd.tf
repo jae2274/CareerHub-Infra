@@ -2,7 +2,7 @@ locals {
   other_latest_tag = "build-date-tag"
 }
 module "dataprovider_cicd" {
-  source = "./cicd_infra"
+  source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-provider"
@@ -16,7 +16,7 @@ module "dataprovider_cicd" {
 }
 
 module "dataprocessor_cicd" {
-  source = "./cicd_infra"
+  source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-processor"
@@ -30,7 +30,7 @@ module "dataprocessor_cicd" {
 }
 
 module "logapi_cicd" {
-  source = "./cicd_infra"
+  source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-logapi"
@@ -44,7 +44,7 @@ module "logapi_cicd" {
 }
 
 module "skillscanner_cicd" {
-  source = "./cicd_infra"
+  source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
   cicd_name        = "${local.prefix_service_name}-skillscanner"
