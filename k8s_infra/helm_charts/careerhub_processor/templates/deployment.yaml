@@ -35,8 +35,6 @@ spec:
               value: "{{.Values.postLogUrl}}"
             - name: REST_API_PORT
               value: "{{.Values.restApi.apiPort}}"
-            - name: ROOT_PATH
-              value: "{{.Values.restApi.rootPath}}"
           ports:
             - containerPort: {{.Values.provider.grpcPort}}
             - containerPort: {{.Values.scanner.grpcPort}}

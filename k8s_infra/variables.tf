@@ -12,8 +12,7 @@ locals {
   logapi_ecr                      = local.infra_outputs.logapi_ecr
   region                          = local.infra_outputs.region
 
-  node_ports        = local.infra_outputs.k8s_node_ports
-  backend_root_path = "/api"
+  node_ports = local.infra_outputs.k8s_node_ports
 
   other_latest_tag = local.infra_outputs.other_latest_tag
 }

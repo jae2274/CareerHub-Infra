@@ -35,7 +35,6 @@ locals {
         name      = "rest-api"
         api_port  = 8080
         node_port = local.node_ports[0]
-        root_path = local.backend_root_path
       }
     }
 
