@@ -4,16 +4,12 @@ locals {
   charts = {
     log_api = {
       name     = "log-api"
-      image    = local.logapi_ecr
-      tag      = "latest" #TODO: Change this to dynamic
       db_name  = "logs"
       api_port = 8080
     }
 
     data_processor = {
       name    = "data-processor"
-      image   = local.dataprocessor_ecr
-      tag     = "latest" #TODO: Change this to dynamic
       db_name = "careerhub"
       provider = {
         name      = "provider-grpc"
@@ -32,16 +28,12 @@ locals {
 
     data_provider = {
       name    = "data-provider"
-      image   = local.dataprovider_ecr
-      tag     = "latest" #TODO: Change this to dynamic
       db_name = "finded-history"
       sites   = ["jumpit", "wanted"]
     }
 
     skill_scanner = {
-      name  = "skill-scanner"
-      image = local.skillscanner_ecr
-      tag   = "latest" #TODO: Change this to dynamic
+      name = "skill-scanner"
     }
   }
 }
@@ -81,9 +73,9 @@ module "log_api_helm_deploy" {
   deploy_name          = "${local.prefix_service_name}-log-api-helm"
   chart_repo           = module.cd_infra["helm_charts/logApi/"].chart_repo
   kubeconfig_secret_id = local.kubeconfig_secret_id
-  # ecr_repos = 
-  vpc_id     = local.vpc_id
-  subnet_ids = local.private_subnet_ids
+  ecr_repo_name        = local.logapi_ecr_name
+  vpc_id               = local.vpc_id
+  subnet_ids           = local.private_subnet_ids
 
   helm_value_secret_ids = {
     "mongoUri"   = local.log_mongodb_endpoint_secret_id
@@ -99,9 +91,9 @@ module "careerhub_processor_helm_deploy" {
   deploy_name          = "${local.prefix_service_name}-processor-helm"
   chart_repo           = module.cd_infra["helm_charts/careerhub_processor/"].chart_repo
   kubeconfig_secret_id = local.kubeconfig_secret_id
-  # ecr_repos = 
-  vpc_id     = local.vpc_id
-  subnet_ids = local.private_subnet_ids
+  ecr_repo_name        = local.dataprocessor_ecr_name
+  vpc_id               = local.vpc_id
+  subnet_ids           = local.private_subnet_ids
 
   helm_value_secret_ids = {
     "mongoUri"   = local.jobposting_mongodb_endpoint_secret_id
@@ -116,9 +108,9 @@ module "careerhub_provider_helm_deploy" {
   deploy_name          = "${local.prefix_service_name}-provider-helm"
   chart_repo           = module.cd_infra["helm_charts/careerhub_provider/"].chart_repo
   kubeconfig_secret_id = local.kubeconfig_secret_id
-  # ecr_repos = 
-  vpc_id     = local.vpc_id
-  subnet_ids = local.private_subnet_ids
+  ecr_repo_name        = local.dataprovider_ecr_name
+  vpc_id               = local.vpc_id
+  subnet_ids           = local.private_subnet_ids
 
   helm_value_secret_ids = {
     "mongoUri"   = local.finded_history_mongodb_endpoint_secret_id
@@ -132,6 +124,7 @@ module "careerhub_skillscanner_helm_deploy" {
 
   deploy_name          = "${local.prefix_service_name}-skillscanner-helm"
   chart_repo           = module.cd_infra["helm_charts/careerhub_skillscanner/"].chart_repo
+  ecr_repo_name        = local.skillscanner_ecr_name
   kubeconfig_secret_id = local.kubeconfig_secret_id
 
   vpc_id     = local.vpc_id

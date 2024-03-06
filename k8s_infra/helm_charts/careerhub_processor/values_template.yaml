@@ -1,6 +1,6 @@
 name: ${charts.data_processor.name}
-image: ${charts.data_processor.image}
-tag: ${charts.data_processor.tag}
+image: #known after the deployment
+tag: #known after the deployment
 dbName: ${charts.data_processor.db_name}
 postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
 mongoUri: #known after the deployment

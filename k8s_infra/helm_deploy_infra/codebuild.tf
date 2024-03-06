@@ -171,6 +171,7 @@ resource "aws_codebuild_project" "codebuild_project" {
       region                = local.region
       ecr_domain            = local.ecr_domain
       helm_name             = var.deploy_name
+      ecr_repo_name         = var.ecr_repo_name
       chart_repo            = var.chart_repo
       kubeconfig_secret_id  = var.kubeconfig_secret_id
       helm_value_secret_ids = var.helm_value_secret_ids

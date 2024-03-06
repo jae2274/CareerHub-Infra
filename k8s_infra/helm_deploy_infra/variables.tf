@@ -14,9 +14,9 @@ variable "chart_repo" {
   type = string
 }
 
-# variable "ecr_repos" {
-#   type = list(string)
-# }
+variable "ecr_repo_name" {
+  type = string
+}
 
 variable "vpc_id" {
   type = string

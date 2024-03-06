@@ -24,17 +24,17 @@ output "kubeconfig_secret_id" {
   value = local.kubeconfig_secret_id
 }
 
-output "dataprovider_ecr" {
-  value = module.dataprovider_cicd.ecr_url
+output "dataprovider_ecr_name" {
+  value = module.dataprovider_cicd.ecr_name
 }
-output "dataprocessor_ecr" {
-  value = module.dataprocessor_cicd.ecr_url
+output "dataprocessor_ecr_name" {
+  value = module.dataprocessor_cicd.ecr_name
 }
-output "skillscanner_ecr" {
-  value = module.skillscanner_cicd.ecr_url
+output "skillscanner_ecr_name" {
+  value = module.skillscanner_cicd.ecr_name
 }
-output "logapi_ecr" {
-  value = module.logapi_cicd.ecr_url
+output "logapi_ecr_name" {
+  value = module.logapi_cicd.ecr_name
 }
 
 output "region" {

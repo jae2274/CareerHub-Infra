@@ -1,6 +1,6 @@
 name: data-processor
-image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-processor-ecr
-tag: latest
+image: #known after the deployment
+tag: #known after the deployment
 dbName: careerhub
 postLogUrl: http://log-api:8080/logs
 mongoUri: #known after the deployment

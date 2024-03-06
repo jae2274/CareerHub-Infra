@@ -8,10 +8,10 @@ locals {
   jobposting_mongodb_endpoint_secret_id     = local.infra_outputs.jobposting_mongodb_endpoint_secret_id
   log_mongodb_endpoint_secret_id            = local.infra_outputs.log_mongodb_endpoint_secret_id
   kubeconfig_secret_id                      = local.infra_outputs.kubeconfig_secret_id
-  dataprovider_ecr                          = local.infra_outputs.dataprovider_ecr
-  dataprocessor_ecr                         = local.infra_outputs.dataprocessor_ecr
-  skillscanner_ecr                          = local.infra_outputs.skillscanner_ecr
-  logapi_ecr                                = local.infra_outputs.logapi_ecr
+  dataprovider_ecr_name                     = local.infra_outputs.dataprovider_ecr_name
+  dataprocessor_ecr_name                    = local.infra_outputs.dataprocessor_ecr_name
+  skillscanner_ecr_name                     = local.infra_outputs.skillscanner_ecr_name
+  logapi_ecr_name                           = local.infra_outputs.logapi_ecr_name
   region                                    = local.infra_outputs.region
 
   vpc_id             = local.infra_outputs.vpc_id

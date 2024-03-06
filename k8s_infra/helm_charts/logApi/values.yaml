@@ -1,6 +1,6 @@
 name: log-api
-image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-logapi-ecr
-tag: latest
+image: #known after the deployment
+tag: #known after the deployment
 apiPort: 8080
 mongoUri: #known after the deployment
 dbName: logs

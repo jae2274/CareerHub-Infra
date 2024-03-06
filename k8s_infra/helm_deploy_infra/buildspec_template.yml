@@ -13,8 +13,13 @@ phases:
       - aws ecr get-login-password --region ${region}  | helm registry login --username AWS --password-stdin ${ecr_domain}
   build:
     commands:
-      # - LATEST_TAG=$(aws ecr describe-images --repository-name dev-careerhub-processor-ecr --region ${region} | jq -r '.imageDetails[] | select( [ .imageTags[] | contains("latest") ] | any) | .imageTags[] | select(. != "latest")')
+      - LATEST_IMAGE_INFO=$(aws ecr describe-images --repository-name ${ecr_repo_name} --region ${region} | jq -r '.imageDetails[] | select( [ .imageTags[] | contains("latest") ] | any)')
+      - REGISTRY_ID=$(echo $LATEST_IMAGE_INFO | jq -r '.registryId')
+      - LATEST_TAG=$(echo $LATEST_IMAGE_INFO | jq -r '.imageTags[] | select(. != "latest")')
+      - IMAGE_URL=$REGISTRY_ID.dkr.ecr.${region}.amazonaws.com/${ecr_repo_name}
+
 %{ for helm_value, secret_id in helm_value_secret_ids ~}
       - SECRET_VALUE_${helm_value}=$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secret_id} --query SecretString --output text)
 %{ endfor ~}
-      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --wait %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 
+
+      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --wait --set image=$IMAGE_URL --set tag=$LATEST_TAG %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 
