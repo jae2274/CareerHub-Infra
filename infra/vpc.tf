@@ -38,13 +38,12 @@ resource "aws_eip" "nat_eips" {
   }
 }
 
-resource "aws_nat_gateway" "nat_gateways" {
-  allocation_id = aws_eip.nat_eips.id
-  subnet_id     = module.vpc_infra.public_subnets[local.public_subnet_key_1].id
+module "nat_instance" {
+  source = "./nat_instance"
 
-  tags = {
-    Name = "${local.prefix_service_name}-nat-gateway"
-  }
+  instance_name    = "${local.prefix_service_name}-nat-gateway"
+  allocation_id    = aws_eip.nat_eips.id
+  public_subnet_id = module.vpc_infra.public_subnets[local.public_subnet_key_1].id
 }
 
 
@@ -57,7 +56,7 @@ module "private_subnet_infra" {
 
   private_subnets = {
     "${local.public_subnet_key_1}" = {
-      nat_gateway_id = aws_nat_gateway.nat_gateways.id
+      nat_gateway_id = module.nat_instance.network_interface_id
       cidr_block     = "10.0.100.0/24"
       az             = module.vpc_infra.public_subnets[local.public_subnet_key_1].availability_zone
     }
