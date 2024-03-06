@@ -1,28 +1,20 @@
-data "aws_secretsmanager_secret_version" "mongodb_user" {
-  secret_id = local.mongodb_user_secret_id
-}
 
-locals {
-  mongodb_user = jsondecode(data.aws_secretsmanager_secret_version.mongodb_user.secret_string)
-}
 
 locals {
   charts = {
     log_api = {
-      name      = "log-api"
-      image     = local.logapi_ecr
-      tag       = "latest" #TODO: Change this to dynamic
-      mongo_uri = local.log_mongodb_endpoint
-      db_name   = "logs"
-      api_port  = 8080
+      name     = "log-api"
+      image    = local.logapi_ecr
+      tag      = "latest" #TODO: Change this to dynamic
+      db_name  = "logs"
+      api_port = 8080
     }
 
     data_processor = {
-      name      = "data-processor"
-      image     = local.dataprocessor_ecr
-      tag       = "latest" #TODO: Change this to dynamic
-      mongo_uri = local.jobposting_mongodb_endpoint
-      db_name   = "careerhub"
+      name    = "data-processor"
+      image   = local.dataprocessor_ecr
+      tag     = "latest" #TODO: Change this to dynamic
+      db_name = "careerhub"
       provider = {
         name      = "provider-grpc"
         grpc_port = 50051
@@ -39,12 +31,11 @@ locals {
     }
 
     data_provider = {
-      name      = "data-provider"
-      image     = local.dataprovider_ecr
-      tag       = "latest" #TODO: Change this to dynamic
-      mongo_uri = local.finded_history_mongodb_endpoint
-      db_name   = "finded-history"
-      sites     = ["jumpit", "wanted"]
+      name    = "data-provider"
+      image   = local.dataprovider_ecr
+      tag     = "latest" #TODO: Change this to dynamic
+      db_name = "finded-history"
+      sites   = ["jumpit", "wanted"]
     }
 
     skill_scanner = {
@@ -81,4 +72,70 @@ module "cd_infra" {
   for_each = toset(local.chart_list)
 
   helm_path = "${path.module}/${each.key}"
+}
+
+module "log_api_helm_deploy" {
+  source = "./helm_deploy_infra"
+
+
+  deploy_name          = "${local.prefix_service_name}-log-api-helm"
+  chart_repo           = module.cd_infra["helm_charts/logApi/"].chart_repo
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+  # ecr_repos = 
+  vpc_id     = local.vpc_id
+  subnet_ids = local.private_subnet_ids
+
+  helm_value_secret_ids = {
+    "mongoUri"   = local.log_mongodb_endpoint_secret_id
+    "dbUsername" = local.mongodb_username_secret_id
+    "dbPassword" = local.mongodb_password_secret_id
+  }
+}
+
+module "careerhub_processor_helm_deploy" {
+  source = "./helm_deploy_infra"
+
+
+  deploy_name          = "${local.prefix_service_name}-processor-helm"
+  chart_repo           = module.cd_infra["helm_charts/careerhub_processor/"].chart_repo
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+  # ecr_repos = 
+  vpc_id     = local.vpc_id
+  subnet_ids = local.private_subnet_ids
+
+  helm_value_secret_ids = {
+    "mongoUri"   = local.jobposting_mongodb_endpoint_secret_id
+    "dbUsername" = local.mongodb_username_secret_id
+    "dbPassword" = local.mongodb_password_secret_id
+  }
+}
+
+module "careerhub_provider_helm_deploy" {
+  source = "./helm_deploy_infra"
+
+  deploy_name          = "${local.prefix_service_name}-provider-helm"
+  chart_repo           = module.cd_infra["helm_charts/careerhub_provider/"].chart_repo
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+  # ecr_repos = 
+  vpc_id     = local.vpc_id
+  subnet_ids = local.private_subnet_ids
+
+  helm_value_secret_ids = {
+    "mongoUri"   = local.finded_history_mongodb_endpoint_secret_id
+    "dbUsername" = local.mongodb_username_secret_id
+    "dbPassword" = local.mongodb_password_secret_id
+  }
+}
+
+module "careerhub_skillscanner_helm_deploy" {
+  source = "./helm_deploy_infra"
+
+  deploy_name          = "${local.prefix_service_name}-skillscanner-helm"
+  chart_repo           = module.cd_infra["helm_charts/careerhub_skillscanner/"].chart_repo
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+
+  vpc_id     = local.vpc_id
+  subnet_ids = local.private_subnet_ids
+
+  helm_value_secret_ids = {}
 }

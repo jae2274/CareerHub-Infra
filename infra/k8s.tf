@@ -34,6 +34,7 @@ module "k8s_infra" {
 
 
 locals {
-  master_ip  = module.k8s_infra.master_public_ip
-  worker_ips = module.k8s_infra.worker_public_ips
+  master_ip            = module.k8s_infra.master_public_ip
+  worker_ips           = module.k8s_infra.worker_public_ips
+  kubeconfig_secret_id = module.k8s_infra.kubeconfig_secret_id
 }

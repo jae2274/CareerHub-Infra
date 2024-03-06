@@ -61,3 +61,7 @@ rm -f ${local.chart_package}
         EOF
   }
 }
+
+output "chart_repo" {
+  value = aws_ecr_repository.helm_repo.repository_url
+}

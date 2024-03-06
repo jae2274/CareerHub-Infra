@@ -1,7 +1,7 @@
 name: data-provider
 image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-provider-ecr
 tag: latest
-mongoUri: mongodb+srv://dev-careerhub-finded-hi.xrcper1.mongodb.net
+mongoUri: #known after the deployment
 dbName: finded-history
 grpcEndpoint: provider-grpc:50051
 postLogUrl: http://log-api:8080/logs

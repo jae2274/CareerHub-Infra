@@ -55,19 +55,52 @@ module "mongodb_atlas" {
   }
 }
 
-resource "aws_secretsmanager_secret" "secretmanager" {
-  name = "mongodb_user"
+resource "aws_secretsmanager_secret" "log_mongodb_endpoint" {
+  name = "${local.prefix_service_name}-log-mongodb-endpoint"
 }
 
-locals {
-  mongodb_user = {
-    username = var.admin_db_username
-    password = var.admin_db_password
-  }
+resource "aws_secretsmanager_secret_version" "log_mongodb_endpoint" {
+  secret_id     = aws_secretsmanager_secret.log_mongodb_endpoint.id
+  secret_string = module.mongodb_atlas.public_endpoint[local.log_db]
+}
+
+resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
+  name = "${local.prefix_service_name}-jobposting-mongodb-endpoint"
+}
+
+resource "aws_secretsmanager_secret_version" "jobposting_mongodb_endpoint" {
+  secret_id     = aws_secretsmanager_secret.jobposting_mongodb_endpoint.id
+  secret_string = module.mongodb_atlas.public_endpoint[local.jobposting_db]
+}
+
+resource "aws_secretsmanager_secret" "finded_history_mongodb_endpoint" {
+  name = "${local.prefix_service_name}-finded-history-mongodb-endpoint"
+}
+
+resource "aws_secretsmanager_secret_version" "finded_history_mongodb_endpoint" {
+  secret_id     = aws_secretsmanager_secret.finded_history_mongodb_endpoint.id
+  secret_string = module.mongodb_atlas.public_endpoint[local.finded_history_db]
+}
+
+resource "aws_secretsmanager_secret" "username_secret" {
+  name = "${local.prefix_service_name}-mongo-username"
+}
+
+resource "aws_secretsmanager_secret_version" "username_secret" {
+  secret_id     = aws_secretsmanager_secret.username_secret.id
+  secret_string = var.admin_db_username
+}
+
+resource "aws_secretsmanager_secret" "password_secret" {
+  name = "${local.prefix_service_name}-mongo-password"
+}
+
+resource "aws_secretsmanager_secret_version" "password_secret" {
+  secret_id     = aws_secretsmanager_secret.password_secret.id
+  secret_string = var.admin_db_password
 }
 
 
-resource "aws_secretsmanager_secret_version" "mongodb_user" {
-  secret_id     = aws_secretsmanager_secret.secretmanager.id
-  secret_string = jsonencode(local.mongodb_user)
-}
+
+
+

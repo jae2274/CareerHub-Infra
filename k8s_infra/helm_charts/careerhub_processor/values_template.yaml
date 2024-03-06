@@ -1,9 +1,9 @@
 name: ${charts.data_processor.name}
 image: ${charts.data_processor.image}
 tag: ${charts.data_processor.tag}
-mongoUri: ${charts.data_processor.mongo_uri}
 dbName: ${charts.data_processor.db_name}
 postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
+mongoUri: #known after the deployment
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment
 provider:

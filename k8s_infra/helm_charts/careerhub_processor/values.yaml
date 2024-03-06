@@ -1,9 +1,9 @@
 name: data-processor
 image: 986069063944.dkr.ecr.ap-south-1.amazonaws.com/dev-careerhub-processor-ecr
 tag: latest
-mongoUri: mongodb+srv://dev-careerhub-jobpostin.whlcb4f.mongodb.net
 dbName: careerhub
 postLogUrl: http://log-api:8080/logs
+mongoUri: #known after the deployment
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment
 provider:

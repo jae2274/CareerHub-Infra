@@ -1,17 +1,27 @@
-output "mongodb_user_secret_id" {
-  value = aws_secretsmanager_secret.secretmanager.id
+
+
+output "finded_history_mongodb_endpoint_secret_id" {
+  value = aws_secretsmanager_secret.finded_history_mongodb_endpoint.name
 }
 
-output "finded_history_mongodb_endpoint" {
-  value = module.mongodb_atlas.public_endpoint[local.finded_history_db]
+output "jobposting_mongodb_endpoint_secret_id" {
+  value = aws_secretsmanager_secret.jobposting_mongodb_endpoint.name
 }
 
-output "jobposting_mongodb_endpoint" {
-  value = module.mongodb_atlas.public_endpoint[local.jobposting_db]
+output "log_mongodb_endpoint_secret_id" {
+  value = aws_secretsmanager_secret.log_mongodb_endpoint.name
 }
 
-output "log_mongodb_endpoint" {
-  value = module.mongodb_atlas.public_endpoint[local.log_db]
+output "mongodb_username_secret_id" {
+  value = aws_secretsmanager_secret.username_secret.name
+}
+
+output "mongodb_password_secret_id" {
+  value = aws_secretsmanager_secret.password_secret.name
+}
+
+output "kubeconfig_secret_id" {
+  value = local.kubeconfig_secret_id
 }
 
 output "dataprovider_ecr" {
@@ -27,12 +37,16 @@ output "logapi_ecr" {
   value = module.logapi_cicd.ecr_url
 }
 
-output "other_latest_tag" {
-  value = local.other_latest_tag
-}
-
 output "region" {
   value = var.region
+}
+
+output "vpc_id" {
+  value = local.vpc_id
+}
+
+output "private_subnet_ids" {
+  value = [for subnet in local.private_subnets : subnet.id]
 }
 
 output "k8s_node_port" {

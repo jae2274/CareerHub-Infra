@@ -1,20 +1,24 @@
 locals {
   infra_outputs = data.terraform_remote_state.infra.outputs
 
-  mongodb_user_secret_id = local.infra_outputs.mongodb_user_secret_id
+  mongodb_username_secret_id = local.infra_outputs.mongodb_username_secret_id
+  mongodb_password_secret_id = local.infra_outputs.mongodb_password_secret_id
 
-  finded_history_mongodb_endpoint = local.infra_outputs.finded_history_mongodb_endpoint
-  jobposting_mongodb_endpoint     = local.infra_outputs.jobposting_mongodb_endpoint
-  log_mongodb_endpoint            = local.infra_outputs.log_mongodb_endpoint
-  dataprovider_ecr                = local.infra_outputs.dataprovider_ecr
-  dataprocessor_ecr               = local.infra_outputs.dataprocessor_ecr
-  skillscanner_ecr                = local.infra_outputs.skillscanner_ecr
-  logapi_ecr                      = local.infra_outputs.logapi_ecr
-  region                          = local.infra_outputs.region
+  finded_history_mongodb_endpoint_secret_id = local.infra_outputs.finded_history_mongodb_endpoint_secret_id
+  jobposting_mongodb_endpoint_secret_id     = local.infra_outputs.jobposting_mongodb_endpoint_secret_id
+  log_mongodb_endpoint_secret_id            = local.infra_outputs.log_mongodb_endpoint_secret_id
+  kubeconfig_secret_id                      = local.infra_outputs.kubeconfig_secret_id
+  dataprovider_ecr                          = local.infra_outputs.dataprovider_ecr
+  dataprocessor_ecr                         = local.infra_outputs.dataprocessor_ecr
+  skillscanner_ecr                          = local.infra_outputs.skillscanner_ecr
+  logapi_ecr                                = local.infra_outputs.logapi_ecr
+  region                                    = local.infra_outputs.region
 
-  node_port = local.infra_outputs.k8s_node_port
+  vpc_id             = local.infra_outputs.vpc_id
+  private_subnet_ids = local.infra_outputs.private_subnet_ids
+  node_port          = local.infra_outputs.k8s_node_port
 
-  other_latest_tag = local.infra_outputs.other_latest_tag
+  # other_latest_tag = local.infra_outputs.other_latest_tag
 }
 variable "terraform_role" {
   type = string

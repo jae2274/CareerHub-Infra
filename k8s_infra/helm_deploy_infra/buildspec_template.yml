@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Installing helm
+      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh
+      - echo Login to ECR
+      - mkdir ~/.kube
+      - aws secretsmanager get-secret-value --region ${region} --secret-id ${kubeconfig_secret_id} --query SecretString --output text > ~/.kube/config
+      - aws ecr get-login-password --region ${region}  | helm registry login --username AWS --password-stdin ${ecr_domain}
+  build:
+    commands:
+      # - LATEST_TAG=$(aws ecr describe-images --repository-name dev-careerhub-processor-ecr --region ${region} | jq -r '.imageDetails[] | select( [ .imageTags[] | contains("latest") ] | any) | .imageTags[] | select(. != "latest")')
+%{ for helm_value, secret_id in helm_value_secret_ids ~}
+      - SECRET_VALUE_${helm_value}=$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secret_id} --query SecretString --output text)
+%{ endfor ~}
+      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --wait %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 

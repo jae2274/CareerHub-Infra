@@ -15,3 +15,7 @@ data "aws_iam_policy_document" "cert_secret_policy_doc" {
     resources = [aws_secretsmanager_secret.kubeconfig.arn]
   }
 }
+
+output "kubeconfig_secret_id" {
+  value = aws_secretsmanager_secret.kubeconfig.name
+}
