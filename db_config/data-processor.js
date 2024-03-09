@@ -71,6 +71,21 @@ const collections = [
       },
     ],
   },
+  {
+    name: "category",
+    indexes: [
+      {
+        name: "site_1_name_1",
+        index: {
+          site: 1,
+          name: 1,
+        },
+        options: {
+          unique: true,
+        },
+      },
+    ],
+  },
 ];
 
 // Create a new database.
