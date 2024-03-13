@@ -14,7 +14,7 @@ kind: CronJob
 metadata:
   name: {{$name}}-{{$site}}
 spec:
-  schedule: "*/30 * * * *"
+  schedule: "12 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   jobTemplate:
