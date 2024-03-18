@@ -1,12 +1,8 @@
 {{ $name := .Values.name }}
 {{ $image := .Values.image }}
 {{ $tag := .Values.tag }}
-{{ $mongoUri := .Values.mongoUri }}
-{{ $dbName := .Values.dbName }}
 {{ $grpcEndpoint := .Values.grpcEndpoint }}
 {{ $postLogUrl := .Values.postLogUrl }}
-{{ $dbUsername := .Values.dbUsername }}
-{{ $dbPassword := .Values.dbPassword }}
 
 {{- range $i, $site := .Values.sites }}
 apiVersion: batch/v1
@@ -27,14 +23,6 @@ spec:
               image: {{ $image }}:{{ $tag }}
               args: ["-site={{ $site }}"]
               env:
-                - name: MONGO_URI
-                  value: {{$mongoUri}}
-                - name: DB_NAME
-                  value: {{$dbName}}
-                - name: DB_USERNAME
-                  value: {{$dbUsername}}
-                - name: DB_PASSWORD
-                  value: {{$dbPassword}}
                 - name: GRPC_ENDPOINT
                   value: "{{$grpcEndpoint}}"
                 - name: POST_LOG_URL

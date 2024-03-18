@@ -1,12 +1,8 @@
 name: data-provider
 image: #known after the deployment
 tag: #known after the deployment
-mongoUri: #known after the deployment
-dbName: finded-history
 grpcEndpoint: provider-grpc:50051
 postLogUrl: http://log-api:8080/logs
-dbUsername: #known after the deployment
-dbPassword: #known after the deployment
 sites:
   - jumpit
   - wanted
