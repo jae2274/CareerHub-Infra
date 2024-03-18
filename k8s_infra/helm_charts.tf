@@ -27,9 +27,8 @@ locals {
     }
 
     data_provider = {
-      name    = "data-provider"
-      db_name = "finded-history"
-      sites   = ["jumpit", "wanted"]
+      name  = "data-provider"
+      sites = ["jumpit", "wanted"]
     }
 
     skill_scanner = {
@@ -112,11 +111,7 @@ module "careerhub_provider_helm_deploy" {
   vpc_id               = local.vpc_id
   subnet_ids           = local.private_subnet_ids
 
-  helm_value_secret_ids = {
-    "mongoUri"   = local.finded_history_mongodb_endpoint_secret_id
-    "dbUsername" = local.mongodb_username_secret_id
-    "dbPassword" = local.mongodb_password_secret_id
-  }
+  helm_value_secret_ids = {}
 }
 
 module "careerhub_skillscanner_helm_deploy" {

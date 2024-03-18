@@ -26,9 +26,8 @@ resource "aws_security_group" "mongodb_security_group" {
 }
 
 locals {
-  finded_history_db = "${local.prefix_service_name}-finded-history"
-  jobposting_db     = "${local.prefix_service_name}-jobposting"
-  log_db            = "${local.prefix_service_name}-log"
+  jobposting_db = "${local.prefix_service_name}-jobposting"
+  log_db        = "${local.prefix_service_name}-log"
 }
 
 module "mongodb_atlas" {
@@ -48,7 +47,7 @@ module "mongodb_atlas" {
     private_key = var.atlas_private_key
   }
 
-  serverless_databases = [local.finded_history_db, local.jobposting_db, local.log_db]
+  serverless_databases = [local.jobposting_db, local.log_db]
 
   tags = {
     env = local.env
@@ -71,15 +70,6 @@ resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
 resource "aws_secretsmanager_secret_version" "jobposting_mongodb_endpoint" {
   secret_id     = aws_secretsmanager_secret.jobposting_mongodb_endpoint.id
   secret_string = module.mongodb_atlas.public_endpoint[local.jobposting_db]
-}
-
-resource "aws_secretsmanager_secret" "finded_history_mongodb_endpoint" {
-  name = "${local.prefix_service_name}-finded-history-mongodb-endpoint"
-}
-
-resource "aws_secretsmanager_secret_version" "finded_history_mongodb_endpoint" {
-  secret_id     = aws_secretsmanager_secret.finded_history_mongodb_endpoint.id
-  secret_string = module.mongodb_atlas.public_endpoint[local.finded_history_db]
 }
 
 resource "aws_secretsmanager_secret" "username_secret" {

@@ -1,9 +1,3 @@
-
-
-output "finded_history_mongodb_endpoint_secret_id" {
-  value = aws_secretsmanager_secret.finded_history_mongodb_endpoint.name
-}
-
 output "jobposting_mongodb_endpoint_secret_id" {
   value = aws_secretsmanager_secret.jobposting_mongodb_endpoint.name
 }
