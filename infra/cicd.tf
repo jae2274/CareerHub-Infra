@@ -66,4 +66,9 @@ locals {
     region = module.dataprocessor_cicd.ecr_region
     domain = module.dataprocessor_cicd.ecr_domain
   }
+
+  dataprovider_ecr_name  = module.dataprovider_cicd.ecr_name
+  dataprocessor_ecr_name = module.dataprocessor_cicd.ecr_name
+  skillscanner_ecr_name  = module.skillscanner_cicd.ecr_name
+  logapi_ecr_name        = module.logapi_cicd.ecr_name
 }

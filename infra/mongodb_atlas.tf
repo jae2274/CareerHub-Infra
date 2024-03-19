@@ -90,7 +90,9 @@ resource "aws_secretsmanager_secret_version" "password_secret" {
   secret_string = var.admin_db_password
 }
 
-
-
-
-
+locals {
+  jobposting_mongodb_endpoint_secret_id = aws_secretsmanager_secret.jobposting_mongodb_endpoint.name
+  log_mongodb_endpoint_secret_id        = aws_secretsmanager_secret.log_mongodb_endpoint.name
+  mongodb_username_secret_id            = aws_secretsmanager_secret.username_secret.name
+  mongodb_password_secret_id            = aws_secretsmanager_secret.password_secret.name
+}

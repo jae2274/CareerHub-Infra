@@ -1,8 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-locals {
-  node_port = 30000
-}
 
 module "k8s_infra" {
   source = "./k8s_infra"
