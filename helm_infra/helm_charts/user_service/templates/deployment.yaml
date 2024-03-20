@@ -31,7 +31,7 @@ spec:
             - name: DB_HOST
               value: {{.Values.dbHost}}
             - name: DB_PORT
-              value: {{.Values.dbPort}}
+              value: "{{.Values.dbPort}}"
             - name: DB_NAME
               value: {{.Values.dbName}}
             - name: DB_USERNAME

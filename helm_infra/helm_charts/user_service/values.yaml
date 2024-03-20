@@ -5,6 +5,7 @@ nodePort: 30001
 image: #known after the deployment
 tag: #known after the deployment
 dbHost: #known after the deployment
+dbPort: #known after the deployment
 dbName: #known after the deployment
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment

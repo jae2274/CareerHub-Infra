@@ -53,6 +53,15 @@ resource "aws_secretsmanager_secret_version" "usermysql_endpoint" {
   secret_string = aws_rds_cluster.user_mysql.endpoint
 }
 
+resource "aws_secretsmanager_secret" "usermysql_dbport" {
+  name = "${local.prefix_service_name}-usermysql-dbport"
+}
+
+resource "aws_secretsmanager_secret_version" "usermysql_dbport" {
+  secret_id     = aws_secretsmanager_secret.usermysql_dbport.id
+  secret_string = aws_rds_cluster.user_mysql.port
+}
+
 resource "aws_secretsmanager_secret" "usermysql_dbname" {
   name = "${local.prefix_service_name}-usermysql-dbname"
 }
@@ -83,6 +92,7 @@ resource "aws_secretsmanager_secret_version" "usermysql_password" {
 
 locals {
   user_mysql_endpoint_secret_id = aws_secretsmanager_secret.usermysql_endpoint.id
+  user_mysql_dbport_secret_id   = aws_secretsmanager_secret.usermysql_dbport.id
   user_mysql_dbname_secret_id   = aws_secretsmanager_secret.usermysql_dbname.id
   user_mysql_username_secret_id = aws_secretsmanager_secret.usermysql_username.id
   user_mysql_password_secret_id = aws_secretsmanager_secret.usermysql_password.id

@@ -66,6 +66,16 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
           ]
         }
       }
+      "${local.user_service_path}" = {
+        get = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "ANY"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${local.master_ip}:${local.user_service_node_port}${local.user_service_path}"
+          }
+        }
+      }
       "${local.user_service_path}/{proxy+}" = {
         x-amazon-apigateway-any-method = {
           x-amazon-apigateway-integration = {

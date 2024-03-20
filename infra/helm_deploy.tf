@@ -104,6 +104,7 @@ module "user_service_helm_deploy" {
 
   helm_value_secret_ids = {
     dbHost             = local.user_mysql_endpoint_secret_id
+    dbPort             = local.user_mysql_dbport_secret_id
     dbName             = local.user_mysql_dbname_secret_id
     dbUsername         = local.user_mysql_username_secret_id
     dbPassword         = local.user_mysql_password_secret_id
