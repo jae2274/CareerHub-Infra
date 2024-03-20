@@ -20,3 +20,15 @@ variable "admin_db_username" {
 variable "admin_db_password" {
   type = string
 }
+
+variable "mysql_db_name" {
+  type = string
+}
+
+variable "mysql_admin_username" {
+  type = string
+}
+
+variable "mysql_admin_password" {
+  type = string
+}

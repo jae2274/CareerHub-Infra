@@ -1,8 +1,4 @@
-// start define iam role and policy
-data "aws_subnet" "private_subnet" {
-  for_each = toset(var.subnet_ids)
-  id       = each.value
-}
+
 
 data "aws_iam_policy_document" "codebuild_policy_doc" {
   statement {
@@ -42,9 +38,7 @@ data "aws_iam_policy_document" "codebuild_policy_doc" {
       test     = "ArnEquals"
       variable = "ec2:Subnet"
 
-      values = [
-        for subnet_id, subnet in data.aws_subnet.private_subnet : subnet.arn
-      ]
+      values = var.subnet_arns
     }
 
     condition {

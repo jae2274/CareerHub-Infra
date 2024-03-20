@@ -60,9 +60,16 @@ module "private_subnet_infra" {
       cidr_block     = "10.0.100.0/24"
       az             = module.vpc_infra.public_subnets[local.public_subnet_key_1].availability_zone
     }
+    "${local.public_subnet_key_2}" = {
+      nat_gateway_id = module.nat_instance.network_interface_id
+      cidr_block     = "10.0.101.0/24"
+      az             = module.vpc_infra.public_subnets[local.public_subnet_key_2].availability_zone
+    }
   }
 }
 
 locals {
-  private_subnets = module.private_subnet_infra.private_subnets
+  private_subnets     = module.private_subnet_infra.private_subnets
+  private_subnet_ids  = [for subnet in local.private_subnets : subnet.id]
+  private_subnet_arns = [for subnet in local.private_subnets : subnet.arn]
 }

@@ -18,7 +18,8 @@ module "log_api_helm_deploy" {
   kubeconfig_secret_id = local.kubeconfig_secret_id
   ecr_repo_name        = local.logapi_ecr_name
   vpc_id               = local.vpc_id
-  subnet_ids           = [for subnet in local.private_subnets : subnet.id]
+  subnet_ids           = local.private_subnet_ids
+  subnet_arns          = local.private_subnet_arns
 
   helm_value_secret_ids = {
     "mongoUri"   = local.log_mongodb_endpoint_secret_id
@@ -36,7 +37,8 @@ module "careerhub_processor_helm_deploy" {
   kubeconfig_secret_id = local.kubeconfig_secret_id
   ecr_repo_name        = local.dataprocessor_ecr_name
   vpc_id               = local.vpc_id
-  subnet_ids           = [for subnet in local.private_subnets : subnet.id]
+  subnet_ids           = local.private_subnet_ids
+  subnet_arns          = local.private_subnet_arns
 
   helm_value_secret_ids = {
     "mongoUri"   = local.jobposting_mongodb_endpoint_secret_id
@@ -53,7 +55,8 @@ module "careerhub_provider_helm_deploy" {
   kubeconfig_secret_id = local.kubeconfig_secret_id
   ecr_repo_name        = local.dataprovider_ecr_name
   vpc_id               = local.vpc_id
-  subnet_ids           = [for subnet in local.private_subnets : subnet.id]
+  subnet_ids           = local.private_subnet_ids
+  subnet_arns          = local.private_subnet_arns
 
   helm_value_secret_ids = {}
 }
@@ -66,8 +69,9 @@ module "careerhub_skillscanner_helm_deploy" {
   ecr_repo_name        = local.skillscanner_ecr_name
   kubeconfig_secret_id = local.kubeconfig_secret_id
 
-  vpc_id     = local.vpc_id
-  subnet_ids = [for subnet in local.private_subnets : subnet.id]
+  vpc_id      = local.vpc_id
+  subnet_ids  = local.private_subnet_ids
+  subnet_arns = local.private_subnet_arns
 
   helm_value_secret_ids = {}
 }
