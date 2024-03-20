@@ -43,3 +43,47 @@ resource "aws_security_group" "user_mysql_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_secretsmanager_secret" "usermysql_endpoint" {
+  name = "${local.prefix_service_name}-usermysql-endpoint"
+}
+
+resource "aws_secretsmanager_secret_version" "usermysql_endpoint" {
+  secret_id     = aws_secretsmanager_secret.usermysql_endpoint.id
+  secret_string = aws_rds_cluster.user_mysql.endpoint
+}
+
+resource "aws_secretsmanager_secret" "usermysql_dbname" {
+  name = "${local.prefix_service_name}-usermysql-dbname"
+}
+
+resource "aws_secretsmanager_secret_version" "usermysql_dbname" {
+  secret_id     = aws_secretsmanager_secret.usermysql_dbname.id
+  secret_string = var.mysql_db_name
+}
+
+resource "aws_secretsmanager_secret" "usermysql_username" {
+  name = "${local.prefix_service_name}-usermysql-username"
+}
+
+resource "aws_secretsmanager_secret_version" "usermysql_username" {
+  secret_id     = aws_secretsmanager_secret.usermysql_username.id
+  secret_string = var.mysql_admin_username
+}
+
+resource "aws_secretsmanager_secret" "usermysql_password" {
+  name = "${local.prefix_service_name}-usermysql-password"
+}
+
+resource "aws_secretsmanager_secret_version" "usermysql_password" {
+  secret_id     = aws_secretsmanager_secret.usermysql_password.id
+  secret_string = var.mysql_admin_password
+}
+
+
+locals {
+  user_mysql_endpoint_secret_id = aws_secretsmanager_secret.usermysql_endpoint.id
+  user_mysql_dbname_secret_id   = aws_secretsmanager_secret.usermysql_dbname.id
+  user_mysql_username_secret_id = aws_secretsmanager_secret.usermysql_username.id
+  user_mysql_password_secret_id = aws_secretsmanager_secret.usermysql_password.id
+}

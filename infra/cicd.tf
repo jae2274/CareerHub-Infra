@@ -57,21 +57,6 @@ module "skillscanner_cicd" {
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
 
-locals {
-  dataprovider_ecr = {
-    region = module.dataprovider_cicd.ecr_region
-    domain = module.dataprovider_cicd.ecr_domain
-  }
-  dataprocessor_ecr = {
-    region = module.dataprocessor_cicd.ecr_region
-    domain = module.dataprocessor_cicd.ecr_domain
-  }
-
-  dataprovider_ecr_name  = module.dataprovider_cicd.ecr_name
-  dataprocessor_ecr_name = module.dataprocessor_cicd.ecr_name
-  skillscanner_ecr_name  = module.skillscanner_cicd.ecr_name
-  logapi_ecr_name        = module.logapi_cicd.ecr_name
-}
 
 module "user_service_cicd" {
   source = "./backend_cicd_infra"
@@ -86,3 +71,22 @@ module "user_service_cicd" {
   subnet_ids      = [for subnet in local.private_subnets : subnet.id]
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
+
+locals {
+  dataprovider_ecr = {
+    region = module.dataprovider_cicd.ecr_region
+    domain = module.dataprovider_cicd.ecr_domain
+  }
+  dataprocessor_ecr = {
+    region = module.dataprocessor_cicd.ecr_region
+    domain = module.dataprocessor_cicd.ecr_domain
+  }
+
+
+  dataprovider_ecr_name  = module.dataprovider_cicd.ecr_name
+  dataprocessor_ecr_name = module.dataprocessor_cicd.ecr_name
+  skillscanner_ecr_name  = module.skillscanner_cicd.ecr_name
+  logapi_ecr_name        = module.logapi_cicd.ecr_name
+  user_service_ecr_name  = module.user_service_cicd.ecr_name
+}
+

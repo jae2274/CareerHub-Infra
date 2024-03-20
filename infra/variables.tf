@@ -32,3 +32,20 @@ variable "mysql_admin_username" {
 variable "mysql_admin_password" {
   type = string
 }
+
+
+variable "google_client_id" {
+  type = string
+}
+
+variable "google_client_secret" {
+  type = string
+}
+
+variable "google_redirecturi" {
+  type = string
+}
+
+variable "jwt_secretkey" {
+  type = string
+}

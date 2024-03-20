@@ -11,5 +11,5 @@ dbPassword: #known after the deployment
 
 googleClientId: #known after the deployment
 googleClientSecret: #known after the deployment
-redirectUrl: #known after the deployment
+googleRedirectUrl: #known after the deployment
 secretKey: #known after the deployment
