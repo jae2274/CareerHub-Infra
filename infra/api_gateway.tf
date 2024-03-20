@@ -1,5 +1,6 @@
 locals {
-  api_gateway_name = "${local.prefix_service_name}-gateway"
+  api_gateway_name  = "${local.prefix_service_name}-gateway"
+  user_service_path = "/auth"
 }
 resource "aws_api_gateway_rest_api" "rest_api_gateway" {
   name = local.api_gateway_name
@@ -51,6 +52,28 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
             uri                  = "http://${local.master_ip}:${local.careerhub_node_port}/{proxy}"
+            requestParameters = {
+              "integration.request.path.proxy" = "method.request.path.proxy"
+            }
+          }
+          parameters = [
+            {
+              name     = "proxy",
+              in       = "path",
+              required = true,
+              type     = "string"
+            }
+          ]
+        }
+      }
+      "${local.user_service_path}/{proxy+}" = {
+        x-amazon-apigateway-any-method = {
+          x-amazon-apigateway-integration = {
+            httpMethod           = "ANY"
+            path                 = "proxy"
+            payloadFormatVersion = "1.0"
+            type                 = "HTTP_PROXY"
+            uri                  = "http://${local.master_ip}:${local.user_service_node_port}${local.user_service_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }
