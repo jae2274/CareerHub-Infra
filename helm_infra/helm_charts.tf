@@ -1,7 +1,8 @@
 
 
 locals {
-  node_port = 30000
+  careerhub_node_port    = 30000
+  user_service_node_port = 30001
   charts = {
     log_api = {
       name     = "log-api"
@@ -23,7 +24,7 @@ locals {
       rest_api = {
         name      = "rest-api"
         api_port  = 8080
-        node_port = local.node_port
+        node_port = local.careerhub_node_port
       }
     }
 
@@ -34,6 +35,12 @@ locals {
 
     skill_scanner = {
       name = "skill-scanner"
+    }
+
+    user_service = {
+      name      = "user-service"
+      api_port  = 8080
+      node_port = local.user_service_node_port
     }
   }
 }
@@ -66,8 +73,12 @@ module "cd_infra" {
   helm_path = "${path.module}/${each.key}"
 }
 
-output "node_port" {
-  value = local.node_port
+output "careerhub_node_port" {
+  value = local.careerhub_node_port
+}
+
+output "user_service_node_port" {
+  value = local.user_service_node_port
 }
 
 output "log_api_helm_chart_repo" {
@@ -86,6 +97,6 @@ output "careerhub_skillscanner_helm_chart_repo" {
   value = module.cd_infra["helm_charts/careerhub_skillscanner/"].chart_repo
 }
 
-
-
-
+output "user_service_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/user_service/"].chart_repo
+}

@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.name}}
+  labels:
+    app: {{.Values.name}}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{.Values.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.name}}
+    spec:
+      containers:
+        - name: {{.Values.name}}
+          image: {{ .Values.image }}:{{ .Values.tag }}
+          env:
+            - name: GOOGLE_CLIENT_ID
+              value: {{.Values.googleClientId}}
+            - name: GOOGLE_CLIENT_SECRET
+              value: {{.Values.googleClientSecret}}
+            - name: REDIRECT_URL
+              value: {{.Values.redirectUrl}}
+            - name: SECRET_KEY
+              value: {{.Values.secretKey}}
+            - name: API_PORT
+              value: "{{.Values.apiPort}}"
+            - name: DB_HOST
+              value: {{.Values.dbHost}}
+            - name: DB_PORT
+              value: {{.Values.dbPort}}
+            - name: DB_NAME
+              value: {{.Values.dbName}}
+            - name: DB_USERNAME
+              value: {{.Values.dbUsername}}
+            - name: DB_PASSWORD
+              value: {{.Values.dbPassword}}
+          ports:
+            - containerPort: {{.Values.apiPort}}

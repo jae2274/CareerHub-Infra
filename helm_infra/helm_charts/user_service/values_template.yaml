@@ -1,0 +1,15 @@
+name: ${charts.user_service.name}
+apiPort: ${charts.user_service.api_port}
+nodePort: ${charts.user_service.node_port}
+
+image: #known after the deployment
+tag: #known after the deployment
+dbHost: #known after the deployment
+dbName: #known after the deployment
+dbUsername: #known after the deployment
+dbPassword: #known after the deployment
+
+googleClientId: #known after the deployment
+googleClientSecret: #known after the deployment
+redirectUrl: #known after the deployment
+secretKey: #known after the deployment
