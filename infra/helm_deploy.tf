@@ -5,7 +5,8 @@ locals {
   careerhub_processor_helm_chart_repo    = local.helm_infra_outputs.careerhub_processor_helm_chart_repo
   careerhub_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_provider_helm_chart_repo
   careerhub_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_skillscanner_helm_chart_repo
-  node_port                              = local.helm_infra_outputs.node_port
+  careerhub_node_port                    = local.helm_infra_outputs.careerhub_node_port
+  user_service_node_port                 = local.helm_infra_outputs.user_service_node_port
 }
 
 

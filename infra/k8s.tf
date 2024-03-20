@@ -14,7 +14,7 @@ module "k8s_infra" {
     subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
-  node_ports = [local.node_port]
+  node_ports = [local.careerhub_node_port, local.user_service_node_port]
 
   workers = {
     instance_type = "t4g.small"

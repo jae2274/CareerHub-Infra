@@ -50,7 +50,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_ip}:${local.node_port}/{proxy}"
+            uri                  = "http://${local.master_ip}:${local.careerhub_node_port}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }

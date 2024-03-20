@@ -72,3 +72,17 @@ locals {
   skillscanner_ecr_name  = module.skillscanner_cicd.ecr_name
   logapi_ecr_name        = module.logapi_cicd.ecr_name
 }
+
+module "user_service_cicd" {
+  source = "./backend_cicd_infra"
+
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix_service_name}-userservice"
+  build_arch       = "arm64"
+
+  repository_path = "jae2274/userService"
+  branch_name     = local.branch
+  vpc_id          = local.vpc_id
+  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
+  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+}
