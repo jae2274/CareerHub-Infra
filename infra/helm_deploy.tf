@@ -1,13 +1,13 @@
 locals {
   helm_infra_outputs = data.terraform_remote_state.helm_infra.outputs
 
-  log_api_helm_chart_repo                = local.helm_infra_outputs.log_api_helm_chart_repo
-  careerhub_processor_helm_chart_repo    = local.helm_infra_outputs.careerhub_processor_helm_chart_repo
-  careerhub_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_provider_helm_chart_repo
-  careerhub_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_skillscanner_helm_chart_repo
-  user_service_helm_chart_repo           = local.helm_infra_outputs.user_service_helm_chart_repo
-  careerhub_node_port                    = local.helm_infra_outputs.careerhub_node_port
-  user_service_node_port                 = local.helm_infra_outputs.user_service_node_port
+  log_api_helm_chart_repo                        = local.helm_infra_outputs.log_api_helm_chart_repo
+  careerhub_posting_service_helm_chart_repo      = local.helm_infra_outputs.careerhub_posting_service_helm_chart_repo
+  careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
+  careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
+  user_service_helm_chart_repo                   = local.helm_infra_outputs.user_service_helm_chart_repo
+  careerhub_node_port                            = local.helm_infra_outputs.careerhub_node_port
+  user_service_node_port                         = local.helm_infra_outputs.user_service_node_port
 }
 
 resource "aws_secretsmanager_secret" "jwt_secretkey" {
@@ -42,12 +42,12 @@ module "log_api_helm_deploy" {
   }
 }
 
-module "careerhub_processor_helm_deploy" {
+module "careerhub_posting_service_helm_deploy" {
   source = "./helm_deploy_infra"
 
 
-  deploy_name          = "${local.prefix_service_name}-processor-helm"
-  chart_repo           = local.careerhub_processor_helm_chart_repo
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-service-helm"
+  chart_repo           = local.careerhub_posting_service_helm_chart_repo
   kubeconfig_secret_id = local.kubeconfig_secret_id
   ecr_repo_name        = local.dataprocessor_ecr_name
   vpc_id               = local.vpc_id
@@ -61,11 +61,11 @@ module "careerhub_processor_helm_deploy" {
   }
 }
 
-module "careerhub_provider_helm_deploy" {
+module "careerhub_posting_provider_helm_deploy" {
   source = "./helm_deploy_infra"
 
-  deploy_name          = "${local.prefix_service_name}-provider-helm"
-  chart_repo           = local.careerhub_provider_helm_chart_repo
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-provider-helm"
+  chart_repo           = local.careerhub_posting_provider_helm_chart_repo
   kubeconfig_secret_id = local.kubeconfig_secret_id
   ecr_repo_name        = local.dataprovider_ecr_name
   vpc_id               = local.vpc_id
@@ -75,11 +75,11 @@ module "careerhub_provider_helm_deploy" {
   helm_value_secret_ids = {}
 }
 
-module "careerhub_skillscanner_helm_deploy" {
+module "careerhub_posting_skillscanner_helm_deploy" {
   source = "./helm_deploy_infra"
 
-  deploy_name          = "${local.prefix_service_name}-skillscanner-helm"
-  chart_repo           = local.careerhub_skillscanner_helm_chart_repo
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-skillscanner-helm"
+  chart_repo           = local.careerhub_posting_skillscanner_helm_chart_repo
   ecr_repo_name        = local.skillscanner_ecr_name
   kubeconfig_secret_id = local.kubeconfig_secret_id
 
