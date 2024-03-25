@@ -11,14 +11,14 @@ locals {
     }
 
     data_processor = {
-      name    = "data-processor"
+      name    = "posting-service"
       db_name = "careerhub"
       provider = {
         name      = "provider-grpc"
         grpc_port = 50051
       }
       scanner = {
-        name      = "scanner-grpc"
+        name      = "skillscanner-grpc"
         grpc_port = 50052
       }
       rest_api = {
@@ -29,12 +29,12 @@ locals {
     }
 
     data_provider = {
-      name  = "data-provider"
+      name  = "posting-provider"
       sites = ["jumpit", "wanted"]
     }
 
     skill_scanner = {
-      name = "skill-scanner"
+      name = "posting-skillscanner"
     }
 
     user_service = {
@@ -70,6 +70,7 @@ module "cd_infra" {
 
   for_each = toset(local.chart_list)
 
+  prefix    = local.prefix
   helm_path = "${path.module}/${each.key}"
 }
 
@@ -85,16 +86,16 @@ output "log_api_helm_chart_repo" {
   value = module.cd_infra["helm_charts/logApi/"].chart_repo
 }
 
-output "careerhub_processor_helm_chart_repo" {
-  value = module.cd_infra["helm_charts/careerhub_processor/"].chart_repo
+output "careerhub_posting_service_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/careerhub_posting_service/"].chart_repo
 }
 
-output "careerhub_provider_helm_chart_repo" {
-  value = module.cd_infra["helm_charts/careerhub_provider/"].chart_repo
+output "careerhub_posting_provider_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/careerhub_posting_provider/"].chart_repo
 }
 
-output "careerhub_skillscanner_helm_chart_repo" {
-  value = module.cd_infra["helm_charts/careerhub_skillscanner/"].chart_repo
+output "careerhub_posting_skillscanner_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/careerhub_posting_skillscanner/"].chart_repo
 }
 
 output "user_service_helm_chart_repo" {

@@ -1,4 +1,4 @@
-name: data-provider
+name: posting-provider
 image: #known after the deployment
 tag: #known after the deployment
 grpcEndpoint: provider-grpc:50051

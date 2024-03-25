@@ -1,4 +1,4 @@
-name: data-processor
+name: posting-service
 image: #known after the deployment
 tag: #known after the deployment
 dbName: careerhub
@@ -10,7 +10,7 @@ provider:
   name: provider-grpc
   grpcPort: 50051
 scanner:
-  name: scanner-grpc
+  name: skillscanner-grpc
   grpcPort: 50052
 restApi:
   name: rest-api
