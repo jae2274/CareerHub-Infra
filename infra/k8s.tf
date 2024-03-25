@@ -7,7 +7,7 @@ module "k8s_infra" {
   vpc_id       = local.vpc_id
   cluster_name = local.prefix_service_name
 
-  ecrs = [for key, ecr in toset([local.dataprovider_ecr, local.dataprocessor_ecr]) : ecr]
+  ecrs = [for key, ecr in toset([local.careerhub_posting_provider_ecr, local.careerhub_posting_service_ecr]) : ecr]
 
   master = {
     instance_type = "t4g.small"

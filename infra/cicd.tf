@@ -1,28 +1,28 @@
 locals {
   other_latest_tag = "build-date-tag"
 }
-module "dataprovider_cicd" {
+module "careerhub_posting_provider_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix_service_name}-provider"
+  cicd_name        = "${local.prefix}posting-provider"
   build_arch       = "arm64"
 
-  repository_path = "jae2274/Careerhub-dataProvider"
+  repository_path = "jae2274/careerhub-posting-provider"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
   subnet_ids      = [for subnet in local.private_subnets : subnet.id]
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
 
-module "dataprocessor_cicd" {
+module "careerhub_posting_service_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix_service_name}-processor"
+  cicd_name        = "${local.prefix}posting-service"
   build_arch       = "arm64"
 
-  repository_path = "jae2274/Careerhub-dataProcessor"
+  repository_path = "jae2274/careerhub-posting-service"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
   subnet_ids      = [for subnet in local.private_subnets : subnet.id]
@@ -33,7 +33,7 @@ module "logapi_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix_service_name}-logapi"
+  cicd_name        = "${local.prefix}logapi"
   build_arch       = "arm64"
 
   repository_path = "jae2274/LogApi"
@@ -43,14 +43,14 @@ module "logapi_cicd" {
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
 
-module "skillscanner_cicd" {
+module "careerhub_posting_skillscanner_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix_service_name}-skillscanner"
+  cicd_name        = "${local.prefix}posting-skillscanner"
   build_arch       = "arm64"
 
-  repository_path = "jae2274/Careerhub-SkillScanner"
+  repository_path = "jae2274/careerhub-posting-skillscanner"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
   subnet_ids      = [for subnet in local.private_subnets : subnet.id]
@@ -62,7 +62,7 @@ module "user_service_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix_service_name}-userservice"
+  cicd_name        = "${local.prefix}userservice"
   build_arch       = "arm64"
 
   repository_path = "jae2274/userService"
@@ -73,20 +73,20 @@ module "user_service_cicd" {
 }
 
 locals {
-  dataprovider_ecr = {
-    region = module.dataprovider_cicd.ecr_region
-    domain = module.dataprovider_cicd.ecr_domain
+  careerhub_posting_provider_ecr = {
+    region = module.careerhub_posting_provider_cicd.ecr_region
+    domain = module.careerhub_posting_provider_cicd.ecr_domain
   }
-  dataprocessor_ecr = {
-    region = module.dataprocessor_cicd.ecr_region
-    domain = module.dataprocessor_cicd.ecr_domain
+  careerhub_posting_service_ecr = {
+    region = module.careerhub_posting_service_cicd.ecr_region
+    domain = module.careerhub_posting_service_cicd.ecr_domain
   }
 
 
-  dataprovider_ecr_name  = module.dataprovider_cicd.ecr_name
-  dataprocessor_ecr_name = module.dataprocessor_cicd.ecr_name
-  skillscanner_ecr_name  = module.skillscanner_cicd.ecr_name
-  logapi_ecr_name        = module.logapi_cicd.ecr_name
-  user_service_ecr_name  = module.user_service_cicd.ecr_name
+  careerhub_posting_provider_ecr_name     = module.careerhub_posting_provider_cicd.ecr_name
+  careerhub_posting_service_ecr_name      = module.careerhub_posting_service_cicd.ecr_name
+  careerhub_posting_skillscanner_ecr_name = module.careerhub_posting_skillscanner_cicd.ecr_name
+  logapi_ecr_name                         = module.logapi_cicd.ecr_name
+  user_service_ecr_name                   = module.user_service_cicd.ecr_name
 }
 
