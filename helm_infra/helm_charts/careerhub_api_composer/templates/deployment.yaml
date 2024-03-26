@@ -22,11 +22,10 @@ spec:
             - name: POSTING_GRPC_ENDPOINT
               value: {{.Values.postingGrpcEndpoint}}
             - name: API_PORT
-              value: {{.Values.apiPort}}
+              value: "{{.Values.apiPort}}"
             - name: SECRET_KEY
               value: {{.Values.secretKey}}
             - name: ACCESS_CONTROL_ALLOW_ORIGIN
               value: {{.Values.accessControlAllowOrigin}}
           ports:
-            - containerPort: {{.Values.provider.grpcPort}}
-            - containerPort: {{.Values.scanner.grpcPort}}
+            - containerPort: {{.Values.apiPort}}

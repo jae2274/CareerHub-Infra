@@ -101,6 +101,7 @@ locals {
   careerhub_posting_service_ecr_name      = module.careerhub_posting_service_cicd.ecr_name
   careerhub_posting_skillscanner_ecr_name = module.careerhub_posting_skillscanner_cicd.ecr_name
   logapi_ecr_name                         = module.logapi_cicd.ecr_name
+  careerhub_api_composer_ecr_name         = module.careerhub_api_composer_cicd.ecr_name
   user_service_ecr_name                   = module.user_service_cicd.ecr_name
 }
 

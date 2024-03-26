@@ -103,6 +103,10 @@ output "careerhub_posting_skillscanner_helm_chart_repo" {
   value = module.cd_infra["helm_charts/careerhub_posting_skillscanner/"].chart_repo
 }
 
+output "careerhub_api_composer_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/careerhub_api_composer/"].chart_repo
+}
+
 output "user_service_helm_chart_repo" {
   value = module.cd_infra["helm_charts/user_service/"].chart_repo
 }
