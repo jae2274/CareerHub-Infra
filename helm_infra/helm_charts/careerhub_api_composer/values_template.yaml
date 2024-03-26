@@ -1,0 +1,8 @@
+name: ${charts.api_composer.name}
+image: #known after the deployment
+tag: #known after the deployment
+apiPort: ${charts.api_composer.api_port}
+postingGrpcEndpoint: ${charts.data_processor.restapi.name}:${charts.data_processor.restapi.grpc_port}
+secretKey: #known after the deployment
+accessControlAllowOrigin: #known after the deployment
+nodePort: ${charts.api_composer.node_port}

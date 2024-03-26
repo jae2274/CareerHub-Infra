@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.name}}
+  labels:
+    app: {{.Values.name}}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{.Values.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.name}}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{.Values.name}}
+          image: {{ .Values.image }}:{{ .Values.tag }}
+          env:
+            - name: POSTING_GRPC_ENDPOINT
+              value: {{.Values.postingGrpcEndpoint}}
+            - name: API_PORT
+              value: {{.Values.apiPort}}
+            - name: SECRET_KEY
+              value: {{.Values.secretKey}}
+            - name: ACCESS_CONTROL_ALLOW_ORIGIN
+              value: {{.Values.accessControlAllowOrigin}}
+          ports:
+            - containerPort: {{.Values.provider.grpcPort}}
+            - containerPort: {{.Values.scanner.grpcPort}}

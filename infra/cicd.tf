@@ -72,6 +72,20 @@ module "user_service_cicd" {
   subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
 }
 
+module "careerhub_api_composer_cicd" {
+  source = "./backend_cicd_infra"
+
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix}api-composer"
+  build_arch       = "arm64"
+
+  repository_path = "jae2274/careerhub-api-composer"
+  branch_name     = local.branch
+  vpc_id          = local.vpc_id
+  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
+  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+}
+
 locals {
   careerhub_posting_provider_ecr = {
     region = module.careerhub_posting_provider_cicd.ecr_region

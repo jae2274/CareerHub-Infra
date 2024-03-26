@@ -12,7 +12,6 @@ provider:
 scanner:
   name: ${charts.data_processor.scanner.name}
   grpcPort: ${charts.data_processor.scanner.grpc_port}
-restApi:
-  name: ${charts.data_processor.rest_api.name}
-  apiPort: ${charts.data_processor.rest_api.api_port}
-  nodePort: ${charts.data_processor.rest_api.node_port}
+restapi:
+  name: ${charts.data_processor.restapi.name}
+  grpcPort: ${charts.data_processor.restapi.grpc_port}

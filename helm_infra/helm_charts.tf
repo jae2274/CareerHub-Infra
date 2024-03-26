@@ -21,10 +21,9 @@ locals {
         name      = "skillscanner-grpc"
         grpc_port = 50052
       }
-      rest_api = {
-        name      = "rest-api"
-        api_port  = 8080
-        node_port = local.careerhub_node_port
+      restapi = {
+        name      = "restapi-grpc"
+        grpc_port = 50053
       }
     }
 
@@ -41,6 +40,12 @@ locals {
       name      = "user-service"
       api_port  = 8080
       node_port = local.user_service_node_port
+    }
+
+    api_composer = {
+      name      = "api-composer"
+      api_port  = 8080
+      node_port = local.careerhub_node_port
     }
   }
 }

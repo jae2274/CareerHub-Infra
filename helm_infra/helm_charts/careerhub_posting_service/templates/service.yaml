@@ -27,12 +27,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{.Values.restApi.name}}
+  name: {{.Values.restapi.name}}
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: {{.Values.name}}
   ports:
-    - port: {{.Values.restApi.apiPort}}
-      targetPort: {{.Values.restApi.apiPort}}
-      nodePort: {{.Values.restApi.nodePort}}
+    - protocol: TCP
+      port: {{.Values.restapi.grpcPort}}
+      targetPort: {{.Values.restapi.grpcPort}}

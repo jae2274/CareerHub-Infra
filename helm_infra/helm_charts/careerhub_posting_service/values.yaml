@@ -12,7 +12,6 @@ provider:
 scanner:
   name: skillscanner-grpc
   grpcPort: 50052
-restApi:
-  name: rest-api
-  apiPort: 8080
-  nodePort: 30000
+restapi:
+  name: restapi-grpc
+  grpcPort: 50053

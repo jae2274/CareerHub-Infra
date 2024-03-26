@@ -1,0 +1,8 @@
+name: api-composer
+image: #known after the deployment
+tag: #known after the deployment
+apiPort: 8080
+postingGrpcEndpoint: restapi-grpc:50053
+secretKey: #known after the deployment
+accessControlAllowOrigin: #known after the deployment
+nodePort: 30000
