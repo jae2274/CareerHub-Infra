@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+  labels:
+    k8s-app: opensearch
+spec:
+  selector:
+    matchLabels:
+      k8s-app: opensearch
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: opensearch
+    spec:
+      nodeSelector:
+        "usage": "monitoring"
+      tolerations:
+        - key: "usage"
+          operator: "Equal"
+          value: "monitoring"
+          effect: "NoSchedule"
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["chown", "-R", "1000:1000", "/usr/share/opensearch/data"]
+          volumeMounts:
+            - name: opensearch-data
+              mountPath: /usr/share/opensearch/data
+      containers:
+        - name: opensearch
+          image: opensearchproject/opensearch:latest
+          env:
+            - name: discovery.type
+              value: single-node
+            - name: node.name
+              value: opensearch
+            - name: OPENSEARCH_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+            - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+              value: "{{ .Values.initialAdminPassword }}"
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: opensearch-data
+              mountPath: /usr/share/opensearch/data
+      volumes:
+        - name: opensearch-data
+          hostPath:
+            path: /usr/share/opensearch/data
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch
+  labels:
+    k8s-app: opensearch
+spec:
+  type: ClusterIP
+  selector:
+    k8s-app: opensearch
+  ports:
+    - name: http
+      port: 9200
+      targetPort: 9200

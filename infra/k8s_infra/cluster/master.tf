@@ -18,14 +18,11 @@ resource "aws_security_group" "k8s_master_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  dynamic "ingress" { //TODO: 이후 세부적으로 수정
-    for_each = var.node_ports
-    content {
-      from_port   = ingress.value
-      to_port     = ingress.value
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
+  ingress { //TODO: 이후 세부적으로 수정
+    from_port   = 30000
+    to_port     = 32767
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {

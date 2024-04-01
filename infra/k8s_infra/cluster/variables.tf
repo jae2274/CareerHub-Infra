@@ -24,10 +24,6 @@ variable "ecrs" {
   }))
 }
 
-variable "node_ports" {
-  type = list(number)
-}
-
 variable "ami" {
   type = string
 }

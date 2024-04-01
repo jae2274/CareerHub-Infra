@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch-dashboard
+  labels:
+    k8s-app: opensearch-dashboard
+spec:
+  selector:
+    matchLabels:
+      k8s-app: opensearch-dashboard
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: opensearch-dashboard
+    spec:
+      nodeSelector:
+        "usage": "monitoring"
+      tolerations:
+        - key: "usage"
+          operator: "Equal"
+          value: "monitoring"
+          effect: "NoSchedule"
+      containers:
+        - name: opensearch-dashboard
+          image: opensearchproject/opensearch-dashboards:latest
+          imagePullPolicy: Always
+          env:
+            - name: OPENSEARCH_HOSTS
+              value: '["https://opensearch:9200"]'
+          ports:
+            - containerPort: 5601
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opensearch-dashboard
+  labels:
+    k8s-app: opensearch-dashboard
+spec:
+  type: NodePort
+  selector:
+    k8s-app: opensearch-dashboard
+  ports:
+    - protocol: TCP
+      port: 5601
+      targetPort: 5601
+      nodePort: 30002

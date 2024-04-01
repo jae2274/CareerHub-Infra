@@ -34,9 +34,8 @@ module "k8s_infra" {
     subnet_id     = local.public_subnets[local.public_subnet_key_1].id
   }
 
-  node_ports = [local.careerhub_node_port, local.user_service_node_port]
-  ami        = local.ami
-  key_name   = aws_key_pair.k8s_keypair.key_name
+  ami      = local.ami
+  key_name = aws_key_pair.k8s_keypair.key_name
 }
 
 locals {

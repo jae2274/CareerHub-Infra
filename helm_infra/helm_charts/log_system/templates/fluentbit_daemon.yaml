@@ -2,13 +2,15 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluent-bit
-  namespace: kube-logging
 spec:
   selector:
     matchLabels:
       k8s-app: fluent-bit-logging
   template:
     metadata:
+      annotations:
+        checksum/config: |
+          {{ include (print $.Template.BasePath "/fluentbit_configmap.yaml") . | sha256sum }}
       labels:
         k8s-app: fluent-bit-logging
     spec:
