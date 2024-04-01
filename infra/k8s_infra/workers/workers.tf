@@ -20,6 +20,10 @@ ${local.join_k8s_sh}
   tags = {
     Name = "${var.cluster_name}-worker-${each.key}"
   }
+
+  root_block_device {
+    volume_size = var.volume_gb_size
+  }
 }
 
 

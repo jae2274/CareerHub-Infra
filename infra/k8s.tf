@@ -90,6 +90,7 @@ module "monitoring_nodes" {
   master_private_key   = tls_private_key.k8s_private_key.private_key_pem
   instance_type        = "t4g.medium"
 
+  volume_gb_size = 32
   labels = {
     "usage" = "monitoring"
   }

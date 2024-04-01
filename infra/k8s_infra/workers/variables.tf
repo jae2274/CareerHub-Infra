@@ -53,6 +53,11 @@ variable "taints" {
   default = []
 }
 
+variable "volume_gb_size" {
+  type    = number
+  default = 8
+}
+
 
 locals {
   install_k8s_sh = file("${path.module}/../init_scripts/install_k8s.sh")
