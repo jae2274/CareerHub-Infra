@@ -51,7 +51,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_ip}:${local.careerhub_node_port}/{proxy}"
+            uri                  = "http://${local.master_public_ip}:${local.careerhub_node_port}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }
@@ -72,7 +72,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             httpMethod           = "ANY"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_ip}:${local.user_service_node_port}${local.user_service_path}"
+            uri                  = "http://${local.master_public_ip}:${local.user_service_node_port}${local.user_service_path}"
           }
         }
       }
@@ -83,7 +83,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_ip}:${local.user_service_node_port}${local.user_service_path}/{proxy}"
+            uri                  = "http://${local.master_public_ip}:${local.user_service_node_port}${local.user_service_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }

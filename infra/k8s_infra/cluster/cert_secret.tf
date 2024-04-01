@@ -5,15 +5,8 @@ resource "aws_secretsmanager_secret" "kubeconfig" {
 
 
 
-data "aws_iam_policy_document" "cert_secret_policy_doc" {
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "secretsmanager:PutSecretValue",
-    ]
-    resources = [aws_secretsmanager_secret.kubeconfig.arn]
-  }
+output "kubeconfig_secret_arn" {
+  value = aws_secretsmanager_secret.kubeconfig.arn
 }
 
 output "kubeconfig_secret_id" {

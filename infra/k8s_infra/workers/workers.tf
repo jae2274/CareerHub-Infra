@@ -1,12 +1,12 @@
 resource "aws_instance" "workers" {
-  for_each = var.workers.worker
+  for_each = var.workers
 
-  ami                  = local.ami
-  instance_type        = var.workers.instance_type
-  iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
+  ami                  = var.ami
+  instance_type        = var.instance_type
+  iam_instance_profile = var.iam_instance_profile
 
   subnet_id = each.value.subnet_id
-  key_name  = aws_key_pair.k8s_keypair.key_name
+  key_name  = var.key_name
   # user_data = file("${path.module}/init_scripts/install_k8s.sh")
   user_data              = <<EOT
 #!/bin/bash
@@ -17,13 +17,11 @@ ${local.join_k8s_sh}
 
 ${local.login_ecr_sh}
   EOT
-  vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id, aws_security_group.k8s_node_sg.id]
+  vpc_security_group_ids = [aws_security_group.k8s_worker_sg.id, var.common_cluster_sg_id]
 
   tags = {
     Name = "${var.cluster_name}-worker-${each.key}"
   }
-
-  depends_on = [aws_instance.master_instance]
 }
 
 resource "aws_security_group" "k8s_worker_sg" {
