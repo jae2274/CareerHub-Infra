@@ -6,14 +6,6 @@ variable "key_name" {
   type = string
 }
 
-variable "iam_instance_profile" {
-  type = string
-}
-
-variable "common_cluster_sg_id" {
-  type = string
-}
-
 variable "cluster_name" {
   type = string
 }

@@ -41,12 +41,13 @@ resource "aws_security_group" "k8s_master_sg" {
 
 
 resource "aws_instance" "master_instance" {
-  ami                  = var.ami
-  instance_type        = var.master.instance_type
-  iam_instance_profile = var.iam_instance_profile
+  ami           = var.ami
+  instance_type = var.master.instance_type
 
   subnet_id = var.master.subnet_id
   key_name  = var.key_name
+
+  iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 
   user_data = <<EOT
 #!/bin/bash
@@ -58,7 +59,7 @@ ${local.init_k8s_sh}
 ${local.set_secret_sh}
   EOT
 
-  vpc_security_group_ids = [aws_security_group.k8s_master_sg.id, var.common_cluster_sg_id]
+  vpc_security_group_ids = [aws_security_group.k8s_master_sg.id, aws_security_group.k8s_node_sg.id]
 
   tags = {
     Name = "${var.cluster_name}-master"
