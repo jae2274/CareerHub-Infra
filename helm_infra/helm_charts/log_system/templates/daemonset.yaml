@@ -31,6 +31,3 @@ spec:
         - name: fluent-bit-config
           configMap:
             name: fluent-bit-config
-      tolerations:
-        - key: node-role.kubernetes.io/master
-          effect: NoSchedule
