@@ -28,6 +28,6 @@ ssh -o "StrictHostKeychecking=no" ubuntu@${master_ip} "kubectl label nodes $HOST
 %{ endfor ~}
 
 echo "***Setting tainted nodes***"
-%{ for key,value in taints ~}
-ssh -o "StrictHostKeychecking=no" ubuntu@${master_ip} "kubectl taint nodes $HOSTNAME ${key}=${value}"
+%{ for taint in taints ~}
+ssh -o "StrictHostKeychecking=no" ubuntu@${master_ip} "kubectl taint nodes $HOSTNAME ${taint.key}=${taint.value}:${taint.effect}"
 %{ endfor ~}

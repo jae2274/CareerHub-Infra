@@ -1,4 +1,5 @@
 
+
 data "aws_iam_policy_document" "ec2_policy_doc" {
 
   statement {
@@ -25,7 +26,7 @@ data "aws_iam_policy_document" "assume_role_policy_doc" {
 }
 
 resource "aws_iam_role" "k8s_node_role" {
-  name               = "${var.cluster_name}-k8s_node-role"
+  name               = "${var.cluster_name}-${var.node_group_name}-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy_doc.json
 }
 
@@ -34,9 +35,8 @@ resource "aws_iam_role_policy" "ec2_role_policy" {
   policy = data.aws_iam_policy_document.ec2_policy_doc.json
 }
 
-
-
 resource "aws_iam_instance_profile" "iam_instance_profile" {
-  name = "${var.cluster_name}-k8s_node-profile"
+  name = "${var.cluster_name}-${var.node_group_name}-profile"
   role = aws_iam_role.k8s_node_role.name
 }
+

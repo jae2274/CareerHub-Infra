@@ -51,9 +51,10 @@ locals {
 module "worker_nodes" {
   source = "./k8s_infra/workers"
 
-  vpc_id       = local.vpc_id
-  cluster_name = local.cluster_name
-  key_name     = aws_key_pair.k8s_keypair.key_name
+  node_group_name = "app"
+  vpc_id          = local.vpc_id
+  cluster_name    = local.cluster_name
+  key_name        = aws_key_pair.k8s_keypair.key_name
 
   common_cluster_sg_id = local.common_cluster_sg_id
   master_ip            = local.master_private_ip
@@ -69,6 +70,38 @@ module "worker_nodes" {
       subnet_id = local.public_subnets[local.public_subnet_key_2].id
     }
     "2" = {
+      subnet_id = local.public_subnets[local.public_subnet_key_1].id
+    }
+  }
+
+  ami = local.ami
+}
+
+module "monitoring_nodes" {
+  source = "./k8s_infra/workers"
+
+  node_group_name = "monitoring"
+  vpc_id          = local.vpc_id
+  cluster_name    = local.cluster_name
+  key_name        = aws_key_pair.k8s_keypair.key_name
+
+  common_cluster_sg_id = local.common_cluster_sg_id
+  master_ip            = local.master_private_ip
+  master_private_key   = tls_private_key.k8s_private_key.private_key_pem
+  instance_type        = "t4g.medium"
+
+  labels = {
+    "usage" = "monitoring"
+  }
+
+  taints = [{
+    key    = "usage"
+    value  = "monitoring"
+    effect = "NoSchedule"
+  }]
+
+  workers = {
+    "monitoring" = {
       subnet_id = local.public_subnets[local.public_subnet_key_1].id
     }
   }
