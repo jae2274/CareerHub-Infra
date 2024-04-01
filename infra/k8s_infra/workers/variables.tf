@@ -36,6 +36,15 @@ variable "ami" {
   type = string
 }
 
+variable "labels" {
+  type = map(string)
+}
+
+variable "taints" {
+  type    = map(string)
+  default = {}
+}
+
 
 locals {
   install_k8s_sh = file("${path.module}/../init_scripts/install_k8s.sh")
@@ -43,5 +52,7 @@ locals {
   join_k8s_sh = templatefile("${path.module}/init_scripts/join_k8s.sh", {
     master_ip          = var.master_ip,
     master_private_key = var.master_private_key
+    labels             = var.labels
+    taints             = var.taints
   })
 }

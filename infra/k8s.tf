@@ -1,3 +1,5 @@
+
+
 locals {
   cluster_name = local.prefix_service_name
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
@@ -58,12 +60,16 @@ module "worker_nodes" {
   master_private_key   = tls_private_key.k8s_private_key.private_key_pem
   instance_type        = "t4g.small"
 
+  labels = {
+    "usage" = "app"
+  }
+
   workers = {
     "1" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_1].id
+      subnet_id = local.public_subnets[local.public_subnet_key_2].id
     }
     "2" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_2].id
+      subnet_id = local.public_subnets[local.public_subnet_key_1].id
     }
   }
 
