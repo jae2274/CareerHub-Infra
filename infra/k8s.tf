@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 
 module "k8s_infra" {
-  source = "./k8s_infra"
+  source = "./k8s_infra/cluster"
 
   vpc_id       = local.vpc_id
   cluster_name = local.prefix_service_name
