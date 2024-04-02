@@ -1,4 +1,4 @@
-{{- $name := .Values.name + "-fluentbit" -}}
+{{- $name := print .Values.name "-fluentbit" -}}
 
 apiVersion: apps/v1
 kind: DaemonSet

@@ -1,4 +1,4 @@
-{{- $name := .Values.name + "-opensearch-dashboard" -}}
+{{- $name := print .Values.name "-opensearch-dashboard" -}}
 
 apiVersion: apps/v1
 kind: Deployment

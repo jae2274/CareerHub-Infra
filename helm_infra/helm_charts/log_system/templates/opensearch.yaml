@@ -1,4 +1,4 @@
-{{- $name := .Values.name + "-opensearch" -}}
+{{- $name := print .Values.name "-opensearch" -}}
 
 
 apiVersion: apps/v1

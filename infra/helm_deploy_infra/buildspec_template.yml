@@ -10,20 +10,18 @@ phases:
       - echo Login to ECR
       - mkdir ~/.kube
       - aws secretsmanager get-secret-value --region ${region} --secret-id ${kubeconfig_secret_id} --query SecretString --output text > ~/.kube/config
-%{ if ecr.exists ~}
-      - aws ecr get-login-password --region ${region}  | helm registry login --username AWS --password-stdin ${ecr.domain}
-%{ endif ~}
+      - aws ecr get-login-password --region ${region}  | helm registry login --username AWS --password-stdin ${ecr_domain}
   build:
     commands:
-%{ if ecr.exists ~}
-      - LATEST_IMAGE_INFO=$(aws ecr describe-images --repository-name ${ecr.repo_name} --region ${region} | jq -r '.imageDetails[] | select( [ .imageTags[] | contains("latest") ] | any)')
+%{ if ecr_repo_name != "" ~}
+      - LATEST_IMAGE_INFO=$(aws ecr describe-images --repository-name ${ecr_repo_name} --region ${region} | jq -r '.imageDetails[] | select( [ .imageTags[] | contains("latest") ] | any)')
       - REGISTRY_ID=$(echo $LATEST_IMAGE_INFO | jq -r '.registryId')
       - LATEST_TAG=$(echo $LATEST_IMAGE_INFO | jq -r '.imageTags[] | select(. != "latest")')
-      - IMAGE_URL=$REGISTRY_ID.dkr.ecr.${region}.amazonaws.com/${ecr.repo_name}
+      - IMAGE_URL=$REGISTRY_ID.dkr.ecr.${region}.amazonaws.com/${ecr_repo_name}
 %{ endif ~}
 
 %{ for helm_value, secret_id in helm_value_secret_ids ~}
       - SECRET_VALUE_${helm_value}=$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secret_id} --query SecretString --output text)
 %{ endfor ~}
 
-      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr.exists }--set image=$IMAGE_URL %{ endif }--set tag=$LATEST_TAG %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 
+      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr_repo_name != "" }--set image=$IMAGE_URL --set tag=$LATEST_TAG %{ endif }%{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 

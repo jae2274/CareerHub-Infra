@@ -132,12 +132,8 @@ data "aws_caller_identity" "current" {}
 
 
 locals {
-  region = data.aws_region.current.name
-  ecr = var.ecr_repo_name == "" ? { exists : false } : {
-    exists    = true
-    repo_name = var.ecr_repo_name
-    domain    = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
-  }
+  region     = data.aws_region.current.name
+  ecr_domain = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
 }
 
 // end define log bucket
@@ -174,8 +170,11 @@ resource "aws_codebuild_project" "codebuild_project" {
   source {
     type = "NO_SOURCE"
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
-      region                = local.region
-      ecr                   = local.ecr
+      region = local.region
+
+      ecr_repo_name = var.ecr_repo_name
+      ecr_domain    = local.ecr_domain
+
       namespace             = var.namespace
       helm_name             = var.deploy_name
       chart_repo            = var.chart_repo
