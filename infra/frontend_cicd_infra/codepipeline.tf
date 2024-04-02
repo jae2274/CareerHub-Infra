@@ -3,6 +3,19 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket        = "${var.cicd_name}-codepipeline-bucket"
   force_destroy = true
 }
+
+resource "aws_s3_bucket_lifecycle_configuration" "codepipeline_bucket" {
+  bucket = aws_s3_bucket.codepipeline_bucket.id
+
+  rule {
+    id     = "expiration"
+    status = "Enabled"
+
+    expiration {
+      days = 3
+    }
+  }
+}
 // end define s3 bucket
 
 // start define iam role and policy

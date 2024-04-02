@@ -100,6 +100,18 @@ resource "aws_s3_bucket" "codebuild_log_bucket" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "codebuild_log_bucket" {
+  bucket = aws_s3_bucket.codebuild_log_bucket.id
+
+  rule {
+    id     = "expiration"
+    status = "Enabled"
+
+    expiration {
+      days = 3
+    }
+  }
+}
 
 locals {
   codebuild_enviroment = {

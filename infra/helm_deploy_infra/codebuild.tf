@@ -114,11 +114,18 @@ resource "aws_s3_bucket" "codebuild_log_bucket" {
   force_destroy = true
 }
 
-# resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
-#   bucket = aws_s3_bucket.codebuild_log_bucket.id
-#   acl    = "private"
-# }
+resource "aws_s3_bucket_lifecycle_configuration" "codebuild_log_bucket" {
+  bucket = aws_s3_bucket.codebuild_log_bucket.id
 
+  rule {
+    id     = "expiration"
+    status = "Enabled"
+
+    expiration {
+      days = 3
+    }
+  }
+}
 
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
