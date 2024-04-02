@@ -2,7 +2,6 @@ name: posting-provider
 image: #known after the deployment
 tag: #known after the deployment
 grpcEndpoint: provider-grpc:50051
-postLogUrl: http://log-api:8080/logs
 sites:
   - jumpit
   - wanted

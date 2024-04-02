@@ -1,8 +1,0 @@
-name: log-api
-image: #known after the deployment
-tag: #known after the deployment
-apiPort: 8080
-mongoUri: #known after the deployment
-dbName: logs
-dbUsername: #known after the deployment
-dbPassword: #known after the deployment

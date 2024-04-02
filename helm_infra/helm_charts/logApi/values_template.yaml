@@ -1,8 +1,0 @@
-name: ${charts.log_api.name}
-image: #known after the deployment
-tag: #known after the deployment
-apiPort: ${charts.log_api.api_port}
-mongoUri: #known after the deployment
-dbName: ${charts.log_api.db_name}
-dbUsername: #known after the deployment
-dbPassword: #known after the deployment

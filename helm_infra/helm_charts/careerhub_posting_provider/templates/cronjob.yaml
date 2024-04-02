@@ -2,7 +2,6 @@
 {{ $image := .Values.image }}
 {{ $tag := .Values.tag }}
 {{ $grpcEndpoint := .Values.grpcEndpoint }}
-{{ $postLogUrl := .Values.postLogUrl }}
 
 {{- range $i, $site := .Values.sites }}
 apiVersion: batch/v1
@@ -25,8 +24,6 @@ spec:
               env:
                 - name: GRPC_ENDPOINT
                   value: "{{$grpcEndpoint}}"
-                - name: POST_LOG_URL
-                  value: "{{$postLogUrl}}"
   concurrencyPolicy: Forbid
 ---
 {{- end }}

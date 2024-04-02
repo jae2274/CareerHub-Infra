@@ -3,11 +3,16 @@
 locals {
   careerhub_node_port    = 30000
   user_service_node_port = 30001
+  log_system_node_port   = 30002
+
+  namespace                      = "careerhub"
+  opensearchInitialAdminPassword = var.opensearchInitialAdminPassword
+
   charts = {
-    log_api = {
-      name     = "log-api"
-      db_name  = "logs"
-      api_port = 8080
+    namespace = local.namespace
+    log_system = {
+      name                           = "log-system"
+      opensearchInitialAdminPassword = local.opensearchInitialAdminPassword
     }
 
     data_processor = {
@@ -87,8 +92,8 @@ output "user_service_node_port" {
   value = local.user_service_node_port
 }
 
-output "log_api_helm_chart_repo" {
-  value = module.cd_infra["helm_charts/logApi/"].chart_repo
+output "namespace" {
+  value = local.namespace
 }
 
 output "careerhub_posting_service_helm_chart_repo" {

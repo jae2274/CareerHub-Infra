@@ -2,7 +2,6 @@
 {{ $image := .Values.image }}
 {{ $tag := .Values.tag }}
 {{ $grpcEndpoint := .Values.grpcEndpoint }}
-{{ $postLogUrl := .Values.postLogUrl }}
 
 apiVersion: batch/v1
 kind: CronJob
@@ -23,6 +22,4 @@ spec:
               env:
                 - name: GRPC_ENDPOINT
                   value: "{{$grpcEndpoint}}"
-                - name: POST_LOG_URL
-                  value: "{{$postLogUrl}}"
   concurrencyPolicy: Forbid

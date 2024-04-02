@@ -1,21 +1,23 @@
+{{- $name := .Values.name + "-fluentbit" -}}
+
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: fluent-bit
+  name: {{$name}}
 spec:
   selector:
     matchLabels:
-      k8s-app: fluent-bit-logging
+      k8s-app: {{$name}}
   template:
     metadata:
       annotations:
         checksum/config: |
           {{ include (print $.Template.BasePath "/fluentbit_configmap.yaml") . | sha256sum }}
       labels:
-        k8s-app: fluent-bit-logging
+        k8s-app: {{$name}}
     spec:
       containers:
-        - name: fluent-bit
+        - name: {{$name}}
           image: fluent/fluent-bit:latest
           imagePullPolicy: Always
           volumeMounts:

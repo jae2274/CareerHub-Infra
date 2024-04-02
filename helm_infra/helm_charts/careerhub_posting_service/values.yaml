@@ -2,7 +2,6 @@ name: posting-service
 image: #known after the deployment
 tag: #known after the deployment
 dbName: careerhub
-postLogUrl: http://log-api:8080/logs
 mongoUri: #known after the deployment
 dbUsername: #known after the deployment
 dbPassword: #known after the deployment

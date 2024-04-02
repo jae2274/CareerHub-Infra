@@ -18,8 +18,8 @@ data:
     [INPUT]
         Name              tail
         Tag               kube.*
-        Exclude_Path      /var/log/containers/*_log-system_*
-        Path              /var/log/containers/*.log
+        Exclude_Path      {{.Values.kubeLogsDir}}/{{.Values.name}}*_{{.Values.targetNamespace}}_*.log
+        Path              {{.Values.kubeLogsDir}}/*_{{.Values.targetNamespace}}_*.log
         Parser            cri
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   On

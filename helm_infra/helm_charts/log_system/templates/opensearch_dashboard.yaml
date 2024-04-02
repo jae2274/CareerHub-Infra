@@ -1,18 +1,20 @@
+{{- $name := .Values.name + "-opensearch-dashboard" -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opensearch-dashboard
+  name: {{ $name }}
   labels:
-    k8s-app: opensearch-dashboard
+    k8s-app: {{ $name }}
 spec:
   selector:
     matchLabels:
-      k8s-app: opensearch-dashboard
+      k8s-app: {{ $name }}
   replicas: 1
   template:
     metadata:
       labels:
-        k8s-app: opensearch-dashboard
+        k8s-app: {{ $name }}
     spec:
     {{- if .Values.nodeSelector }}
       nodeSelector:
@@ -30,7 +32,7 @@ spec:
         {{- end }}
     {{- end }}
       containers:
-        - name: opensearch-dashboard
+        - name: {{ $name }}
           image: opensearchproject/opensearch-dashboards:latest
           imagePullPolicy: Always
           env:
@@ -42,13 +44,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: opensearch-dashboard
+  name: {{ $name }}
   labels:
-    k8s-app: opensearch-dashboard
+    k8s-app: {{ $name }}
 spec:
   type: NodePort
   selector:
-    k8s-app: opensearch-dashboard
+    k8s-app: {{ $name }}
   ports:
     - protocol: TCP
       port: 5601

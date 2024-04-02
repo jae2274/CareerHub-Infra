@@ -1,5 +1,5 @@
-name: log-system
-targetNamespace: careerhub
+name: ${charts.log_system.name}
+targetNamespace: ${charts.namespace}
 
 kubeLogsDir: /var/log/containers
 nodeSelector:
@@ -10,4 +10,4 @@ tolerations:
     operator: "Equal"
     value: "monitoring"
     effect: "PreferNoSchedule"
-initialAdminPassword: "It's been a while, My old friend. Maybe 163 years?"
+initialAdminPassword: "${charts.log_system.opensearchInitialAdminPassword}"

@@ -2,4 +2,3 @@ name: ${charts.skill_scanner.name}
 image: #known after the deployment
 tag: #known after the deployment
 grpcEndpoint: ${charts.data_processor.scanner.name}:${charts.data_processor.scanner.grpc_port}
-postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs

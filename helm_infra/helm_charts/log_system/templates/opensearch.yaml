@@ -1,18 +1,21 @@
+{{- $name := .Values.name + "-opensearch" -}}
+
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: opensearch
+  name: {{$name}}
   labels:
-    k8s-app: opensearch
+    k8s-app: {{$name}}
 spec:
   selector:
     matchLabels:
-      k8s-app: opensearch
+      k8s-app: {{$name}}
   replicas: 1
   template:
     metadata:
       labels:
-        k8s-app: opensearch
+        k8s-app: {{$name}}
     spec:
     {{- if .Values.nodeSelector }}
       nodeSelector:
@@ -37,7 +40,7 @@ spec:
             - name: opensearch-data
               mountPath: /usr/share/opensearch/data
       containers:
-        - name: opensearch
+        - name: {{$name}}
           image: opensearchproject/opensearch:latest
           env:
             - name: discovery.type
@@ -61,13 +64,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: opensearch
+  name: {{$name}}
   labels:
-    k8s-app: opensearch
+    k8s-app: {{$name}}
 spec:
   type: ClusterIP
   selector:
-    k8s-app: opensearch
+    k8s-app: {{$name}}
   ports:
     - name: http
       port: 9200

@@ -2,7 +2,6 @@ name: ${charts.data_provider.name}
 image: #known after the deployment
 tag: #known after the deployment
 grpcEndpoint: ${charts.data_processor.provider.name}:${charts.data_processor.provider.grpc_port}
-postLogUrl: http://${charts.log_api.name}:${charts.log_api.api_port}/logs
 sites:
 %{ for site in charts.data_provider.sites ~}
   - ${site}
