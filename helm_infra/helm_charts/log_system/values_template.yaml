@@ -10,4 +10,4 @@ tolerations:
     operator: "Equal"
     value: "monitoring"
     effect: "PreferNoSchedule"
-initialAdminPassword: "${charts.log_system.opensearchInitialAdminPassword}"
+initialAdminPassword: #known after the deployment

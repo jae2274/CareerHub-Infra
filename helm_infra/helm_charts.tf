@@ -5,14 +5,12 @@ locals {
   user_service_node_port = 30001
   log_system_node_port   = 30002
 
-  namespace                      = "careerhub"
-  opensearchInitialAdminPassword = var.opensearchInitialAdminPassword
+  namespace = "careerhub"
 
   charts = {
     namespace = local.namespace
     log_system = {
-      name                           = "log-system"
-      opensearchInitialAdminPassword = local.opensearchInitialAdminPassword
+      name = "log-system"
     }
 
     data_processor = {

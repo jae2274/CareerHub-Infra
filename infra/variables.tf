@@ -49,3 +49,7 @@ variable "google_redirecturi" {
 variable "jwt_secretkey" {
   type = string
 }
+
+variable "initialAdminPassword" {
+  type = string
+}

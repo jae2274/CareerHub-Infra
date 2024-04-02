@@ -118,17 +118,29 @@ module "user_service_helm_deploy" {
   }
 }
 
-# module "log_system_helm_deploy" {
-#   source = "./helm_deploy_infra"
 
-#   deploy_name          = "${local.prefix_service_name}-log-system-helm"
-#   chart_repo           = local.log_system_helm_chart_repo
-#   ecr_repo_name        = local.log_system_ecr_name
-#   kubeconfig_secret_id = local.kubeconfig_secret_id
+resource "aws_secretsmanager_secret" "initial_admin_password" {
+  name = "${local.prefix_service_name}-opensearch-password"
 
-#   vpc_id      = local.vpc_id
-#   subnet_ids  = local.private_subnet_ids
-#   subnet_arns = local.private_subnet_arns
+}
 
-#   helm_value_secret_ids = {}
-# }
+resource "aws_secretsmanager_secret_version" "initial_admin_password" {
+  secret_id     = aws_secretsmanager_secret.initial_admin_password.id
+  secret_string = var.initialAdminPassword
+}
+
+module "log_system_helm_deploy" {
+  source = "./helm_deploy_infra"
+
+  deploy_name          = "${local.prefix_service_name}-log-system-helm"
+  chart_repo           = local.log_system_helm_chart_repo
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+
+  vpc_id      = local.vpc_id
+  subnet_ids  = local.private_subnet_ids
+  subnet_arns = local.private_subnet_arns
+
+  helm_value_secret_ids = {
+    initialAdminPassword = aws_secretsmanager_secret.initial_admin_password.name
+  }
+}

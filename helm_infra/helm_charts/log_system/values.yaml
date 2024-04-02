@@ -10,4 +10,4 @@ tolerations:
     operator: "Equal"
     value: "monitoring"
     effect: "PreferNoSchedule"
-initialAdminPassword: "It's been a while, My old friend. Maybe 163 years?"
+initialAdminPassword: #known after the deployment
