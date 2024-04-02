@@ -176,6 +176,7 @@ resource "aws_codebuild_project" "codebuild_project" {
     buildspec = templatefile("${path.module}/buildspec_template.yml", {
       region                = local.region
       ecr                   = local.ecr
+      namespace             = var.namespace
       helm_name             = var.deploy_name
       chart_repo            = var.chart_repo
       kubeconfig_secret_id  = var.kubeconfig_secret_id

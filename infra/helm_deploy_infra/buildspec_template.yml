@@ -26,4 +26,4 @@ phases:
       - SECRET_VALUE_${helm_value}=$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secret_id} --query SecretString --output text)
 %{ endfor ~}
 
-      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --wait %{ if ecr.exists }--set image=$IMAGE_URL %{ endif }--set tag=$LATEST_TAG %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 
+      - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr.exists }--set image=$IMAGE_URL %{ endif }--set tag=$LATEST_TAG %{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 

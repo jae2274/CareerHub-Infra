@@ -85,14 +85,4 @@ resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
 output "public_endpoint" {
   value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_standard_srv }
 }
-# resource "mongodbatlas_privatelink_endpoint_service_serverless" "privatelink_endpoint_service" {
-#   for_each = mongodbatlas_privatelink_endpoint_serverless.privatelink_endpoint
-
-#   project_id                 = mongodbatlas_project.project.id
-#   instance_name              = each.value.instance_name
-#   endpoint_id                = each.value.endpoint_id
-#   cloud_provider_endpoint_id = aws_vpc_endpoint.vpc_endpoint[each.key].id
-#   provider_name              = "AWS"
-#   comment                    = "New serverless endpoint"
-# }
 

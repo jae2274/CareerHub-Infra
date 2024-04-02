@@ -2,6 +2,10 @@ variable "deploy_name" {
   type = string
 }
 
+variable "namespace" {
+  type = string
+}
+
 variable "kubeconfig_secret_id" {
   type = string
 }

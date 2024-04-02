@@ -1,6 +1,7 @@
 locals {
   helm_infra_outputs = data.terraform_remote_state.helm_infra.outputs
 
+  namespace                                      = local.helm_infra_outputs.namespace
   careerhub_posting_service_helm_chart_repo      = local.helm_infra_outputs.careerhub_posting_service_helm_chart_repo
   careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
   careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
@@ -28,8 +29,8 @@ locals {
 }
 
 module "careerhub_posting_service_helm_deploy" {
-  source = "./helm_deploy_infra"
-
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-careerhub-posting-service-helm"
   chart_repo           = local.careerhub_posting_service_helm_chart_repo
@@ -47,7 +48,8 @@ module "careerhub_posting_service_helm_deploy" {
 }
 
 module "careerhub_posting_provider_helm_deploy" {
-  source = "./helm_deploy_infra"
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-careerhub-posting-provider-helm"
   chart_repo           = local.careerhub_posting_provider_helm_chart_repo
@@ -61,7 +63,8 @@ module "careerhub_posting_provider_helm_deploy" {
 }
 
 module "careerhub_posting_skillscanner_helm_deploy" {
-  source = "./helm_deploy_infra"
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-careerhub-posting-skillscanner-helm"
   chart_repo           = local.careerhub_posting_skillscanner_helm_chart_repo
@@ -77,7 +80,8 @@ module "careerhub_posting_skillscanner_helm_deploy" {
 
 
 module "careerhub_api_composer_helm_deploy" {
-  source = "./helm_deploy_infra"
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-careerhub-api-composer-helm"
   chart_repo           = local.careerhub_api_composer_helm_chart_repo
@@ -94,7 +98,8 @@ module "careerhub_api_composer_helm_deploy" {
 }
 
 module "user_service_helm_deploy" {
-  source = "./helm_deploy_infra"
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-userservice-helm"
   chart_repo           = local.user_service_helm_chart_repo
@@ -130,7 +135,8 @@ resource "aws_secretsmanager_secret_version" "initial_admin_password" {
 }
 
 module "log_system_helm_deploy" {
-  source = "./helm_deploy_infra"
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
 
   deploy_name          = "${local.prefix_service_name}-log-system-helm"
   chart_repo           = local.log_system_helm_chart_repo
