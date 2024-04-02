@@ -1,7 +1,6 @@
 locals {
   helm_infra_outputs = data.terraform_remote_state.helm_infra.outputs
 
-  log_api_helm_chart_repo                        = local.helm_infra_outputs.log_api_helm_chart_repo
   careerhub_posting_service_helm_chart_repo      = local.helm_infra_outputs.careerhub_posting_service_helm_chart_repo
   careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
   careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
@@ -22,25 +21,6 @@ resource "aws_secretsmanager_secret_version" "jwt_secretkey" {
 
 locals {
   jwt_secretkey_secret_id = aws_secretsmanager_secret.jwt_secretkey.id
-}
-
-module "log_api_helm_deploy" {
-  source = "./helm_deploy_infra"
-
-
-  deploy_name          = "${local.prefix_service_name}-log-api-helm"
-  chart_repo           = local.log_api_helm_chart_repo
-  kubeconfig_secret_id = local.kubeconfig_secret_id
-  ecr_repo_name        = local.logapi_ecr_name
-  vpc_id               = local.vpc_id
-  subnet_ids           = local.private_subnet_ids
-  subnet_arns          = local.private_subnet_arns
-
-  helm_value_secret_ids = {
-    "mongoUri"   = local.log_mongodb_endpoint_secret_id
-    "dbUsername" = local.mongodb_username_secret_id
-    "dbPassword" = local.mongodb_password_secret_id
-  }
 }
 
 module "careerhub_posting_service_helm_deploy" {

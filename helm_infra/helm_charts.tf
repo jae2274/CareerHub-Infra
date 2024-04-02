@@ -115,3 +115,7 @@ output "careerhub_api_composer_helm_chart_repo" {
 output "user_service_helm_chart_repo" {
   value = module.cd_infra["helm_charts/user_service/"].chart_repo
 }
+
+output "log_system_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/log_system/"].chart_repo
+}
