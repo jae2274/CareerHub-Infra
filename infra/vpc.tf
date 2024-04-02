@@ -5,6 +5,7 @@ data "aws_availability_zones" "available" {
 locals {
   public_subnet_key_1 = "public_subnet_1"
   public_subnet_key_2 = "public_subnet_2"
+  public_subnet_key_3 = "public_subnet_3"
 
   vpc_cidr_block = "10.0.0.0/16"
 }
@@ -22,6 +23,10 @@ module "vpc_infra" {
     "${local.public_subnet_key_2}" = {
       public_cidr_block = "10.0.2.0/24"
       az                = data.aws_availability_zones.available.names[1]
+    }
+    "${local.public_subnet_key_3}" = {
+      public_cidr_block = "10.0.3.0/24"
+      az                = data.aws_availability_zones.available.names[2]
     }
   }
 }
@@ -64,6 +69,11 @@ module "private_subnet_infra" {
       nat_gateway_id = module.nat_instance.network_interface_id
       cidr_block     = "10.0.101.0/24"
       az             = module.vpc_infra.public_subnets[local.public_subnet_key_2].availability_zone
+    }
+    "${local.public_subnet_key_3}" = {
+      nat_gateway_id = module.nat_instance.network_interface_id
+      cidr_block     = "10.0.102.0/24"
+      az             = module.vpc_infra.public_subnets[local.public_subnet_key_3].availability_zone
     }
   }
 }
