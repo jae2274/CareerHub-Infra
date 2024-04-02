@@ -1,4 +1,5 @@
 {{- $name := print .Values.name "-opensearch-dashboard" -}}
+{{- $opensearch_name := print .Values.name "-opensearch" -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -37,7 +38,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: OPENSEARCH_HOSTS
-              value: '["https://opensearch:9200"]'
+              value: '["https://{{ $opensearch_name }}:9200"]'
           ports:
             - containerPort: 5601
 ---
