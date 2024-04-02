@@ -27,7 +27,7 @@ resource "null_resource" "chart_package" {
 resource "aws_ecr_repository" "helm_repo" {
   name = local.chart_name //TODO: 반드시! 환경별로 다른 이름을 사용 필요. 현재 구조로는 같은 이름만 사용 가능. 구조 변경 필요.
 
-
+  force_delete = true
   image_scanning_configuration {
     scan_on_push = true
   }
