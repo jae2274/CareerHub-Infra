@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "frontend_s3_bucket" {
-  bucket = "${var.cicd_name}-frontend"
+  bucket        = "${var.cicd_name}-frontend"
+  force_destroy = true
 }
 locals {
   key_prefix = "deploy"

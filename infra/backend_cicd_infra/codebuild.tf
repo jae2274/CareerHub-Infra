@@ -109,7 +109,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
 // start define log/cache bucket
 
 resource "aws_s3_bucket" "codebuild_log_bucket" {
-  bucket = "${var.cicd_name}-codebuild-log"
+  bucket        = "${var.cicd_name}-codebuild-log"
+  force_destroy = true
 }
 
 # resource "aws_s3_bucket_acl" "codebuild_log_bucket_acl" {
