@@ -14,13 +14,21 @@ spec:
       labels:
         k8s-app: opensearch
     spec:
+    {{- if .Values.nodeSelector }}
       nodeSelector:
-        "usage": "monitoring"
+        {{- range .Values.nodeSelector }}
+        {{ .key }}: {{ .value }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.tolerations }}
       tolerations:
-        - key: "usage"
-          operator: "Equal"
-          value: "monitoring"
-          effect: "NoSchedule"
+        {{- range .Values.tolerations }}
+        - key: {{ .key }}
+          operator: {{ .operator }}
+          value: {{ .value }}
+          effect: {{ .effect }}
+        {{- end }}
+    {{- end }}
       initContainers:
         - name: fix-permissions
           image: busybox

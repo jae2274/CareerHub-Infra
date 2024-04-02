@@ -97,12 +97,12 @@ module "monitoring_nodes" {
   taints = [{
     key    = "usage"
     value  = "monitoring"
-    effect = "NoSchedule"
+    effect = "PreferNoSchedule"
   }]
 
   workers = {
     "monitoring" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_1].id
+      subnet_id = local.public_subnets[local.public_subnet_key_3].id
     }
   }
 
