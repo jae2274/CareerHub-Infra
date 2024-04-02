@@ -15,7 +15,8 @@ variable "chart_repo" {
 }
 
 variable "ecr_repo_name" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "vpc_id" {

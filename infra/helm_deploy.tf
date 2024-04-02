@@ -5,9 +5,13 @@ locals {
   careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
   careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
   careerhub_api_composer_helm_chart_repo         = local.helm_infra_outputs.careerhub_api_composer_helm_chart_repo
-  user_service_helm_chart_repo                   = local.helm_infra_outputs.user_service_helm_chart_repo
-  careerhub_node_port                            = local.helm_infra_outputs.careerhub_node_port
-  user_service_node_port                         = local.helm_infra_outputs.user_service_node_port
+  log_system_helm_chart_repo                     = local.helm_infra_outputs.log_system_helm_chart_repo
+
+
+  user_service_helm_chart_repo = local.helm_infra_outputs.user_service_helm_chart_repo
+  careerhub_node_port          = local.helm_infra_outputs.careerhub_node_port
+  user_service_node_port       = local.helm_infra_outputs.user_service_node_port
+
 }
 
 resource "aws_secretsmanager_secret" "jwt_secretkey" {
@@ -114,7 +118,17 @@ module "user_service_helm_deploy" {
   }
 }
 
-# googleClientId: #known after the deployment
-# googleClientSecret: #known after the deployment
-# redirectUrl: #known after the deployment
-# secretKey: #known after the deployment
+# module "log_system_helm_deploy" {
+#   source = "./helm_deploy_infra"
+
+#   deploy_name          = "${local.prefix_service_name}-log-system-helm"
+#   chart_repo           = local.log_system_helm_chart_repo
+#   ecr_repo_name        = local.log_system_ecr_name
+#   kubeconfig_secret_id = local.kubeconfig_secret_id
+
+#   vpc_id      = local.vpc_id
+#   subnet_ids  = local.private_subnet_ids
+#   subnet_arns = local.private_subnet_arns
+
+#   helm_value_secret_ids = {}
+# }
