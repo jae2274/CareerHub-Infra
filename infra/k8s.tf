@@ -32,7 +32,7 @@ module "k8s_infra" {
 
   master = {
     instance_type = "t4g.small"
-    subnet_id     = local.public_subnets[local.public_subnet_key_1].id
+    subnet_id     = local.public_subnets[local.public_subnet_key_2].id
   }
 
   ami      = local.ami
@@ -71,10 +71,10 @@ module "worker_nodes" {
 
   workers = {
     "1" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_1].id
+      subnet_id = local.public_subnets[local.public_subnet_key_2].id
     }
     "2" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_2].id
+      subnet_id = local.public_subnets[local.public_subnet_key_1].id
     }
   }
 
@@ -109,7 +109,7 @@ module "monitoring_nodes" {
   }]
 
   workers = {
-    "monitoring_1" = {
+    "monitoring" = {
       subnet_id = local.public_subnets[local.public_subnet_key_3].id
     }
   }
@@ -119,5 +119,4 @@ module "monitoring_nodes" {
 
 locals {
   worker_ips = module.worker_nodes.worker_public_ips
-  # worker_ips = []
 }

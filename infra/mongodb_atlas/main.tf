@@ -75,10 +75,11 @@ resource "mongodbatlas_database_user" "admin_db_user" {
 
 
 resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
-  for_each   = toset(var.access_ip_list)
+  count = length(var.access_ip_list)
+
   project_id = mongodbatlas_project.project.id
-  cidr_block = "${each.key}/32"
-  comment    = "Access from ${each.key}"
+  cidr_block = "${var.access_ip_list[count.index]}/32"
+  comment    = "Access from ${var.access_ip_list[count.index]}"
 }
 
 

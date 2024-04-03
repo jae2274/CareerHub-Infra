@@ -29,5 +29,5 @@ ${local.join_k8s_sh}
 
 
 output "worker_public_ips" {
-  value = [for worker in aws_instance.workers : worker.public_ip]
+  value = [for _, worker in aws_instance.workers : worker.public_ip]
 }

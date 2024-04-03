@@ -19,6 +19,7 @@ NAMESPACES=\$(kubectl get namespaces | awk '{if (NR>1) print \$1}')
 echo "\$NAMESPACES" | while read namespace; do 
     echo "\$SECRET_YAML" | kubectl apply -n \$namespace -f  -;
     echo "\$SECRET_YAML" | kubectl replace -n \$namespace -f -;
+    kubectl patch serviceaccount default -n \$namespace -p '{"imagePullSecrets": [{"name": "ecr-auth"}]}';
 done
 EOF
 
@@ -59,4 +60,3 @@ cat <<EOF | tee /etc/cron.d/cron_docker > /dev/null
 * * * * * root /etc/init.d/check_namespaces.sh
 EOF
 
-kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "ecr-auth"}]}'
