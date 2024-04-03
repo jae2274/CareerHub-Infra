@@ -27,6 +27,7 @@ data:
         Match           {{.Values.targetNamespace}}.*
         Key_Name        log
         Parser          json_log
+        Parser          pass_through
         Reserve_Data    On
     [OUTPUT]
         Name            stdout
@@ -54,3 +55,7 @@ data:
     [PARSER]
         Name        json_log
         Format      json
+    [PARSER]
+        Name        pass_through
+        Format      regex
+        Regex       ^(?<raw_log>.*)$
