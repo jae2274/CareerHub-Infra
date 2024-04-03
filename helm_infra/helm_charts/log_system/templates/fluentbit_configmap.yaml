@@ -13,32 +13,37 @@ data:
         Log_Level     info
         Daemon        off
         Parsers_File  parsers.conf
-
-    @INCLUDE input-kubernetes.conf
-    @INCLUDE output-elasticsearch.conf
-  input-kubernetes.conf: |
     [INPUT]
         Name              tail
-        Tag               kube.*
+        Tag               {{.Values.targetNamespace}}.*
         Exclude_Path      {{.Values.kubeLogsDir}}/{{.Values.name}}*_{{.Values.targetNamespace}}_*.log
         Path              {{.Values.kubeLogsDir}}/*_{{.Values.targetNamespace}}_*.log
         Parser            cri
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   On
         Refresh_Interval  10
-
-  output-elasticsearch.conf: |
+    [FILTER]
+        Name            parser
+        Match           {{.Values.targetNamespace}}.*
+        Key_Name        log
+        Parser          json_log
+        Reserve_Data    On
+    [OUTPUT]
+        Name            stdout
+        Match           {{ $opensearch_name }}.*
     [OUTPUT]
         Name            opensearch
-        Match           kube.*
+        Match           {{.Values.targetNamespace}}.*
         Host            {{ $opensearch_name }}
         Port            9200
+        Include_Tag_Key On 
         tls.verify      Off
         tls             On
         HTTP_User       admin
         HTTP_Passwd     {{ .Values.initialAdminPassword }}
-        Suppress_Type_Name On
+        Suppress_Type_Name  On
         Logstash_Format On
+        Logstash_Prefix {{.Values.targetNamespace}}
   parsers.conf: |
     [PARSER]
         Name        cri
@@ -46,3 +51,6 @@ data:
         Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
         Time_Key    time
         Time_Format %Y-%m-%dT%H:%M:%S.%L%z
+    [PARSER]
+        Name        json_log
+        Format      json
