@@ -1,5 +1,0 @@
-
-echo "***Setting node labels***"
-%{ for key,value in labels ~}
-ssh -o "StrictHostKeychecking=no" ubuntu@10.0.1.153 "kubectl label nodes $HOSTNAME usage=app"
-%{ endfor ~}

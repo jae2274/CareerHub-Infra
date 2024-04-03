@@ -39,11 +39,14 @@ locals {
     ecrs      = var.ecrs #TODO: 불필요한 정보 제거
   })
 
+  login_ecr_sh = templatefile("${path.module}/init_scripts/login_ecr.sh", {
+    ecrs = var.ecrs
+  })
+
   set_secret_sh = templatefile("${path.module}/init_scripts/set_secret.sh", {
     secret_id = aws_secretsmanager_secret.kubeconfig.id
     master_ip = aws_eip.master_public_ip.public_ip
   })
-
   # ami = "ami-0a7cf821b91bcccbc" # ubuntu 20.04 LTS x86_64
   # ami = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
 }

@@ -53,6 +53,8 @@ ${local.install_k8s_sh}
 
 ${local.init_k8s_sh}
 
+${local.login_ecr_sh}
+
 ${local.set_secret_sh}
   EOT
 
