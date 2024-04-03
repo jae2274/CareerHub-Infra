@@ -1,3 +1,5 @@
+{{- $opensearch_name := .Values.opensearch.name -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -29,7 +31,7 @@ data:
     [OUTPUT]
         Name            opensearch
         Match           kube.*
-        Host            opensearch
+        Host            {{ $opensearch_name }}
         Port            9200
         tls.verify      Off
         tls             On

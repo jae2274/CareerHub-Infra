@@ -1,6 +1,15 @@
 name: ${charts.log_system.name}
 targetNamespace: ${charts.namespace}
 
+opensearchDashboard:
+  name: "${charts.log_system.name}-opensearch-dashboard"
+
+opensearch:
+  name: ${charts.log_system.name}-opensearch
+
+fluentbit:
+  name: ${charts.log_system.name}-fluentbit
+
 kubeLogsDir: /var/log/containers
 nodeSelector:
   - key: "usage"

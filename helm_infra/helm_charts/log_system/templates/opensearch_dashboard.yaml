@@ -1,5 +1,5 @@
-{{- $name := print .Values.name "-opensearch-dashboard" -}}
-{{- $opensearch_name := print .Values.name "-opensearch" -}}
+{{- $opensearch_name := .Values.opensearch.name -}}
+{{- $name := print .Values.opensearchDashboard.name -}}
 
 apiVersion: apps/v1
 kind: Deployment

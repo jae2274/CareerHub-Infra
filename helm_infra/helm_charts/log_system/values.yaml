@@ -1,6 +1,15 @@
 name: log-system
 targetNamespace: careerhub
 
+opensearchDashboard:
+  name: "log-system-opensearch-dashboard"
+
+opensearch:
+  name: log-system-opensearch
+
+fluentbit:
+  name: log-system-fluentbit
+
 kubeLogsDir: /var/log/containers
 nodeSelector:
   - key: "usage"
