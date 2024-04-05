@@ -27,7 +27,6 @@ resource "aws_security_group" "mongodb_security_group" {
 
 locals {
   jobposting_db = "${local.prefix_service_name}-jobposting"
-  log_db        = "${local.prefix_service_name}-log"
 }
 
 module "mongodb_atlas" {
@@ -47,20 +46,11 @@ module "mongodb_atlas" {
     private_key = var.atlas_private_key
   }
 
-  serverless_databases = [local.jobposting_db, local.log_db]
+  serverless_databases = [local.jobposting_db]
 
   tags = {
     env = local.env
   }
-}
-
-resource "aws_secretsmanager_secret" "log_mongodb_endpoint" {
-  name = "${local.prefix_service_name}-log-mongodb-endpoint"
-}
-
-resource "aws_secretsmanager_secret_version" "log_mongodb_endpoint" {
-  secret_id     = aws_secretsmanager_secret.log_mongodb_endpoint.id
-  secret_string = module.mongodb_atlas.public_endpoint[local.log_db]
 }
 
 resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
@@ -92,7 +82,6 @@ resource "aws_secretsmanager_secret_version" "password_secret" {
 
 locals {
   jobposting_mongodb_endpoint_secret_id = aws_secretsmanager_secret.jobposting_mongodb_endpoint.name
-  log_mongodb_endpoint_secret_id        = aws_secretsmanager_secret.log_mongodb_endpoint.name
   mongodb_username_secret_id            = aws_secretsmanager_secret.username_secret.name
   mongodb_password_secret_id            = aws_secretsmanager_secret.password_secret.name
 }
