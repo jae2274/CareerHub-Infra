@@ -11,7 +11,7 @@ locals {
 }
 
 resource "local_file" "infra_remote_config" {
-  filename = "${local.terraform_root_dir}k8s_infra/${local.k8s_backend_file}"
+  filename = "${local.terraform_root_dir}helm_infra/${local.k8s_backend_file}"
   content  = <<EOF
 terraform {
   backend "s3" {
