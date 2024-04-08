@@ -1,25 +1,25 @@
 locals {
-  k8s_backend                = data.terraform_remote_state.backend.outputs.k8s_backend
-  k8s_backend_bucket         = local.k8s_backend.bucket
-  k8s_backend_region         = local.k8s_backend.region
-  k8s_backend_encrypt        = local.k8s_backend.encrypt
-  k8s_backend_dynamodb_table = local.k8s_backend.dynamodb_table
+  helm_infra_backend                = data.terraform_remote_state.backend.outputs.helm_infra_backend
+  helm_infra_backend_bucket         = local.helm_infra_backend.bucket
+  helm_infra_backend_region         = local.helm_infra_backend.region
+  helm_infra_backend_encrypt        = local.helm_infra_backend.encrypt
+  helm_infra_backend_dynamodb_table = local.helm_infra_backend.dynamodb_table
 
-  k8s_backend_file_without_prefix = "backend.tf"
-  k8s_backend_file                = "${local.prefix}${local.k8s_backend_file_without_prefix}"
+  helm_infra_backend_file_without_prefix = "backend.tf"
+  helm_infra_backend_file                = "${local.prefix}${local.helm_infra_backend_file_without_prefix}"
 
 }
 
 resource "local_file" "infra_remote_config" {
-  filename = "${local.terraform_root_dir}helm_infra/${local.k8s_backend_file}"
+  filename = "${local.terraform_root_dir}helm_infra/${local.helm_infra_backend_file}"
   content  = <<EOF
 terraform {
   backend "s3" {
-    bucket = "${local.k8s_backend_bucket}"
+    bucket = "${local.helm_infra_backend_bucket}"
     key = "${local.key}"
-    region = "${local.k8s_backend_region}"
+    region = "${local.helm_infra_backend_region}"
     encrypt= ${local.backend_encrypt}
-    dynamodb_table = "${local.k8s_backend_dynamodb_table}"
+    dynamodb_table = "${local.helm_infra_backend_dynamodb_table}"
   }
 }
 
@@ -44,7 +44,7 @@ locals {
 
 //CHECK BACKEND CONFIG FILE
 data "local_file" "check_remote_state_config" {
-  filename = "$${local.prefix}${local.k8s_backend_file_without_prefix}"
+  filename = "$${local.prefix}${local.helm_infra_backend_file_without_prefix}"
 }
 
 data "terraform_remote_state" "infra" {

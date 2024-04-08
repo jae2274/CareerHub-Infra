@@ -53,9 +53,9 @@ data "terraform_remote_state" "helm_infra" {
   backend = "s3"
 
   config = {
-    bucket = "${local.k8s_backend_bucket}"
+    bucket = "${local.helm_infra_backend_bucket}"
     key = "${local.key}"
-    region = "${local.k8s_backend_region}"
+    region = "${local.helm_infra_backend_region}"
     encrypt= ${local.backend_encrypt}
   }
 }
