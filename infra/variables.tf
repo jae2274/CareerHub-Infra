@@ -40,7 +40,7 @@ variable "google_client_secret" {
   type = string
 }
 
-variable "google_redirecturi" {
+variable "google_redirect_path" {
   type = string
 }
 
@@ -49,5 +49,9 @@ variable "jwt_secretkey" {
 }
 
 variable "initialAdminPassword" {
+  type = string
+}
+
+variable "root_domain_name" {
   type = string
 }

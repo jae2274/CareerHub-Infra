@@ -23,7 +23,7 @@ resource "aws_secretsmanager_secret" "google_redirecturi" {
 
 resource "aws_secretsmanager_secret_version" "google_redirecturi" {
   secret_id     = aws_secretsmanager_secret.google_redirecturi.id
-  secret_string = var.google_redirecturi
+  secret_string = "https://${local.service_domain}${var.google_redirect_path}"
 }
 
 
