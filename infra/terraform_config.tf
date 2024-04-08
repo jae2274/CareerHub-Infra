@@ -33,7 +33,7 @@ provider "aws" {
     }
   }
 
-  region = var.region
+  region = local.region
 }
 
 

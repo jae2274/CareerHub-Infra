@@ -11,13 +11,12 @@ module "frontend_cicd" {
   repository_path = "jae2274/Careerhub-Front"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 
   build_env_vars = {
     "BACKEND_URL" = local.backend_root_path
   }
-
 }
 
 locals {

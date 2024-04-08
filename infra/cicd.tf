@@ -11,8 +11,8 @@ module "careerhub_posting_provider_cicd" {
   repository_path = "jae2274/careerhub-posting-provider"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 }
 
 module "careerhub_posting_service_cicd" {
@@ -25,8 +25,8 @@ module "careerhub_posting_service_cicd" {
   repository_path = "jae2274/careerhub-posting-service"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 }
 
 module "careerhub_posting_skillscanner_cicd" {
@@ -39,8 +39,8 @@ module "careerhub_posting_skillscanner_cicd" {
   repository_path = "jae2274/careerhub-posting-skillscanner"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 }
 
 
@@ -54,8 +54,8 @@ module "user_service_cicd" {
   repository_path = "jae2274/userService"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 }
 
 module "careerhub_api_composer_cicd" {
@@ -68,8 +68,8 @@ module "careerhub_api_composer_cicd" {
   repository_path = "jae2274/careerhub-api-composer"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
-  subnet_ids      = [for subnet in local.private_subnets : subnet.id]
-  subnet_arns     = [for subnet in local.private_subnets : subnet.arn]
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
 }
 
 locals {
