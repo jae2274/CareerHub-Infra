@@ -3,19 +3,6 @@ resource "aws_s3_bucket" "frontend_s3_bucket" {
   force_destroy = true
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "frontend_s3_bucket" {
-  bucket = aws_s3_bucket.frontend_s3_bucket.id
-
-  rule {
-    id     = "expiration"
-    status = "Enabled"
-
-    expiration {
-      days = 3
-    }
-  }
-}
-
 locals {
   key_prefix = "deploy"
 }
