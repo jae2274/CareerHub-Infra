@@ -21,6 +21,8 @@ spec:
           env:
             - name: POSTING_GRPC_ENDPOINT
               value: {{.Values.postingGrpcEndpoint}}
+            - name: USERINFO_GRPC_ENDPOINT
+              value: {{.Values.userInfoGrpcEndpoint}}
             - name: API_PORT
               value: "{{.Values.apiPort}}"
             - name: SECRET_KEY

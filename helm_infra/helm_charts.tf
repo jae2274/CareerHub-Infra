@@ -45,6 +45,15 @@ locals {
       node_port = local.user_service_node_port
     }
 
+    userinfo_service = {
+      name    = "userinfo-service"
+      db_name = "userinfo"
+      restapi = {
+        name      = "userinfo-restapi-grpc"
+        grpc_port = 50051
+      }
+    }
+
     api_composer = {
       name      = "api-composer"
       api_port  = 8080
@@ -104,6 +113,10 @@ output "careerhub_posting_provider_helm_chart_repo" {
 
 output "careerhub_posting_skillscanner_helm_chart_repo" {
   value = module.cd_infra["helm_charts/careerhub_posting_skillscanner/"].chart_repo
+}
+
+output "careerhub_userinfo_service_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/careerhub_userinfo_service/"].chart_repo
 }
 
 output "careerhub_api_composer_helm_chart_repo" {

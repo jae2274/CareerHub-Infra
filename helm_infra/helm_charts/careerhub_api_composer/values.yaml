@@ -3,6 +3,7 @@ image: #known after the deployment
 tag: #known after the deployment
 apiPort: 8080
 postingGrpcEndpoint: restapi-grpc:50053
+userInfoGrpcEndpoint: userinfo-restapi-grpc:50051
 secretKey: #known after the deployment
 accessControlAllowOrigin: #known after the deployment
 nodePort: 30000
