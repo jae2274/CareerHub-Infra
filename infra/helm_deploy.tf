@@ -5,6 +5,7 @@ locals {
   careerhub_posting_service_helm_chart_repo      = local.helm_infra_outputs.careerhub_posting_service_helm_chart_repo
   careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
   careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
+  careerhub_userinfo_service_helm_chart_repo     = local.helm_infra_outputs.careerhub_userinfo_service_helm_chart_repo
   careerhub_api_composer_helm_chart_repo         = local.helm_infra_outputs.careerhub_api_composer_helm_chart_repo
   log_system_helm_chart_repo                     = local.helm_infra_outputs.log_system_helm_chart_repo
 
@@ -78,6 +79,24 @@ module "careerhub_posting_skillscanner_helm_deploy" {
   helm_value_secret_ids = {}
 }
 
+module "careerhub_userinfo_service_helm_deploy" {
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
+
+  deploy_name          = "${local.prefix}careerhub-userinfo-service-helm"
+  chart_repo           = local.careerhub_userinfo_service_helm_chart_repo
+  ecr_repo_name        = local.careerhub_userinfo_service_ecr_name
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+
+  vpc_id      = local.vpc_id
+  subnet_ids  = local.private_subnet_ids
+  subnet_arns = local.private_subnet_arns
+
+  helm_value_secret_ids = {
+    "mongoUri"   = local.userinfo_mongodb_endpoint_secret_id
+    "dbUsername" = local.mongodb_username_secret_id
+  "dbPassword" = local.mongodb_password_secret_id }
+}
 
 module "careerhub_api_composer_helm_deploy" {
   source    = "./helm_deploy_infra"

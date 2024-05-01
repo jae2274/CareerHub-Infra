@@ -58,6 +58,20 @@ module "user_service_cicd" {
   subnet_arns     = local.private_subnet_arns
 }
 
+module "careerhub_userinfo_service_cicd" {
+  source = "./backend_cicd_infra"
+
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix}userinfo-service"
+  build_arch       = "arm64"
+
+  repository_path = "jae2274/careerhub-userinfo-service"
+  branch_name     = local.branch
+  vpc_id          = local.vpc_id
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
+}
+
 module "careerhub_api_composer_cicd" {
   source = "./backend_cicd_infra"
 
@@ -87,7 +101,8 @@ locals {
   careerhub_posting_service_ecr_name      = module.careerhub_posting_service_cicd.ecr_name
   careerhub_posting_skillscanner_ecr_name = module.careerhub_posting_skillscanner_cicd.ecr_name
 
-  careerhub_api_composer_ecr_name = module.careerhub_api_composer_cicd.ecr_name
-  user_service_ecr_name           = module.user_service_cicd.ecr_name
+  careerhub_userinfo_service_ecr_name = module.careerhub_userinfo_service_cicd.ecr_name
+  careerhub_api_composer_ecr_name     = module.careerhub_api_composer_cicd.ecr_name
+  user_service_ecr_name               = module.user_service_cicd.ecr_name
 }
 
