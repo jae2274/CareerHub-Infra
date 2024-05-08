@@ -14,3 +14,6 @@ scanner:
 restapi:
   name: ${charts.data_processor.restapi.name}
   grpcPort: ${charts.data_processor.restapi.grpc_port}
+suggester:
+  name: ${charts.data_processor.suggester.name}
+  grpcPort: ${charts.data_processor.suggester.grpc_port}

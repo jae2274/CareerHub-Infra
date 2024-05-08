@@ -38,5 +38,7 @@ spec:
               value: {{.Values.dbUsername}}
             - name: DB_PASSWORD
               value: {{.Values.dbPassword}}
+            - name: MAILER_GRPC_PORT
+              value: "{{.Values.mailer.grpcPort}}"
           ports:
             - containerPort: {{.Values.apiPort}}

@@ -28,6 +28,10 @@ locals {
         name      = "restapi-grpc"
         grpc_port = 50053
       }
+      suggester = {
+        name      = "data-processor-suggester"
+        grpc_port = 50054
+      }
     }
 
     data_provider = {
@@ -43,6 +47,10 @@ locals {
       name      = "user-service"
       api_port  = 8080
       node_port = local.user_service_node_port
+      mailer = {
+        name      = "user-mailer-grpc"
+        grpc_port = 50054
+      }
     }
 
     userinfo_service = {
@@ -51,6 +59,10 @@ locals {
       restapi = {
         name      = "userinfo-restapi-grpc"
         grpc_port = 50051
+      }
+      suggester = {
+        name      = "userinfo-suggester-grpc"
+        grpc_port = 50054
       }
     }
 

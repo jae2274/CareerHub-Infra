@@ -33,6 +33,8 @@ spec:
               value: "{{.Values.scanner.grpcPort}}"
             - name: RESTAPI_GRPC_PORT
               value: "{{.Values.restapi.grpcPort}}"
+            - name: SUGGESTER_GRPC_PORT
+              value: "{{.Values.suggester.grpcPort}}"
           ports:
             - containerPort: {{.Values.provider.grpcPort}}
             - containerPort: {{.Values.scanner.grpcPort}}

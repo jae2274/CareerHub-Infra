@@ -8,3 +8,6 @@ dbPassword: #known after the deployment
 restapi:
   name: ${charts.userinfo_service.restapi.name}
   grpcPort: ${charts.userinfo_service.restapi.grpc_port}
+suggester:
+  name: ${charts.userinfo_service.suggester.name}
+  grpcPort: ${charts.userinfo_service.suggester.grpc_port}

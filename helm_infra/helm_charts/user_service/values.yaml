@@ -14,3 +14,6 @@ googleClientId: #known after the deployment
 googleClientSecret: #known after the deployment
 googleRedirectUrl: #known after the deployment
 secretKey: #known after the deployment
+mailer:
+  name: user-mailer-grpc
+  grpcPort: 50054

@@ -10,3 +10,16 @@ spec:
     - protocol: TCP
       port: {{.Values.restapi.grpcPort}}
       targetPort: {{.Values.restapi.grpcPort}}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{.Values.suggester.name}}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{.Values.name}}
+  ports:
+    - protocol: TCP
+      port: {{.Values.suggester.grpcPort}}
+      targetPort: {{.Values.suggester.grpcPort}}
