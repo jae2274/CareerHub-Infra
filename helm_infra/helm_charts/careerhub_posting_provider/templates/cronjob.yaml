@@ -1,7 +1,8 @@
 {{ $name := .Values.name }}
 {{ $image := .Values.image }}
 {{ $tag := .Values.tag }}
-{{ $grpcEndpoint := .Values.grpcEndpoint }}
+{{ $jobPostingGrpcEndpoint := .Values.jobPostingGrpcEndpoint }}
+{{ $reviewGrpcEndpoint := .Values.reviewGrpcEndpoint }}
 
 {{- range $i, $site := .Values.sites }}
 apiVersion: batch/v1
@@ -22,8 +23,10 @@ spec:
               image: {{ $image }}:{{ $tag }}
               args: ["-site={{ $site }}"]
               env:
-                - name: GRPC_ENDPOINT
-                  value: "{{$grpcEndpoint}}"
+                - name: JOB_POSTING_GRPC_ENDPOINT
+                  value: "{{$jobPostingGrpcEndpoint}}"
+                - name: REVIEW_GRPC_ENDPOINT
+                  value: "{{$reviewGrpcEndpoint}}"
   concurrencyPolicy: Forbid
 ---
 {{- end }}

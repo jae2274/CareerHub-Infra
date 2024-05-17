@@ -1,7 +1,8 @@
 name: posting-provider
 image: #known after the deployment
 tag: #known after the deployment
-grpcEndpoint: provider-grpc:50051
+jobPostingGrpcEndpoint: provider-grpc:50051
+reviewGrpcEndpoint: review-provider-grpc:50053
 sites:
   - jumpit
   - wanted
