@@ -1,0 +1,16 @@
+name: review-service
+image: #known after the deployment
+tag: #known after the deployment
+dbName: review
+mongoUri: #known after the deployment
+dbUsername: #known after the deployment
+dbPassword: #known after the deployment
+provider:
+  name: review-provider-grpc
+  grpcPort: 50053
+crawler:
+  name: review-crawler-grpc
+  grpcPort: 50052
+restapi:
+  name: review-restapi-grpc
+  grpcPort: 50051

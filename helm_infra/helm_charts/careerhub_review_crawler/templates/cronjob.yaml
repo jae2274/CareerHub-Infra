@@ -1,0 +1,25 @@
+{{ $name := .Values.name }}
+{{ $image := .Values.image }}
+{{ $tag := .Values.tag }}
+{{ $grpcEndpoint := .Values.grpcEndpoint }}
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{$name}}
+spec:
+  schedule: "12 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: {{$name}}
+              image: {{ $image }}:{{ $tag }}
+              env:
+                - name: REVIEW_GRPC_ENDPOINT
+                  value: "{{$grpcEndpoint}}"
+  concurrencyPolicy: Forbid

@@ -1,0 +1,16 @@
+name: ${charts.review_service.name}
+image: #known after the deployment
+tag: #known after the deployment
+dbName: ${charts.review_service.db_name}
+mongoUri: #known after the deployment
+dbUsername: #known after the deployment
+dbPassword: #known after the deployment
+provider:
+  name: ${charts.review_service.provider.name}
+  grpcPort: ${charts.review_service.provider.grpc_port}
+crawler:
+  name: ${charts.review_service.crawler.name}
+  grpcPort: ${charts.review_service.crawler.grpc_port}
+restapi:
+  name: ${charts.review_service.restapi.name}
+  grpcPort: ${charts.review_service.restapi.grpc_port}

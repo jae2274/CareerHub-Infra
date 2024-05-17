@@ -71,6 +71,26 @@ locals {
       api_port  = 8080
       node_port = local.careerhub_node_port
     }
+
+    review_service = {
+      name    = "review-service"
+      db_name = "review"
+      restapi = {
+        name      = "review-restapi-grpc"
+        grpc_port = 50051
+      }
+      crawler = {
+        name      = "review-crawler-grpc"
+        grpc_port = 50052
+      }
+      provider = {
+        name      = "review-provider-grpc"
+        grpc_port = 50053
+      }
+    }
+    review_crawler = {
+      name = "review-crawler"
+    }
   }
 }
 

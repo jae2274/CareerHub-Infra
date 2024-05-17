@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.name}}
+  labels:
+    app: {{.Values.name}}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: {{.Values.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.name}}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{.Values.name}}
+          image: {{ .Values.image }}:{{ .Values.tag }}
+          env:
+            - name: MONGO_URI
+              value: {{.Values.mongoUri}}
+            - name: DB_NAME
+              value: {{.Values.dbName}}
+            - name: DB_USERNAME
+              value: {{.Values.dbUsername}}
+            - name: DB_PASSWORD
+              value: {{.Values.dbPassword}}
+            - name: RESTAPI_GRPC_PORT
+              value: "{{.Values.restapi.grpcPort}}"
+            - name: CRAWLER_GRPC_PORT
+              value: "{{.Values.crawler.grpcPort}}"
+            - name: PROVIDER_GRPC_PORT
+              value: "{{.Values.provider.grpcPort}}"
+          ports:
+            - containerPort: {{.Values.restapi.grpcPort}}
+            - containerPort: {{.Values.crawler.grpcPort}}
+            - containerPort: {{.Values.provider.grpcPort}}

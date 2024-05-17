@@ -1,0 +1,4 @@
+name: ${charts.review_crawler.name}
+image: #known after the deployment
+tag: #known after the deployment
+grpcEndpoint: ${charts.review_service.crawler.name}:${charts.review_service.crawler.grpc_port}
