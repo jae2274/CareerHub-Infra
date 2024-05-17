@@ -7,7 +7,10 @@ locals {
   careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
   careerhub_userinfo_service_helm_chart_repo     = local.helm_infra_outputs.careerhub_userinfo_service_helm_chart_repo
   careerhub_api_composer_helm_chart_repo         = local.helm_infra_outputs.careerhub_api_composer_helm_chart_repo
-  log_system_helm_chart_repo                     = local.helm_infra_outputs.log_system_helm_chart_repo
+  careerhub_review_service_helm_chart_repo       = local.helm_infra_outputs.careerhub_review_service_helm_chart_repo
+  careerhub_review_crawler_helm_chart_repo       = local.helm_infra_outputs.careerhub_review_crawler_helm_chart_repo
+
+  log_system_helm_chart_repo = local.helm_infra_outputs.log_system_helm_chart_repo
 
 
   user_service_helm_chart_repo = local.helm_infra_outputs.user_service_helm_chart_repo
@@ -139,6 +142,26 @@ module "user_service_helm_deploy" {
     googleClientSecret = local.google_client_secret_secret_id
     googleRedirectUrl  = local.google_redirect_uri_secret_id
     secretKey          = local.jwt_secretkey_secret_id
+  }
+}
+
+module "careerhub_review_service_helm_deploy" {
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
+
+  deploy_name          = "${local.prefix_service_name}-careerhub-review-service-helm"
+  chart_repo           = local.careerhub_review_service_helm_chart_repo
+  ecr_repo_name        = local.careerhub_review_service_ecr_name
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+
+  vpc_id      = local.vpc_id
+  subnet_ids  = local.private_subnet_ids
+  subnet_arns = local.private_subnet_arns
+
+  helm_value_secret_ids = {
+    "mongoUri"   = local.review_mongodb_endpoint_secret_id
+    "dbUsername" = local.mongodb_username_secret_id
+    "dbPassword" = local.mongodb_password_secret_id
   }
 }
 
