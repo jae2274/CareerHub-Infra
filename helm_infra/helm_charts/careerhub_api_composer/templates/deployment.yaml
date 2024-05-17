@@ -23,6 +23,8 @@ spec:
               value: {{.Values.postingGrpcEndpoint}}
             - name: USERINFO_GRPC_ENDPOINT
               value: {{.Values.userInfoGrpcEndpoint}}
+            - name: REVIEW_GRPC_ENDPOINT
+              value: {{.Values.reviewGrpcEndpoint}}
             - name: API_PORT
               value: "{{.Values.apiPort}}"
             - name: SECRET_KEY

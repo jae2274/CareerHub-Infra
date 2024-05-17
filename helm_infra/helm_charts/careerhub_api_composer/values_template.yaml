@@ -4,6 +4,7 @@ tag: #known after the deployment
 apiPort: ${charts.api_composer.api_port}
 postingGrpcEndpoint: ${charts.data_processor.restapi.name}:${charts.data_processor.restapi.grpc_port}
 userInfoGrpcEndpoint: ${charts.userinfo_service.restapi.name}:${charts.userinfo_service.restapi.grpc_port}
+reviewGrpcEndpoint: ${charts.review_service.restapi.name}:${charts.review_service.restapi.grpc_port}
 secretKey: #known after the deployment
 accessControlAllowOrigin: #known after the deployment
 nodePort: ${charts.api_composer.node_port}
