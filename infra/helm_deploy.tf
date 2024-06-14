@@ -164,6 +164,21 @@ module "careerhub_review_service_helm_deploy" {
     "dbPassword" = local.mongodb_password_secret_id
   }
 }
+module "careerhub_review_crawler_helm_deploy" {
+  source    = "./helm_deploy_infra"
+  namespace = local.namespace
+
+  deploy_name          = "${local.prefix_service_name}-careerhub-review-crawler-helm"
+  chart_repo           = local.careerhub_review_crawler_helm_chart_repo
+  ecr_repo_name        = local.careerhub_review_crawler_ecr_name
+  kubeconfig_secret_id = local.kubeconfig_secret_id
+
+  vpc_id      = local.vpc_id
+  subnet_ids  = local.private_subnet_ids
+  subnet_arns = local.private_subnet_arns
+
+  helm_value_secret_ids = {}
+}
 
 
 resource "aws_secretsmanager_secret" "initial_admin_password" {

@@ -100,6 +100,20 @@ module "careerhub_review_service_cicd" {
   subnet_arns     = local.private_subnet_arns
 }
 
+module "careerhub_review_crawler_cicd" {
+  source = "./backend_cicd_infra"
+
+  other_latest_tag = local.other_latest_tag
+  cicd_name        = "${local.prefix}review-crawler"
+  build_arch       = "arm64"
+
+  repository_path = "jae2274/careerhub-review-crawler"
+  branch_name     = local.branch
+  vpc_id          = local.vpc_id
+  subnet_ids      = local.private_subnet_ids
+  subnet_arns     = local.private_subnet_arns
+}
+
 locals {
   careerhub_posting_provider_ecr = {
     region = module.careerhub_posting_provider_cicd.ecr_region
@@ -118,6 +132,7 @@ locals {
   careerhub_userinfo_service_ecr_name = module.careerhub_userinfo_service_cicd.ecr_name
   careerhub_api_composer_ecr_name     = module.careerhub_api_composer_cicd.ecr_name
   careerhub_review_service_ecr_name   = module.careerhub_review_service_cicd.ecr_name
+  careerhub_review_crawler_ecr_name   = module.careerhub_review_crawler_cicd.ecr_name
 
   user_service_ecr_name = module.user_service_cicd.ecr_name
 }
