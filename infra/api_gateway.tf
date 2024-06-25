@@ -1,6 +1,6 @@
 locals {
   api_gateway_name  = "${local.prefix_service_name}-gateway"
-  user_service_path = "/auth"
+  auth_service_path = "/auth"
 }
 resource "aws_api_gateway_rest_api" "rest_api_gateway" {
   name = local.api_gateway_name
@@ -66,24 +66,24 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
           ]
         }
       }
-      "${local.user_service_path}" = {
+      "${local.auth_service_path}" = {
         get = {
           x-amazon-apigateway-integration = {
             httpMethod           = "ANY"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.user_service_node_port}${local.user_service_path}"
+            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}"
           }
         }
       }
-      "${local.user_service_path}/{proxy+}" = {
+      "${local.auth_service_path}/{proxy+}" = {
         x-amazon-apigateway-any-method = {
           x-amazon-apigateway-integration = {
             httpMethod           = "ANY"
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.user_service_node_port}${local.user_service_path}/{proxy}"
+            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }

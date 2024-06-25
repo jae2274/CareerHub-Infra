@@ -1,6 +1,6 @@
-name: ${charts.user_service.name}
-apiPort: ${charts.user_service.api_port}
-nodePort: ${charts.user_service.node_port}
+name: ${charts.auth_service.name}
+apiPort: ${charts.auth_service.api_port}
+nodePort: ${charts.auth_service.node_port}
 
 image: #known after the deployment
 tag: #known after the deployment
@@ -15,5 +15,5 @@ googleClientSecret: #known after the deployment
 googleRedirectUrl: #known after the deployment
 secretKey: #known after the deployment
 mailer:
-  name: ${charts.user_service.mailer.name}
-  grpcPort: ${charts.user_service.mailer.grpc_port}
+  name: ${charts.auth_service.mailer.name}
+  grpcPort: ${charts.auth_service.mailer.grpc_port}

@@ -2,7 +2,7 @@
 
 locals {
   careerhub_node_port    = 30000
-  user_service_node_port = 30001
+  auth_service_node_port = 30001
   log_system_node_port   = 30002
 
   namespace = "careerhub"
@@ -43,10 +43,10 @@ locals {
       name = "posting-skillscanner"
     }
 
-    user_service = {
-      name      = "user-service"
+    auth_service = {
+      name      = "auth-service"
       api_port  = 8080
-      node_port = local.user_service_node_port
+      node_port = local.auth_service_node_port
       mailer = {
         name      = "user-mailer-grpc"
         grpc_port = 50054
@@ -127,8 +127,8 @@ output "careerhub_node_port" {
   value = local.careerhub_node_port
 }
 
-output "user_service_node_port" {
-  value = local.user_service_node_port
+output "auth_service_node_port" {
+  value = local.auth_service_node_port
 }
 
 output "namespace" {
@@ -155,8 +155,8 @@ output "careerhub_api_composer_helm_chart_repo" {
   value = module.cd_infra["helm_charts/careerhub_api_composer/"].chart_repo
 }
 
-output "user_service_helm_chart_repo" {
-  value = module.cd_infra["helm_charts/user_service/"].chart_repo
+output "auth_service_helm_chart_repo" {
+  value = module.cd_infra["helm_charts/auth_service/"].chart_repo
 }
 
 output "log_system_helm_chart_repo" {

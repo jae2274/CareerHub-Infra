@@ -44,14 +44,14 @@ module "careerhub_posting_skillscanner_cicd" {
 }
 
 
-module "user_service_cicd" {
+module "auth_service_cicd" {
   source = "./backend_cicd_infra"
 
   other_latest_tag = local.other_latest_tag
-  cicd_name        = "${local.prefix}userservice"
+  cicd_name        = "${local.prefix}auth-service"
   build_arch       = "arm64"
 
-  repository_path = "jae2274/userService"
+  repository_path = "jae2274/auth-service"
   branch_name     = local.branch
   vpc_id          = local.vpc_id
   subnet_ids      = local.private_subnet_ids
@@ -134,6 +134,6 @@ locals {
   careerhub_review_service_ecr_name   = module.careerhub_review_service_cicd.ecr_name
   careerhub_review_crawler_ecr_name   = module.careerhub_review_crawler_cicd.ecr_name
 
-  user_service_ecr_name = module.user_service_cicd.ecr_name
+  auth_service_ecr_name = module.auth_service_cicd.ecr_name
 }
 

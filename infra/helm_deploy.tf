@@ -13,9 +13,9 @@ locals {
   log_system_helm_chart_repo = local.helm_infra_outputs.log_system_helm_chart_repo
 
 
-  user_service_helm_chart_repo = local.helm_infra_outputs.user_service_helm_chart_repo
+  auth_service_helm_chart_repo = local.helm_infra_outputs.auth_service_helm_chart_repo
   careerhub_node_port          = local.helm_infra_outputs.careerhub_node_port
-  user_service_node_port       = local.helm_infra_outputs.user_service_node_port
+  auth_service_node_port       = local.helm_infra_outputs.auth_service_node_port
 
 }
 
@@ -119,13 +119,13 @@ module "careerhub_api_composer_helm_deploy" {
   }
 }
 
-module "user_service_helm_deploy" {
+module "auth_service_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = local.namespace
 
-  deploy_name          = "${local.prefix_service_name}-userservice-helm"
-  chart_repo           = local.user_service_helm_chart_repo
-  ecr_repo_name        = local.user_service_ecr_name
+  deploy_name          = "${local.prefix_service_name}-auth-service-helm"
+  chart_repo           = local.auth_service_helm_chart_repo
+  ecr_repo_name        = local.auth_service_ecr_name
   kubeconfig_secret_id = local.kubeconfig_secret_id
 
   vpc_id      = local.vpc_id
