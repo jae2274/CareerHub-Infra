@@ -93,12 +93,12 @@ locals {
     }
   }
 }
-
+//helm_charts의 폴더내의 helm chart 목록을 가져오는 코드
 data "external" "helm_charts" {
   program = ["bash", "${path.module}/data_external/helm_charts.sh", "helm_charts"]
 }
 
-locals {
+locals { //가져온 helm chart 목록을 list로 변환
   chart_list = split(",", data.external.helm_charts.result.list)
 }
 
@@ -110,12 +110,23 @@ resource "local_file" "value_yaml" {
   content = templatefile("${path.module}/${each.key}values_template.yaml", {
     charts = local.charts
   })
+
+}
+
+resource "local_file" "chart_yaml" {
+
+  for_each = toset(local.chart_list)
+
+  filename = "${path.module}/${each.key}Chart.yaml"
+  content = templatefile("${path.module}/${each.key}Chart_template.yaml", {
+    env = local.env
+  })
 }
 
 
-
 module "cd_infra" {
-  source = "./helm_repo_infra"
+  depends_on = [local_file.chart_yaml]
+  source     = "./helm_repo_infra"
 
   for_each = toset(local.chart_list)
 

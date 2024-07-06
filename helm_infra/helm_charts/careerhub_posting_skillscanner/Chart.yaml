@@ -1,5 +1,5 @@
 apiVersion: v2
-name: careerhub-posting-skillscanner
+name: dev-careerhub-posting-skillscanner-helm
 description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
