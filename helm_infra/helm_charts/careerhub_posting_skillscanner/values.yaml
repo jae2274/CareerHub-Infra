@@ -1,4 +1,0 @@
-name: posting-skillscanner
-image: #known after the deployment
-tag: #known after the deployment
-grpcEndpoint: skillscanner-grpc:50052

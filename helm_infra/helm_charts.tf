@@ -102,36 +102,16 @@ locals { //가져온 helm chart 목록을 list로 변환
   chart_list = split(",", data.external.helm_charts.result.list)
 }
 
-resource "local_file" "value_yaml" {
-
-  for_each = toset(local.chart_list)
-
-  filename = "${path.module}/${each.key}values.yaml"
-  content = templatefile("${path.module}/${each.key}values_template.yaml", {
-    charts = local.charts
-  })
-
-}
-
-resource "local_file" "chart_yaml" {
-
-  for_each = toset(local.chart_list)
-
-  filename = "${path.module}/${each.key}Chart.yaml"
-  content = templatefile("${path.module}/${each.key}Chart_template.yaml", {
-    env = local.env
-  })
-}
-
 
 module "cd_infra" {
-  depends_on = [local_file.chart_yaml]
-  source     = "./helm_repo_infra"
+  source = "./helm_repo_infra"
 
   for_each = toset(local.chart_list)
 
-  prefix    = local.prefix
-  helm_path = "${path.module}/${each.key}"
+  prefix       = local.prefix
+  helm_path    = "${path.module}/${each.key}"
+  chart_values = local.charts
+  env_value    = local.env
 }
 
 output "careerhub_node_port" {

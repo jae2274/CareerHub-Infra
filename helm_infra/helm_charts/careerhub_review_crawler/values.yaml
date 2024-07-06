@@ -1,4 +1,0 @@
-name: review-crawler
-image: #known after the deployment
-tag: #known after the deployment
-grpcEndpoint: review-crawler-grpc:50052

@@ -1,5 +1,17 @@
+
+locals {
+  value_yaml = templatefile("${var.helm_path}values_template.yaml", {
+    charts = var.chart_values
+  })
+
+  charts_yaml = templatefile("${var.helm_path}Chart_template.yaml", {
+    env = var.env_value
+  })
+}
+
+
 data "external" "chart_info" {
-  program = ["bash", "${path.module}/external/chart_info.sh", var.helm_path]
+  program = ["bash", "${path.module}/external/chart_info.sh", var.helm_path, local.charts_yaml]
 }
 
 
@@ -19,7 +31,18 @@ resource "null_resource" "chart_package" {
   }
 
   provisioner "local-exec" {
-    command = "helm package ${var.helm_path}"
+    command = <<EOF
+cat <<EOL >  ${var.helm_path}Chart.yaml
+${local.charts_yaml}
+EOL
+
+cat <<EOL >  ${var.helm_path}values.yaml
+${local.value_yaml}
+EOL
+
+
+helm package ${var.helm_path}
+EOF
   }
 }
 
@@ -36,7 +59,6 @@ resource "aws_ecr_repository" "helm_repo" {
 
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
-
 
 locals {
   region      = data.aws_region.current.name
@@ -59,6 +81,8 @@ aws ecr get-login-password --region ${local.region} | helm registry login --user
 helm push ${local.chart_package} oci://${local.repo_domain}/
 
 rm -f ${local.chart_package}
+rm -f ${var.helm_path}Chart.yaml
+rm -f ${var.helm_path}values.yaml
         EOF
   }
 }
