@@ -46,7 +46,7 @@ locals {
 
 //CHECK BACKEND CONFIG FILE
 data "local_file" "check_backend_config" {
-  filename = "$${local.prefix}${local.backend_file_without_prefix}"
+  filename = "$${local.env}-${local.backend_file_without_prefix}"
 }
 
 data "terraform_remote_state" "helm_infra" {
