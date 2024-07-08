@@ -27,7 +27,7 @@ terraform {
 module "git_branch" {
   source = "github.com/jae2274/terraform_modules/git_branch"
   branch_map = {
-    main = {
+    prod = {
       prefix = ""
       env    = "prod"
     }
