@@ -64,5 +64,5 @@ resource "aws_s3_bucket_acl" "frontend_s3_bucket_acl" {
 }
 
 output "frontend_website_endpoint" {
-  value = aws_s3_bucket.frontend_s3_bucket.website_endpoint
+  value = aws_s3_bucket_website_configuration.s3_website.website_endpoint
 }
