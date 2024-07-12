@@ -11,6 +11,10 @@ spec:
       port: {{.Values.apiPort}}
       targetPort: {{.Values.apiPort}}
       nodePort: {{.Values.nodePort}}
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 180
 ---
 apiVersion: v1
 kind: Service
