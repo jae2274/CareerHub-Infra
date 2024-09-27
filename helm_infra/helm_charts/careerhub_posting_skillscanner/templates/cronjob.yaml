@@ -8,7 +8,7 @@ kind: CronJob
 metadata:
   name: {{$name}}
 spec:
-  schedule: "*/30 * * * *"
+  schedule: "09 06 * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 3
   jobTemplate:

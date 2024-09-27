@@ -73,11 +73,11 @@ module "worker_nodes" {
   }
 
   workers = {
-    "1" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_2].id
-    }
-    "2" = {
+    "3" = {
       subnet_id = local.public_subnets[local.public_subnet_key_1].id
+    }
+    "4" = {
+      subnet_id = local.public_subnets[local.public_subnet_key_2].id
     }
   }
 
