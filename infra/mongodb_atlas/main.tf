@@ -39,7 +39,7 @@ resource "mongodbatlas_serverless_instance" "mongodb_serverless" {
   for_each = toset(var.serverless_databases)
 
   project_id                              = mongodbatlas_project.project.id
-  name                                    = each.key
+  name                                    = replace(each.key, "_", "-")
   provider_settings_backing_provider_name = "AWS"
   provider_settings_provider_name         = "SERVERLESS"
   provider_settings_region_name           = local.mongodb_region
@@ -74,13 +74,13 @@ resource "mongodbatlas_database_user" "admin_db_user" {
 
 
 
-resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
-  count = length(var.access_ip_list)
+# resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
+#   count = length(var.access_ip_list)
 
-  project_id = mongodbatlas_project.project.id
-  cidr_block = "${var.access_ip_list[count.index]}/32"
-  comment    = "Access from ${var.access_ip_list[count.index]}"
-}
+#   project_id = mongodbatlas_project.project.id
+#   cidr_block = "${var.access_ip_list[count.index]}/32"
+#   comment    = "Access from ${var.access_ip_list[count.index]}"
+# }
 
 
 output "public_endpoint" {

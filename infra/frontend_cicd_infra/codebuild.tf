@@ -96,7 +96,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
 // start define log/cache bucket
 
 resource "aws_s3_bucket" "codebuild_log_bucket" {
-  bucket        = "${var.cicd_name}-codebuild-log"
+  bucket        = replace("${var.cicd_name}-codebuild-log", "_", "-")
   force_destroy = true
 }
 
@@ -198,6 +198,8 @@ artifacts:
       aws_security_group.codebuild_sg.id,
     ]
   }
+
+  depends_on = [aws_iam_role_policy.codebuild_role_policy]
 }
 
 resource "aws_security_group" "codebuild_sg" {

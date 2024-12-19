@@ -6,7 +6,7 @@ variable "namespace" {
   type = string
 }
 
-variable "kubeconfig_secret_id" {
+variable "eks_admin_role_arn" {
   type = string
 }
 

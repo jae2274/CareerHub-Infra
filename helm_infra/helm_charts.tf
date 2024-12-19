@@ -1,9 +1,7 @@
 
 
 locals {
-  careerhub_node_port    = 30000
-  auth_service_node_port = 30001
-  log_system_node_port   = 30002
+  log_system_node_port = 30002
 
   namespace = "careerhub"
 
@@ -44,9 +42,8 @@ locals {
     }
 
     auth_service = {
-      name      = "auth-service"
-      api_port  = 8080
-      node_port = local.auth_service_node_port
+      name     = "auth-service"
+      api_port = 8080
       mailer = {
         name      = "user-mailer-grpc"
         grpc_port = 50054
@@ -67,9 +64,8 @@ locals {
     }
 
     api_composer = {
-      name      = "api-composer"
-      api_port  = 8080
-      node_port = local.careerhub_node_port
+      name     = "api-composer"
+      api_port = 8080
     }
 
     review_service = {
@@ -114,12 +110,18 @@ module "cd_infra" {
   env_value    = local.env
 }
 
-output "careerhub_node_port" {
-  value = local.careerhub_node_port
+output "api_composer_service" {
+  value = {
+    name = local.charts.api_composer.name
+    port = local.charts.api_composer.api_port
+  }
 }
 
-output "auth_service_node_port" {
-  value = local.auth_service_node_port
+output "auth_service" {
+  value = {
+    name = local.charts.auth_service.name
+    port = local.charts.auth_service.api_port
+  }
 }
 
 output "namespace" {

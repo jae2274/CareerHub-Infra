@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "frontend_s3_bucket" {
-  bucket        = "${var.cicd_name}-frontend"
+  bucket        = replace("${var.cicd_name}-frontend", "_", "-")
   force_destroy = true
 }
 

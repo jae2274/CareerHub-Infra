@@ -7,9 +7,6 @@
 #}
 #
 
-variable "access_ip_list" {
-  type = list(string)
-}
 
 variable "atlas_key" {
   type = object({

@@ -7,4 +7,3 @@ userInfoGrpcEndpoint: ${charts.userinfo_service.restapi.name}:${charts.userinfo_
 reviewGrpcEndpoint: ${charts.review_service.restapi.name}:${charts.review_service.restapi.grpc_port}
 secretKey: #known after the deployment
 accessControlAllowOrigin: #known after the deployment
-nodePort: ${charts.api_composer.node_port}

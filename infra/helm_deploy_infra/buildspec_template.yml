@@ -9,7 +9,6 @@ phases:
       - ./get_helm.sh
       - echo Login to ECR
       - mkdir ~/.kube
-      - aws secretsmanager get-secret-value --region ${region} --secret-id ${kubeconfig_secret_id} --query SecretString --output text > ~/.kube/config
       - aws ecr get-login-password --region ${region}  | helm registry login --username AWS --password-stdin ${ecr_domain}
   build:
     commands:
@@ -23,5 +22,14 @@ phases:
 %{ for helm_value, secret_id in helm_value_secret_ids ~}
       - SECRET_VALUE_${helm_value}=$(aws secretsmanager get-secret-value --region ${region} --secret-id ${secret_id} --query SecretString --output text)
 %{ endfor ~}
+
+      - ASSUME_ROLE_INFO=$(aws sts assume-role --role-arn "${eks_admin_role_arn}" --role-session-name ${deploy_name}-helm-deploy)
+      - AWS_ACCESS_KEY_ID=$(echo $ASSUME_ROLE_INFO | jq -r '.Credentials.AccessKeyId')
+      - AWS_SECRET_ACCESS_KEY=$(echo $ASSUME_ROLE_INFO | jq -r '.Credentials.SecretAccessKey')
+      - AWS_SESSION_TOKEN=$(echo $ASSUME_ROLE_INFO | jq -r '.Credentials.SessionToken')
+      
+      - aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID"
+      - aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY"
+      - aws configure set aws_session_token "$AWS_SESSION_TOKEN"
 
       - helm upgrade ${helm_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr_repo_name != "" }--set image=$IMAGE_URL --set tag=$LATEST_TAG %{ endif }%{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} 

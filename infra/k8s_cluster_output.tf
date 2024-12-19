@@ -7,7 +7,8 @@ locals {
   private_subnet_ids  = local.k8s_cluster_infra_outputs.private_subnet_ids
   private_subnet_arns = local.k8s_cluster_infra_outputs.private_subnet_arns
 
-  master_public_ip     = local.k8s_cluster_infra_outputs.master_public_ip
-  worker_ips           = local.k8s_cluster_infra_outputs.worker_ips
-  kubeconfig_secret_id = local.k8s_cluster_infra_outputs.kubeconfig_secret_id
+  eks_cluster_name = local.k8s_cluster_infra_outputs.eks_cluster_name
+
+  eks_admin_policy_arn = local.k8s_cluster_infra_outputs.eks_cluster_admin_config.policy_arn
+  eks_admin_type       = local.k8s_cluster_infra_outputs.eks_cluster_admin_config.type
 }

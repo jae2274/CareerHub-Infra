@@ -13,9 +13,7 @@ data "aws_acm_certificate" "issued" {
 //********************************************************************************************************************
 
 
-locals {
-  service_domain = "${local.prefix_service_name}.${var.root_domain_name}"
-}
+
 
 resource "aws_api_gateway_domain_name" "api_gateway_domain" {
   regional_certificate_arn = data.aws_acm_certificate.issued.arn

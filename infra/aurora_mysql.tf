@@ -1,5 +1,5 @@
 resource "aws_rds_cluster" "user_mysql" {
-  cluster_identifier     = "${local.prefix_service_name}-usermysql"
+  cluster_identifier     = replace("${local.prefix_service_name}-usermysql", "_", "-")
   engine                 = "aurora-mysql"
   engine_version         = "5.7.mysql_aurora.2.11.4"
   db_subnet_group_name   = aws_db_subnet_group.user_mysql_subnet_group.name
@@ -45,7 +45,9 @@ resource "aws_security_group" "user_mysql_sg" {
 }
 
 resource "aws_secretsmanager_secret" "usermysql_endpoint" {
-  name = "${local.prefix_service_name}-usermysql-endpoint"
+  name                           = "${local.prefix_service_name}-usermysql-endpoint"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "usermysql_endpoint" {
@@ -54,7 +56,9 @@ resource "aws_secretsmanager_secret_version" "usermysql_endpoint" {
 }
 
 resource "aws_secretsmanager_secret" "usermysql_dbport" {
-  name = "${local.prefix_service_name}-usermysql-dbport"
+  name                           = "${local.prefix_service_name}-usermysql-dbport"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "usermysql_dbport" {
@@ -63,7 +67,9 @@ resource "aws_secretsmanager_secret_version" "usermysql_dbport" {
 }
 
 resource "aws_secretsmanager_secret" "usermysql_dbname" {
-  name = "${local.prefix_service_name}-usermysql-dbname"
+  name                           = "${local.prefix_service_name}-usermysql-dbname"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "usermysql_dbname" {
@@ -72,7 +78,9 @@ resource "aws_secretsmanager_secret_version" "usermysql_dbname" {
 }
 
 resource "aws_secretsmanager_secret" "usermysql_username" {
-  name = "${local.prefix_service_name}-usermysql-username"
+  name                           = "${local.prefix_service_name}-usermysql-username"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "usermysql_username" {
@@ -81,7 +89,9 @@ resource "aws_secretsmanager_secret_version" "usermysql_username" {
 }
 
 resource "aws_secretsmanager_secret" "usermysql_password" {
-  name = "${local.prefix_service_name}-usermysql-password"
+  name                           = "${local.prefix_service_name}-usermysql-password"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "usermysql_password" {

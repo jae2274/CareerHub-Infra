@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "codebuild_assume_role_policy_doc" {
 }
 
 resource "aws_iam_role" "codebuild_role" {
-  name               = "${var.deploy_name}-codebuild-role"
+  name               = "${var.deploy_name}-cb"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role_policy_doc.json
 }
 
@@ -110,7 +110,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
 // start define log/cache bucket
 
 resource "aws_s3_bucket" "codebuild_log_bucket" {
-  bucket        = "${var.deploy_name}-codebuild-log"
+  bucket        = replace("${var.deploy_name}-cb", "_", "-")
   force_destroy = true
 }
 
@@ -175,10 +175,12 @@ resource "aws_codebuild_project" "codebuild_project" {
       ecr_repo_name = var.ecr_repo_name
       ecr_domain    = local.ecr_domain
 
-      namespace             = var.namespace
-      helm_name             = var.deploy_name
-      chart_repo            = var.chart_repo
-      kubeconfig_secret_id  = var.kubeconfig_secret_id
+      namespace  = var.namespace
+      helm_name  = var.deploy_name
+      chart_repo = var.chart_repo
+
+      deploy_name           = var.deploy_name
+      eks_admin_role_arn    = var.eks_admin_role_arn
       helm_value_secret_ids = var.helm_value_secret_ids
     })
   }
@@ -192,6 +194,8 @@ resource "aws_codebuild_project" "codebuild_project" {
       aws_security_group.codebuild_sg.id,
     ]
   }
+
+  depends_on = [aws_iam_role_policy.codebuild_role_policy]
 }
 
 resource "aws_security_group" "codebuild_sg" {

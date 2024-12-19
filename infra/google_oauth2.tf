@@ -1,6 +1,8 @@
 
 resource "aws_secretsmanager_secret" "google_client_id" {
-  name = "${local.prefix_service_name}-google-client-id"
+  name                           = "${local.prefix_service_name}-google-client-id"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "google_client_id" {
@@ -9,7 +11,9 @@ resource "aws_secretsmanager_secret_version" "google_client_id" {
 }
 
 resource "aws_secretsmanager_secret" "google_client_secret" {
-  name = "${local.prefix_service_name}-google-client-secret"
+  name                           = "${local.prefix_service_name}-google-client-secret"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "google_client_secret" {
@@ -18,13 +22,20 @@ resource "aws_secretsmanager_secret_version" "google_client_secret" {
 }
 
 resource "aws_secretsmanager_secret" "google_redirecturi" {
-  name = "${local.prefix_service_name}-google-redirect-uri"
+  name                           = "${local.prefix_service_name}-google-redirect-uri"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
+}
+
+locals {
+  service_domain = "${local.prefix_service_name}.${var.root_domain_name}"
 }
 
 resource "aws_secretsmanager_secret_version" "google_redirecturi" {
   secret_id     = aws_secretsmanager_secret.google_redirecturi.id
   secret_string = "https://${local.service_domain}${var.google_redirect_path}"
 }
+
 
 
 locals {

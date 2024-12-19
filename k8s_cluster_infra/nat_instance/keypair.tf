@@ -9,7 +9,9 @@ resource "aws_key_pair" "nat_keypair" {
 }
 
 resource "aws_secretsmanager_secret" "nat_private_key" {
-  name = "${var.instance_name}-private-key"
+  name                           = "${var.instance_name}-private-key"
+  recovery_window_in_days        = 0
+  force_overwrite_replica_secret = true
 }
 
 resource "aws_secretsmanager_secret_version" "nat_private_key_version" {

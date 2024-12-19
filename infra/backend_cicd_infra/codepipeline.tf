@@ -1,6 +1,6 @@
 // start define s3 bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket        = "${var.cicd_name}-codepipeline-bucket"
+  bucket        = replace("${var.cicd_name}-codepipeline-bucket", "_", "-")
   force_destroy = true
 }
 
@@ -87,7 +87,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 
 // start define code connection
 resource "aws_codestarconnections_connection" "codepipeline_connection" {
-  name          = "${var.cicd_name}-conn"
+  name          = var.cicd_name
   provider_type = "GitHub"
 }
 // end define code connection

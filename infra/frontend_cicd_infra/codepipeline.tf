@@ -1,6 +1,6 @@
 // start define s3 bucket
 resource "aws_s3_bucket" "codepipeline_bucket" {
-  bucket        = "${var.cicd_name}-codepipeline-bucket"
+  bucket        = replace("${var.cicd_name}-codepipeline-bucket", "_", "-")
   force_destroy = true
 }
 
