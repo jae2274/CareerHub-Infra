@@ -29,6 +29,10 @@ module "vpc_infra" {
       az                = data.aws_availability_zones.available.names[2]
     }
   }
+
+  tags = {
+    "kubernetes.io/role/elb" = "1"
+  }
 }
 
 locals {
