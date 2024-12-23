@@ -1,112 +1,4 @@
 
-
-data "aws_iam_policy_document" "codebuild_policy_doc" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = ["*"]
-  }
-
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "ec2:CreateNetworkInterface",
-      "ec2:DescribeDhcpOptions",
-      "ec2:DescribeNetworkInterfaces",
-      "ec2:DeleteNetworkInterface",
-      "ec2:DescribeSubnets",
-      "ec2:DescribeSecurityGroups",
-      "ec2:DescribeVpcs",
-    ]
-
-    resources = ["*"]
-  }
-
-  statement {
-    effect    = "Allow"
-    actions   = ["ec2:CreateNetworkInterfacePermission"]
-    resources = ["arn:aws:ec2:*:*:network-interface/*"]
-
-    condition {
-      test     = "ArnEquals"
-      variable = "ec2:Subnet"
-
-      values = var.subnet_arns
-    }
-
-    condition {
-      test     = "StringEquals"
-      variable = "ec2:AuthorizedService"
-      values   = ["codebuild.amazonaws.com"]
-    }
-  }
-
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecr:GetAuthorizationToken",
-      "ecr:BatchCheckLayerAvailability",
-      "ecr:GetDownloadUrlForLayer",
-      "ecr:GetRepositoryPolicy",
-      "ecr:DescribeRepositories",
-      "ecr:ListImages",
-      "ecr:DescribeImages",
-      "ecr:BatchGetImage",
-      "ecr:GetLifecyclePolicy",
-      "ecr:GetLifecyclePolicyPreview",
-      "ecr:ListTagsForResource",
-      "ecr:DescribeImageScanFindings"
-    ]
-    resources = ["*"]
-  }
-
-  statement {
-    effect  = "Allow"
-    actions = ["s3:*"]
-    resources = [
-      aws_s3_bucket.codebuild_log_bucket.arn,
-      "${aws_s3_bucket.codebuild_log_bucket.arn}/*",
-    ]
-  }
-
-  statement {
-    effect    = "Allow"
-    actions   = ["secretsmanager:GetSecretValue"]
-    resources = ["*"]
-  }
-}
-
-data "aws_iam_policy_document" "codebuild_assume_role_policy_doc" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["codebuild.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
-resource "aws_iam_role" "codebuild_role" {
-  name               = "${var.deploy_name}-cb"
-  assume_role_policy = data.aws_iam_policy_document.codebuild_assume_role_policy_doc.json
-}
-
-resource "aws_iam_role_policy" "codebuild_role_policy" {
-  role   = aws_iam_role.codebuild_role.name
-  policy = data.aws_iam_policy_document.codebuild_policy_doc.json
-}
-// end define iam role and policy
-
 // start define log/cache bucket
 
 resource "aws_s3_bucket" "codebuild_log_bucket" {
@@ -141,7 +33,7 @@ resource "aws_codebuild_project" "codebuild_project" {
   name          = "${var.deploy_name}-codebuild"
   description   = "CodeBuild for ${var.deploy_name}"
   build_timeout = 30
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = var.cd_role_arn
 
   artifacts {
     type = "NO_ARTIFACTS"
@@ -175,13 +67,13 @@ resource "aws_codebuild_project" "codebuild_project" {
       ecr_repo_name = var.ecr_repo_name
       ecr_domain    = local.ecr_domain
 
-      namespace  = var.namespace
-      helm_name  = var.deploy_name
-      chart_repo = var.chart_repo
+      namespace    = var.namespace
+      release_name = replace(var.deploy_name, "_", "-")
+      chart_repo   = var.chart_repo
 
       deploy_name           = var.deploy_name
-      eks_admin_role_arn    = var.eks_admin_role_arn
       helm_value_secret_ids = var.helm_value_secret_ids
+      eks_cluster_name      = var.eks_cluster_name
     })
   }
 
@@ -195,7 +87,6 @@ resource "aws_codebuild_project" "codebuild_project" {
     ]
   }
 
-  depends_on = [aws_iam_role_policy.codebuild_role_policy]
 }
 
 resource "aws_security_group" "codebuild_sg" {

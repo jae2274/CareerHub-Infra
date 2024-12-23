@@ -83,6 +83,24 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   role       = aws_iam_role.node_group.name
 }
 
+data "aws_iam_policy_document" "ecr_readonly_policy" {
+  statement {
+    actions = [
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:BatchGetImage",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:GetAuthorizationToken"
+    ]
+
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "ecr_readonly_policy" {
+  name   = replace("${local.prefix_service_name}-ecr-readonly", "_", "-")
+  role   = aws_iam_role.node_group.name
+  policy = data.aws_iam_policy_document.ecr_readonly_policy.json
+}
 
 # # EKS 노드 그룹 보안 그룹
 resource "aws_security_group" "eks_node_sg" {

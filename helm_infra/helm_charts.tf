@@ -107,7 +107,7 @@ module "cd_infra" {
   prefix       = local.prefix
   helm_path    = "${path.module}/${each.key}"
   chart_values = local.charts
-  env_value    = local.env
+  env_value    = replace(local.env, "-", "_")
 }
 
 output "api_composer_service" {

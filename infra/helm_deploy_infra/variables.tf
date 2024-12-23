@@ -6,7 +6,7 @@ variable "namespace" {
   type = string
 }
 
-variable "eks_admin_role_arn" {
+variable "cd_role_arn" {
   type = string
 }
 
@@ -33,4 +33,8 @@ variable "subnet_ids" {
 
 variable "subnet_arns" {
   type = list(string)
+}
+
+variable "eks_cluster_name" {
+  type = string
 }
