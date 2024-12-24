@@ -38,8 +38,7 @@ module "vpc_infra" {
 locals {
   vpc_id = module.vpc_infra.vpc.id
 
-  public_subnets    = module.vpc_infra.public_subnets
-  public_subnet_ids = [for subnet in local.public_subnets : subnet.id]
+  public_subnets = module.vpc_infra.public_subnets
 }
 
 resource "aws_eip" "nat_eips" {

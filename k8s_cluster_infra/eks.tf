@@ -19,7 +19,7 @@ resource "aws_eks_cluster" "careerhub" {
     endpoint_public_access  = true
     endpoint_private_access = true
 
-    subnet_ids = local.public_subnet_ids
+    subnet_ids = [for subnet in local.network_output.public_subnets : subnet.id]
     security_group_ids = [
       aws_security_group.eks_cluster_sg.id,
     ]
@@ -60,7 +60,7 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
 resource "aws_security_group" "eks_cluster_sg" {
   name        = "${local.prefix_service_name}-eks-cluster-sg"
   description = "Security group for EKS Cluster"
-  vpc_id      = local.vpc_id
+  vpc_id      = local.network_output.vpc_id
 
   # EKS 클러스터 -> 노드로의 통신 허용 (TCP 443)
   ingress {

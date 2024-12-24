@@ -24,7 +24,7 @@ resource "aws_eks_node_group" "careerhub" {
   cluster_name    = aws_eks_cluster.careerhub.name
   node_group_name = "${local.eks_cluster_name}-ng"
   node_role_arn   = aws_iam_role.node_group.arn
-  subnet_ids      = local.public_subnet_ids
+  subnet_ids      = [for subnet in local.network_output.public_subnets : subnet.id]
 
   scaling_config {
     desired_size = 1
@@ -106,7 +106,7 @@ resource "aws_iam_role_policy" "ecr_readonly_policy" {
 resource "aws_security_group" "eks_node_sg" {
   name        = "${local.prefix_service_name}-eks-node-sg"
   description = "Security group for EKS Worker Nodes"
-  vpc_id      = local.vpc_id
+  vpc_id      = local.network_output.vpc_id
 
   # 노드 -> 클러스터로의 통신 허용 (TCP 443)
   ingress {
@@ -114,7 +114,7 @@ resource "aws_security_group" "eks_node_sg" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [local.vpc_cidr_block]
+    cidr_blocks = [local.network_output.vpc_cidr_block]
   }
 
   # 외부에서의 SSH 접근 허용 (TCP 22)
@@ -132,7 +132,7 @@ resource "aws_security_group" "eks_node_sg" {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = [local.vpc_cidr_block]
+    cidr_blocks = [local.network_output.vpc_cidr_block]
   }
 
   egress {

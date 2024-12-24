@@ -13,11 +13,6 @@ locals {
   mongodb_region = join("_", split("-", upper(var.mongodb_region)))
 }
 
-provider "mongodbatlas" {
-  public_key  = var.atlas_key.public_key
-  private_key = var.atlas_key.private_key
-}
-
 
 data "mongodbatlas_roles_org_id" "organization" {
 }

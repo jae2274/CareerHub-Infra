@@ -33,7 +33,7 @@ provider "aws" {
     }
   }
 
-  region = local.network_output.region
+  region = var.region
 }
 
 

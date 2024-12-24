@@ -8,13 +8,6 @@
 #
 
 
-variable "atlas_key" {
-  type = object({
-    public_key  = string
-    private_key = string
-  })
-}
-
 variable "mongodb_region" {
   type = string
 }

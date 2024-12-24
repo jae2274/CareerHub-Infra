@@ -1,20 +1,20 @@
 provider "mongodbatlas" {
-  public_key  = var.atlas_key.public_key
-  private_key = var.atlas_key.private_key
+  public_key  = var.atlas_public_key
+  private_key = var.atlas_private_key
 }
 
 
 resource "aws_security_group" "mongodb_security_group" {
   name        = "mongodb_security_group"
   description = "mongodb_security_group"
-  vpc_id      = local.vpc_id
+  vpc_id      = local.network_output.vpc_id
 
   ingress {
     description = "mongodb ingress"
     from_port   = 27017
     to_port     = 27017
     protocol    = "tcp"
-    cidr_blocks = [local.vpc_cidr_block]
+    cidr_blocks = [local.network_output.vpc_cidr_block]
   }
 
   egress {
@@ -34,17 +34,12 @@ locals {
 module "mongodb_atlas" {
   source = "./mongodb_atlas"
 
-  mongodb_region = local.region
+  mongodb_region = local.network_output.region
   project_name   = "${local.prefix_service_name}-project"
 
   admin_db_user = {
     username = var.admin_db_username
     password = var.admin_db_password
-  }
-
-  atlas_key = {
-    public_key  = var.atlas_public_key
-    private_key = var.atlas_private_key
   }
 
   serverless_databases = [local.jobposting_db, local.userinfo_db, local.review_db]
