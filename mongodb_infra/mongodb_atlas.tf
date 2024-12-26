@@ -3,28 +3,6 @@ provider "mongodbatlas" {
   private_key = var.atlas_private_key
 }
 
-
-resource "aws_security_group" "mongodb_security_group" {
-  name        = "mongodb_security_group"
-  description = "mongodb_security_group"
-  vpc_id      = local.network_output.vpc_id
-
-  ingress {
-    description = "mongodb ingress"
-    from_port   = 27017
-    to_port     = 27017
-    protocol    = "tcp"
-    cidr_blocks = [local.network_output.vpc_cidr_block]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 locals {
   jobposting_db = "${local.prefix_service_name}-jobposting"
   userinfo_db   = "${local.prefix_service_name}-userinfo"

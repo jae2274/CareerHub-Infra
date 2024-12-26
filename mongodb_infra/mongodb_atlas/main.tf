@@ -76,9 +76,3 @@ resource "mongodbatlas_database_user" "admin_db_user" {
 #   cidr_block = "${var.access_ip_list[count.index]}/32"
 #   comment    = "Access from ${var.access_ip_list[count.index]}"
 # }
-
-
-output "public_endpoint" {
-  value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_standard_srv }
-}
-
