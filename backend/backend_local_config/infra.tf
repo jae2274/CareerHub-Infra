@@ -81,6 +81,17 @@ data "terraform_remote_state" "network_infra" {
     encrypt= ${local.network_infra_backend_encrypt}
   }
 }
+
+data "terraform_remote_state" "mongodb_infra" {
+  backend = "s3"
+
+  config = {
+    bucket = "${local.mongodb_infra_backend_bucket}"
+    key = "${local.key}"
+    region = "${local.mongodb_infra_backend_region}"
+    encrypt= ${local.mongodb_infra_backend_encrypt}
+  }
+}
 // This file is generated automatically by backend/backend_local_config and should not be modified manually
 // 이 파일은 backend/backend_local_config에 의해 자동으로 생성되며 수동으로 수정하지 마십시오.
 

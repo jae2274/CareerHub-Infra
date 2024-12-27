@@ -165,7 +165,7 @@ module "careerhub_posting_service_helm_deploy" {
   eks_cluster_name = local.eks_cluster_name
 
   helm_value_secret_ids = {
-    "mongoUri"   = local.jobposting_mongodb_endpoint_secret_id
+    "mongoUri"   = local.jobposting_db_private_endpoint_secret_id
     "dbUsername" = local.mongodb_username_secret_id
     "dbPassword" = local.mongodb_password_secret_id
   }
@@ -219,9 +219,10 @@ module "careerhub_userinfo_service_helm_deploy" {
   subnet_arns = local.private_subnet_arns
 
   helm_value_secret_ids = {
-    "mongoUri"   = local.userinfo_mongodb_endpoint_secret_id
+    "mongoUri"   = local.userinfo_db_private_endpoint_secret_id
     "dbUsername" = local.mongodb_username_secret_id
-  "dbPassword" = local.mongodb_password_secret_id }
+    "dbPassword" = local.mongodb_password_secret_id
+  }
 }
 
 module "careerhub_api_composer_helm_deploy" {
@@ -285,7 +286,7 @@ module "careerhub_review_service_helm_deploy" {
   subnet_arns = local.private_subnet_arns
 
   helm_value_secret_ids = {
-    "mongoUri"   = local.review_mongodb_endpoint_secret_id
+    "mongoUri"   = local.review_db_private_endpoint_secret_id
     "dbUsername" = local.mongodb_username_secret_id
     "dbPassword" = local.mongodb_password_secret_id
   }

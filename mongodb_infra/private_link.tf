@@ -75,12 +75,8 @@ resource "mongodbatlas_privatelink_endpoint_service_serverless" "privatelink_end
 }
 
 data "mongodbatlas_serverless_instance" "serverless_instances" {
-  for_each = module.mongodb_atlas.serverless_instances
+  for_each = mongodbatlas_privatelink_endpoint_service_serverless.privatelink_endpoint_service
 
   project_id = module.mongodb_atlas.project_id
-  name       = each.value.name
-}
-
-output "private_endpoint" {
-  value = { for key, mongodb in data.mongodbatlas_serverless_instance.serverless_instances : key => mongodb.connection_strings_private_endpoint_srv }
+  name       = module.mongodb_atlas.serverless_instances[each.key].name
 }
