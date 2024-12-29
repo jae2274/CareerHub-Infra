@@ -33,6 +33,19 @@ resource "aws_eks_cluster" "careerhub" {
   ]
 }
 
+resource "null_resource" "eks_cluster" {
+  triggers = {
+    cluster_name = aws_eks_cluster.careerhub.name
+  }
+
+  provisioner "local-exec" {
+    command = <<EOF
+      aws eks update-kubeconfig --name ${aws_eks_cluster.careerhub.name} --region ${local.network_output.region} --alias tempContext
+      kubectl set env daemonset aws-node -n kube-system ENABLE_PREFIX_DELEGATION=true --context tempContext
+    EOF
+  }
+}
+
 resource "aws_iam_role" "eks_cluster" {
   name = "${local.eks_cluster_name}-role"
   assume_role_policy = jsonencode({
