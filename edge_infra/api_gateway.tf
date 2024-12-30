@@ -3,9 +3,9 @@ locals {
 
   root_path               = "/"
   root_proxy_path         = "/{proxy+}"
-  backend_root_proxy_path = "${local.backend_root_path}/{proxy+}"
+  backend_root_proxy_path = "/api/{proxy+}"
   auth_service_path       = "/auth"
-  auth_service_proxy_path = "${local.auth_service_path}/{proxy+}"
+  auth_service_proxy_path = "/auth/{proxy+}"
 
   ALL_METHODS = toset([
     "GET",
@@ -66,7 +66,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.careerhub_node_port}/{proxy}"
+            uri                  = "http://${local.ingress_hostname}:${local.ingress_port}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }
@@ -87,7 +87,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             httpMethod           = "ANY"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}"
+            uri                  = "http://${local.ingress_hostname}:${local.ingress_port}${local.auth_service_path}"
           }
         }
       }
@@ -98,7 +98,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}/{proxy}"
+            uri                  = "http://${local.ingress_hostname}:${local.ingress_port}${local.auth_service_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }

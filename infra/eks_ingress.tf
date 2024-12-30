@@ -13,6 +13,10 @@ provider "kubernetes" {
   token                  = data.aws_eks_cluster_auth.cluster.token
 }
 
+locals {
+  ingress_port = 80
+}
+
 resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name = replace("${local.prefix_service_name}-ingress", "_", "-")
@@ -27,7 +31,7 @@ resource "kubernetes_ingress_v1" "ingress" {
     default_backend {
       service {
         name = replace("${local.prefix_service_name}-backend", "_", "-")
-        port { number = 80 }
+        port { number = local.ingress_port }
       }
     }
     rule {

@@ -19,6 +19,4 @@ module "frontend_cicd" {
   }
 }
 
-locals {
-  frontend_website_endpoint = module.frontend_cicd.frontend_website_endpoint
-}
+

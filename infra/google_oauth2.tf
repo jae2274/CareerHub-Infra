@@ -28,7 +28,7 @@ resource "aws_secretsmanager_secret" "google_redirecturi" {
 }
 
 locals {
-  service_domain = "${local.prefix_service_name}.${var.root_domain_name}"
+  service_domain = replace("${local.prefix_service_name}.${var.root_domain_name}", "_", "-")
 }
 
 resource "aws_secretsmanager_secret_version" "google_redirecturi" {

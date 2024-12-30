@@ -3,11 +3,11 @@
   */
 //********************************************************************************************************************
 data "aws_route53_zone" "route53_zone" {
-  name = var.root_domain_name
+  name = local.root_domain_name
 }
 
 data "aws_acm_certificate" "issued" {
-  domain   = "*.${var.root_domain_name}"
+  domain   = "*.${local.root_domain_name}"
   statuses = ["ISSUED"]
 }
 //********************************************************************************************************************
