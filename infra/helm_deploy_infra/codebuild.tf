@@ -73,6 +73,7 @@ resource "aws_codebuild_project" "codebuild_project" {
 
       deploy_name           = var.deploy_name
       helm_value_secret_ids = var.helm_value_secret_ids
+      helm_values           = var.helm_values
       eks_cluster_name      = var.eks_cluster_name
     })
   }

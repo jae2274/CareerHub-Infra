@@ -14,6 +14,11 @@ variable "helm_value_secret_ids" {
   type = map(string)
 }
 
+variable "helm_values" {
+  type    = map(string)
+  default = {}
+}
+
 variable "chart_repo" {
   type = string
 }

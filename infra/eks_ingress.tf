@@ -17,6 +17,12 @@ locals {
   ingress_port = 80
 }
 
+resource "kubernetes_namespace_v1" "careerhub" {
+  metadata {
+    name = local.namespace
+  }
+}
+
 resource "kubernetes_ingress_v1" "ingress" {
   metadata {
     name = replace("${local.prefix_service_name}-ingress", "_", "-")
@@ -24,16 +30,17 @@ resource "kubernetes_ingress_v1" "ingress" {
       "alb.ingress.kubernetes.io/scheme"      = "internet-facing"
       "alb.ingress.kubernetes.io/target-type" = "ip"
     }
+    namespace = local.namespace
   }
 
   spec {
     ingress_class_name = "alb"
-    default_backend {
-      service {
-        name = replace("${local.prefix_service_name}-backend", "_", "-")
-        port { number = local.ingress_port }
-      }
-    }
+    # default_backend {
+    #   service {
+    #     name = local.api_composer_service.name
+    #     port { number = local.api_composer_service.port }
+    #   }
+    # }
     rule {
       http {
         path {
@@ -46,7 +53,8 @@ resource "kubernetes_ingress_v1" "ingress" {
             }
           }
 
-          path = local.backend_root_path
+          path      = "${local.backend_root_path}/*"
+          path_type = "ImplementationSpecific"
         }
 
         path {
@@ -59,9 +67,12 @@ resource "kubernetes_ingress_v1" "ingress" {
             }
           }
 
-          path = "/auth"
+          path      = "/auth/*"
+          path_type = "ImplementationSpecific"
         }
       }
     }
   }
+
+  depends_on = [kubernetes_namespace_v1.careerhub]
 }

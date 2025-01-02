@@ -31,5 +31,7 @@ spec:
               value: {{.Values.secretKey}}
             - name: ACCESS_CONTROL_ALLOW_ORIGIN
               value: {{.Values.accessControlAllowOrigin}}
+            - name: ROOT_PATH
+              value: {{.Values.rootPath | default ""}}
           ports:
             - containerPort: {{.Values.apiPort}}

@@ -3,6 +3,7 @@ locals {
 
   root_path               = "/"
   root_proxy_path         = "/{proxy+}"
+  backend_root_path       = "/api"
   backend_root_proxy_path = "/api/{proxy+}"
   auth_service_path       = "/auth"
   auth_service_proxy_path = "/auth/{proxy+}"
@@ -66,7 +67,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.ingress_hostname}:${local.ingress_port}/{proxy}"
+            uri                  = "http://${local.ingress_hostname}:${local.ingress_port}${local.backend_root_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }

@@ -26,4 +26,4 @@ phases:
 
       - aws sts get-caller-identity
       - cat ~/.kube/config
-      - helm upgrade ${release_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr_repo_name != "" }--set image=$IMAGE_URL --set tag=$LATEST_TAG %{ endif }%{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} --kube-context careerhub-eks
+      - helm upgrade ${release_name} oci://${chart_repo} --install --create-namespace --namespace ${namespace} --wait %{ if ecr_repo_name != "" }--set image=$IMAGE_URL --set tag=$LATEST_TAG %{ endif }%{ for helm_value, secret_id in helm_value_secret_ids ~} --set ${helm_value}=$SECRET_VALUE_${helm_value} %{ endfor ~} %{ for helm_key, helm_value in helm_values ~} --set ${helm_key}="${helm_value}" %{ endfor ~}--kube-context careerhub-eks
