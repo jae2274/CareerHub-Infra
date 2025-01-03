@@ -15,6 +15,7 @@ provider "kubernetes" {
 
 locals {
   ingress_port = 80
+  log_hostname = "log.${var.root_domain_name}"
 }
 
 resource "kubernetes_namespace_v1" "careerhub" {
@@ -41,6 +42,26 @@ resource "kubernetes_ingress_v1" "ingress" {
     #     port { number = local.api_composer_service.port }
     #   }
     # }
+
+    rule {
+      host = local.log_hostname
+      http {
+        path {
+          backend {
+            service {
+              name = local.log_system.name
+              port {
+                number = local.log_system.port
+              }
+            }
+          }
+
+          path      = "/*"
+          path_type = "ImplementationSpecific"
+        }
+      }
+    }
+
     rule {
       http {
         path {
@@ -72,6 +93,7 @@ resource "kubernetes_ingress_v1" "ingress" {
         }
       }
     }
+
   }
 
   depends_on = [kubernetes_namespace_v1.careerhub]

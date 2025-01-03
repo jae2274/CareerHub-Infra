@@ -8,4 +8,6 @@ locals {
   root_domain_name = local.infra_remote_state.root_domain_name
 
   service_domain = local.infra_remote_state.service_domain
+
+  log_hostname = local.infra_remote_state.log_hostname
 }

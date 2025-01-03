@@ -42,3 +42,12 @@ resource "aws_api_gateway_base_path_mapping" "api_gateway_domain_mapping" {
   stage_name  = aws_api_gateway_stage.prod_stage.stage_name
   domain_name = aws_api_gateway_domain_name.api_gateway_domain.domain_name
 }
+
+resource "aws_route53_record" "log_system_hostname" {
+  zone_id = data.aws_route53_zone.route53_zone.zone_id
+  name    = local.log_hostname
+  type    = "CNAME"
+  ttl     = 300
+
+  records = [local.ingress_hostname]
+}

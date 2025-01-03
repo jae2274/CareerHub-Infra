@@ -53,6 +53,49 @@ resource "aws_eks_node_group" "careerhub" {
   ]
 }
 
+resource "aws_eks_node_group" "monitoring" {
+  cluster_name    = aws_eks_cluster.careerhub.name
+  node_group_name = "${local.eks_cluster_name}-monitoring-ng"
+  node_role_arn   = aws_iam_role.node_group.arn
+  subnet_ids      = [for subnet in local.network_output.public_subnets : subnet.id]
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+  instance_types = ["t4g.medium"]
+  version        = aws_eks_cluster.careerhub.version
+
+  ami_type = "AL2023_ARM_64_STANDARD"
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  remote_access {
+    ec2_ssh_key = aws_key_pair.k8s_keypair.key_name
+  }
+
+  taint {
+    key    = "usage"
+    value  = "monitoring"
+    effect = "PREFER_NO_SCHEDULE"
+  }
+
+  labels = {
+    usage = "monitoring"
+  }
+
+  # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
+  # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
+  depends_on = [
+    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+  ]
+}
+
 resource "aws_iam_role" "node_group" {
   name = "${local.eks_cluster_name}-ng-role"
 

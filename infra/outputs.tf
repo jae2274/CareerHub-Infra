@@ -6,6 +6,10 @@ output "root_domain_name" {
   value = var.root_domain_name
 }
 
+output "log_hostname" {
+  value = local.log_hostname
+}
+
 output "ingress_hostname" {
   value = kubernetes_ingress_v1.ingress.status.0.load_balancer.0.ingress.0.hostname
 }

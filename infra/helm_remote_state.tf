@@ -18,4 +18,5 @@ locals {
   api_composer_service = local.helm_infra_outputs.api_composer_service
   auth_service         = local.helm_infra_outputs.auth_service
 
+  log_system = local.helm_infra_outputs.log_system
 }

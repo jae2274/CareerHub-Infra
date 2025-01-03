@@ -2,10 +2,11 @@ name: ${charts.log_system.name}
 targetNamespace: ${charts.namespace}
 
 opensearchDashboard:
-  name: "${charts.log_system.name}-opensearch-dashboard"
+  name: "${charts.log_system.dashboard_name}"
+  port: ${charts.log_system.dashboard_port}
 
 opensearch:
-  name: ${charts.log_system.name}-opensearch
+  name: ${charts.log_system.opensearch_name}
 
 fluentbit:
   name: ${charts.log_system.name}-fluentbit
@@ -20,3 +21,4 @@ tolerations:
     value: "monitoring"
     effect: "PreferNoSchedule"
 initialAdminPassword: #known after the deployment
+

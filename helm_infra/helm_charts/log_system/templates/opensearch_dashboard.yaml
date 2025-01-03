@@ -1,5 +1,6 @@
 {{- $opensearch_name := .Values.opensearch.name -}}
 {{- $name := print .Values.opensearchDashboard.name -}}
+{{- $port := .Values.opensearchDashboard.port -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -49,11 +50,10 @@ metadata:
   labels:
     k8s-app: {{ $name }}
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     k8s-app: {{ $name }}
   ports:
     - protocol: TCP
-      port: 5601
+      port: {{ $port }}
       targetPort: 5601
-      nodePort: 30002

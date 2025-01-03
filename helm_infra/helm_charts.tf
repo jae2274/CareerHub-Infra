@@ -1,14 +1,16 @@
 
 
 locals {
-  log_system_node_port = 30002
 
   namespace = "careerhub"
 
   charts = {
     namespace = local.namespace
     log_system = {
-      name = "log-system"
+      name            = "log-system"
+      opensearch_name = "log-system-opensearch"
+      dashboard_name  = "log-system-opensearch-dashboard"
+      dashboard_port  = 8080
     }
 
     data_processor = {
@@ -121,6 +123,13 @@ output "auth_service" {
   value = {
     name = local.charts.auth_service.name
     port = local.charts.auth_service.api_port
+  }
+}
+
+output "log_system" {
+  value = {
+    name = local.charts.log_system.dashboard_name
+    port = local.charts.log_system.dashboard_port
   }
 }
 
