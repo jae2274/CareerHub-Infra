@@ -242,6 +242,10 @@ module "careerhub_api_composer_helm_deploy" {
   helm_value_secret_ids = {
     secretKey = local.jwt_secretkey_secret_id
   }
+
+  helm_values = {
+    "rootPath" = local.backend_root_path
+  }
 }
 
 module "auth_service_helm_deploy" {
