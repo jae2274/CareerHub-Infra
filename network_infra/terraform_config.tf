@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "5.19.0"
+      version = "5.81.0"
     }
     local = {
       source  = "hashicorp/local"
@@ -33,7 +33,7 @@ provider "aws" {
     }
   }
 
-  region = local.region
+  region = var.region
 }
 
 

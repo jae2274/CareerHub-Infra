@@ -39,6 +39,10 @@ resource "aws_route_table_association" "private_route_table_association" {
   route_table_id = aws_route_table.private_route_table[each.key].id
 }
 
+output "private_route_table" {
+  value = aws_route_table.private_route_table
+}
+
 output "private_subnets" {
   value = aws_subnet.aws_private_subnets
 }

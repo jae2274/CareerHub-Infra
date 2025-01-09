@@ -54,6 +54,10 @@ resource "aws_route_table_association" "public_route_table_association" {
   route_table_id = aws_route_table.public_route_table.id
 }
 
+output "public_route_table" {
+  value = aws_route_table.public_route_table
+}
+
 output "vpc" {
   value = aws_vpc.vpc
 }

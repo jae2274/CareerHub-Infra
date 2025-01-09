@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 locals {
   cluster_name = local.prefix_service_name
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
-  ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
+  ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${local.region}.amazonaws.com"
 }
 
 resource "tls_private_key" "k8s_private_key" {
@@ -26,13 +26,12 @@ resource "aws_secretsmanager_secret_version" "k8s_node_private_key_version" {
 }
 
 module "k8s_infra" {
-  depends_on = [module.vpc_infra]
-  source     = "./k8s_infra/cluster"
+  source = "./k8s_infra/cluster"
 
   vpc_id       = local.vpc_id
   cluster_name = local.cluster_name
 
-  ecrs = [{ domain = local.ecr_domain, region = var.region }]
+  ecrs = [{ domain = local.ecr_domain, region = local.region }]
 
   master = {
     instance_type = "t4g.small"

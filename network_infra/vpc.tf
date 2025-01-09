@@ -83,27 +83,3 @@ locals {
   private_subnet_ids  = [for subnet in local.private_subnets : subnet.id]
   private_subnet_arns = [for subnet in local.private_subnets : subnet.arn]
 }
-
-output "region" {
-  value = var.region
-}
-
-output "vpc_id" {
-  value = local.vpc_id
-}
-
-output "vpc_cidr_block" {
-  value = local.vpc_cidr_block
-}
-
-output "private_subnets" {
-  value = local.private_subnets
-}
-
-output "private_subnet_ids" {
-  value = local.private_subnet_ids
-}
-
-output "private_subnet_arns" {
-  value = local.private_subnet_arns
-}

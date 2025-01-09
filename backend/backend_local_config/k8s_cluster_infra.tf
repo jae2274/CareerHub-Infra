@@ -46,6 +46,17 @@ locals {
 data "local_file" "check_remote_state_config" {
   filename = "$${local.env}-${local.k8s_cluster_infra_backend_file_without_prefix}"
 }
+
+data "terraform_remote_state" "network_infra" {
+  backend = "s3"
+
+  config = {
+    bucket = "${local.network_infra_backend_bucket}"
+    key = "${local.key}"
+    region = "${local.network_infra_backend_region}"
+    encrypt= ${local.network_infra_backend_encrypt}
+  }
+}
 EOF
 }
 
