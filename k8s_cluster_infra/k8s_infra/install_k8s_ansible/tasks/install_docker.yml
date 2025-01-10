@@ -1,0 +1,53 @@
+- name: Install dependencies for Docker
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+      - net-tools
+    state: present
+
+- name: Add Docker GPG key
+  ansible.builtin.shell: |
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+- name: Get the architecture
+  shell: dpkg --print-architecture
+  register: dpkg_arch
+
+- name: Get the release codename
+  shell: lsb_release -cs
+  register: lsb_release
+
+- name: Add Docker repository
+  copy:
+    dest: /etc/apt/sources.list.d/docker.list
+    content: |
+      deb [arch={{ dpkg_arch.stdout }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable
+
+- name: Install Docker
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+    update_cache: yes
+
+- name: Configure Docker daemon
+  copy:
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+          "data-root": "/data/docker"
+      }
+
+- name: Reload Docker daemon
+  systemd:
+    daemon_reload: yes
+- name: Restart Docker
+  systemd:
+    name: docker
+    state: restarted

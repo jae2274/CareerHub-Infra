@@ -1,0 +1,12 @@
+- name: Install awscli
+  curl:
+    url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ ansible_architecture == 'x86_64' | ternary('x86_64', 'aarch64') }}.zip"
+    dest: /tmp/awscliv2.zip
+
+- name: Unzip awscli
+  unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp
+
+- name: Install awscli
+  command: /tmp/aws/install

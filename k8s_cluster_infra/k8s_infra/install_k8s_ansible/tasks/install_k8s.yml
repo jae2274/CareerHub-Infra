@@ -1,0 +1,29 @@
+- name: Add Kubernetes GPG key and repository
+  shell: |
+    mkdir -p -m 755 /etc/apt/keyrings
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+- name: Add Kubernetes repository
+  copy:
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    content: |
+      deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+
+- name: Install Kubernetes components
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+    update_cache: yes
+
+- name: Remove containerd default config
+  file:
+    path: /etc/containerd/config.toml
+    state: absent
+
+- name: Restart containerd
+  systemd:
+    name: containerd
+    state: restarted

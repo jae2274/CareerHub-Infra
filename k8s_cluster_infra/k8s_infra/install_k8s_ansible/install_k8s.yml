@@ -1,0 +1,55 @@
+---
+- name: Setup Kubernetes Environment
+  hosts: all
+  become: yes
+  tasks:
+    - name: Disable UFW
+      shell: ufw disable
+
+    - name: Set kernel modules for Kubernetes
+      include_tasks: tasks/kernel_modules.yml
+
+    - name: Install dependencies for Docker
+      include_tasks: tasks/install_docker.yml
+
+    - name: Install dependencies for Kubernetes
+      include_tasks: tasks/install_k8s.yml
+
+    - name: Install command-line tools
+      apt:
+        name:
+          - unzip
+          - jq
+        state: present
+
+    - name: Install awscli
+      include_tasks: tasks/install_awscli.yml
+
+    - name: Install jq
+      apt:
+        name: jq
+        state: present
+
+    - name: Install yq via snap
+      snap:
+        name: yq
+        state: present
+
+  # handlers:
+  #   - name: Load kernel modules
+  #     ansible.builtin.shell: |
+  #       modprobe overlay
+  #       modprobe br_netfilter
+
+  #   - name: Reload sysctl
+  #     ansible.builtin.shell: sysctl --system
+
+  #   - name: Restart Docker
+  #     service:
+  #       name: docker
+  #       state: restarted
+
+  #   - name: Restart containerd
+  #     service:
+  #       name: containerd
+  #       state: restarted
