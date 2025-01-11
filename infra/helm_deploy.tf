@@ -20,7 +20,8 @@ locals {
 }
 
 resource "aws_secretsmanager_secret" "jwt_secretkey" {
-  name = "${local.prefix_service_name}-jwt-secretkey"
+  name                    = "${local.prefix_service_name}-jwt-secretkey"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "jwt_secretkey" {
@@ -182,8 +183,8 @@ module "careerhub_review_crawler_helm_deploy" {
 
 
 resource "aws_secretsmanager_secret" "initial_admin_password" {
-  name = "${local.prefix_service_name}-opensearch-password"
-
+  name                    = "${local.prefix_service_name}-opensearch-password"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "initial_admin_password" {

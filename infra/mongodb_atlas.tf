@@ -56,7 +56,8 @@ module "mongodb_atlas" {
 }
 
 resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
-  name = "${local.prefix_service_name}-jobposting-mongodb-endpoint"
+  name                    = "${local.prefix_service_name}-jobposting-mongodb-endpoint"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "jobposting_mongodb_endpoint" {
@@ -65,7 +66,8 @@ resource "aws_secretsmanager_secret_version" "jobposting_mongodb_endpoint" {
 }
 
 resource "aws_secretsmanager_secret" "userinfo_mongodb_endpoint" {
-  name = "${local.prefix_service_name}-userinfo-mongodb-endpoint"
+  name                    = "${local.prefix_service_name}-userinfo-mongodb-endpoint"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "userinfo_mongodb_endpoint" {
@@ -74,7 +76,8 @@ resource "aws_secretsmanager_secret_version" "userinfo_mongodb_endpoint" {
 }
 
 resource "aws_secretsmanager_secret" "review_mongodb_endpoint" {
-  name = "${local.prefix_service_name}-review-mongodb-endpoint"
+  name                    = "${local.prefix_service_name}-review-mongodb-endpoint"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "review_mongodb_endpoint" {
@@ -83,7 +86,8 @@ resource "aws_secretsmanager_secret_version" "review_mongodb_endpoint" {
 }
 
 resource "aws_secretsmanager_secret" "username_secret" {
-  name = "${local.prefix_service_name}-mongo-username"
+  name                    = "${local.prefix_service_name}-mongo-username"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "username_secret" {
@@ -92,7 +96,8 @@ resource "aws_secretsmanager_secret_version" "username_secret" {
 }
 
 resource "aws_secretsmanager_secret" "password_secret" {
-  name = "${local.prefix_service_name}-mongo-password"
+  name                    = "${local.prefix_service_name}-mongo-password"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "password_secret" {
