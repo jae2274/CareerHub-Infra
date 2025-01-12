@@ -26,8 +26,38 @@ ${local.join_k8s_sh}
   }
 }
 
+terraform {
+  required_providers {
 
+    ansible = {
+      source  = "ansible/ansible"
+      version = "1.3.0"
+    }
+  }
+}
+provider "ansible" {
+}
 
+# resource "ansible_host" "worker_nodes" {
+#   for_each = aws_instance.workers
+
+#   name   = each.value.public_ip
+#   groups = ["worker_nodes"]
+
+#   variables = {
+#     ansible_ssh_private_key_file = var.ssh_private_key_path
+#   }
+# }
+
+# resource "ansible_playbook" "playbook" {
+#   playbook = "${path.module}/../install_k8s_ansible/test.yml"
+#   name     = "worker_nodes"
+#   groups   = ["worker_nodes"]
+# }
 output "worker_public_ips" {
   value = [for _, worker in aws_instance.workers : worker.public_ip]
 }
+
+# output "ansible_playbook_stdout" {
+#   value = ansible_playbook.playbook.ansible_playbook_stdout
+# }

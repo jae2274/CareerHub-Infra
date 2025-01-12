@@ -1,0 +1,7 @@
+---
+- name: Test ping
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ping all hosts
+      ping:
