@@ -56,6 +56,6 @@ output "worker_public_ips" {
   value = [for _, worker in aws_instance.workers : worker.public_ip]
 }
 
-output "inventory_content" {
-  value = module.install_k8s_ansible.inventory_content
-}
+# output "inventory_content" {
+#   value = module.install_k8s_ansible.inventory_content
+# }

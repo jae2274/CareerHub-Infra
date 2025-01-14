@@ -1,14 +1,29 @@
-- name: Download awscli
-  uri:
-    url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ (dpkg_arch.stdout == 'x86_64')|ternary('x86_64', 'aarch64') }}.zip"
-    dest: /tmp/awscliv2.zip
-    status_code: [200, 304]
-
-- name: Unzip awscli
-  unarchive:
-    remote_src: yes
-    src: /tmp/awscliv2.zip
-    dest: /tmp
-
-- name: Install awscli
-  command: /tmp/aws/install --update
+---
+- name: Install commands
+  hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Install jq
+      apt:
+        name: jq
+        state: present
+    - name: Install yq via snap
+      snap:
+        name: yq
+        state: present
+    - name: Get the architecture
+      shell: dpkg --print-architecture
+      register: dpkg_arch
+    - name: Download awscli
+      uri:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ (dpkg_arch.stdout == 'x86_64')|ternary('x86_64', 'aarch64') }}.zip"
+        dest: /tmp/awscliv2.zip
+        status_code: [200, 304]
+    - name: Unzip awscli
+      unarchive:
+        remote_src: yes
+        src: /tmp/awscliv2.zip
+        dest: /tmp
+    - name: Install awscli
+      command: /tmp/aws/install --update
