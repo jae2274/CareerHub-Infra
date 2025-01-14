@@ -77,7 +77,8 @@ module "worker_nodes" {
     # }
   }
 
-  ami = local.ami
+  ami                  = local.ami
+  ssh_private_key_path = var.ssh_private_key_path
 }
 
 # module "monitoring_nodes" {
@@ -128,3 +129,6 @@ output "kubeconfig_secret_id" {
   value = local.kubeconfig_secret_id
 }
 
+# output "ansible_playbook_stdout" {
+#   value = module.worker_nodes.ansible_playbook_stdout
+# }

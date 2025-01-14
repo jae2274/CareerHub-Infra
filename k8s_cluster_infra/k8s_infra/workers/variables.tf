@@ -57,6 +57,9 @@ variable "volume_gb_size" {
   type    = number
   default = 8
 }
+variable "ssh_private_key_path" {
+  type = string
+}
 
 
 locals {

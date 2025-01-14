@@ -1,7 +1,8 @@
 ---
 - name: Test ping
-  hosts: all
+  hosts: worker_nodes
   become: yes
+  gather_facts: no
   tasks:
     - name: Ping all hosts
       ping:
