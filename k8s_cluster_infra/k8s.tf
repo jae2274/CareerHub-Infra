@@ -81,6 +81,9 @@ module "worker_nodes" {
   ssh_private_key_path = var.ssh_private_key_path
 }
 
+output "inventory_content" {
+  value = module.worker_nodes.inventory_content
+}
 # module "monitoring_nodes" {
 #   depends_on = [module.k8s_infra]
 

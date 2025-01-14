@@ -36,43 +36,17 @@ terraform {
   }
 }
 
-provider "ansible" {}
+module "install_k8s_ansible" {
+  source = "../install_k8s_ansible"
 
-locals {
-  groups = {
-    "worker_nodes" : {
-      hosts = [for _, worker in aws_instance.workers : {
+  host_groups = {
+    "worker_nodes" = [
+      for _, worker in aws_instance.workers : {
         name                         = worker.public_ip
         ansible_user                 = "ubuntu"
         ansible_ssh_private_key_file = var.ssh_private_key_path
-      }]
-    }
-  }
-
-  intentory_temp_path = "${path.module}/../install_k8s_ansible/inventory.tpl"
-  inventory_path      = "${path.module}/../install_k8s_ansible/inventory.ini"
-  playbook_path       = "${path.module}/../install_k8s_ansible/test.yml"
-}
-
-
-resource "local_file" "pve_inventory" {
-  content = templatefile(local.intentory_temp_path, {
-    groups = local.groups
-  })
-
-  filename = local.inventory_path
-}
-
-resource "null_resource" "pve_maintenance_playbook" {
-  depends_on = [local_file.pve_inventory]
-  triggers = {
-    # SHA256 hash of the file to detect changes
-    playbook_hash = filesha256(local.playbook_path)
-    groups_hash   = jsonencode(local.groups)
-  }
-
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ${local.inventory_path} ${local.playbook_path}"
+      }
+    ]
   }
 }
 
@@ -80,6 +54,6 @@ output "worker_public_ips" {
   value = [for _, worker in aws_instance.workers : worker.public_ip]
 }
 
-# output "ansible_playbook_stdout" {
-#   value = ansible_playbook.playbook.ansible_playbook_stdout
-# }
+output "inventory_content" {
+  value = module.install_k8s_ansible.inventory_content
+}

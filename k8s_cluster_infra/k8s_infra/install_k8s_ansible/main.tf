@@ -1,22 +1,35 @@
+locals {
+
+  intentory_temp_path = "${path.module}/inventory.tpl"
+  inventory_path      = "${path.module}/inventory.ini"
+  playbook_path       = "${path.module}/test.yml"
+
+  inventory_content = templatefile(local.intentory_temp_path, {
+    groups = var.host_groups
+  })
+}
 
 
-resource "ansible_host" "worker_nodes" {
-  for_each = var.target_nodes
+resource "null_resource" "pve_maintenance_playbook" {
+  triggers = {
+    # SHA256 hash of the file to detect changes
+    playbook_hash = sha256(local.inventory_content)
+  }
 
-  name   = each.value
-  groups = ["worker_nodes"]
+  provisioner "local-exec" {
+    command = <<EOT
+    
+cat <<EOF | tee ${local.inventory_path} > /dev/null
+${local.inventory_content}
+EOF
 
-  variables = {
-    ansible_ssh_private_key_file = var.ssh_private_key_path
+ansible-playbook -i ${local.inventory_path} ${local.playbook_path}
+
+rm -f ${local.inventory_path}
+    EOT
   }
 }
 
-resource "ansible_playbook" "playbook" {
-  playbook = "${path.module}/test.yml"
-  name     = "worker_nodes"
-  groups   = ["worker_nodes"]
-}
-
-output "ansible_playbook_stdout" {
-  value = ansible_playbook.playbook.ansible_playbook_stdout
+output "inventory_content" {
+  value = local.inventory_content
 }
