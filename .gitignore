@@ -168,3 +168,4 @@ terraform.rc
 **/.DS_Store
 *_chart.zip
 memo*
+*.log

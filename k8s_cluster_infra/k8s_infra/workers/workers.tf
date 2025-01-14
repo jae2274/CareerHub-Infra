@@ -39,6 +39,8 @@ terraform {
 module "install_k8s_ansible" {
   source = "../install_k8s_ansible"
 
+  group_name = var.node_group_name
+
   host_groups = {
     "worker_nodes" = [
       for _, worker in aws_instance.workers : {
