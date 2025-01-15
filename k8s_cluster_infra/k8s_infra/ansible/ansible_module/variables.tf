@@ -21,6 +21,13 @@ variable "host_groups" {
   )
 }
 
+variable "ansible_vars" {
+  type = any
+  default = {
+
+  }
+}
+
 variable "playbook_path" {
   description = "Path to the playbook file"
   type        = string

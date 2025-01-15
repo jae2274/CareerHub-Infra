@@ -87,41 +87,42 @@ module "worker_nodes" {
 # output "inventory_content" {
 #   value = module.worker_nodes.inventory_content
 # }
-# module "monitoring_nodes" {
-#   depends_on = [module.k8s_infra]
+module "monitoring_nodes" {
+  depends_on = [module.k8s_infra]
+  source     = "./k8s_infra/workers"
 
-#   source = "./k8s_infra/workers"
+  node_group_name = "monitoring"
+  region          = local.region
+  vpc_id          = local.vpc_id
+  cluster_name    = local.cluster_name
+  key_name        = aws_key_pair.k8s_keypair.key_name
 
-#   node_group_name = "monitoring"
-#   vpc_id          = local.vpc_id
-#   cluster_name    = local.cluster_name
-#   key_name        = aws_key_pair.k8s_keypair.key_name
+  common_cluster_sg_id = local.common_cluster_sg_id
+  master_ip            = local.master_private_ip
 
-#   common_cluster_sg_id = local.common_cluster_sg_id
-#   master_ip            = local.master_private_ip
-#   master_private_key   = tls_private_key.k8s_private_key.private_key_pem
-#   instance_type        = "t4g.medium"
+  instance_type = "t4g.medium"
 
-#   volume_gb_size = 32
+  volume_gb_size = 32
 
-#   labels = {
-#     "usage" = "monitoring"
-#   }
+  labels = {
+    "usage" = "monitoring"
+  }
 
-#   taints = [{
-#     key    = "usage"
-#     value  = "monitoring"
-#     effect = "PreferNoSchedule"
-#   }]
+  taints = [{
+    key    = "usage"
+    value  = "monitoring"
+    effect = "PreferNoSchedule"
+  }]
 
-#   workers = {
-#     "monitoring" = {
-#       subnet_id = local.public_subnets[local.public_subnet_key_3].id
-#     }
-#   }
+  workers = {
+    "monitoring" = {
+      subnet_id = local.public_subnets[local.public_subnet_key_3].id
+    }
+  }
 
-#   ami = local.ami
-# }
+  ami                  = local.ami
+  ssh_private_key_path = var.ssh_private_key_path
+}
 
 output "worker_ips" {
   value = module.worker_nodes.worker_public_ips

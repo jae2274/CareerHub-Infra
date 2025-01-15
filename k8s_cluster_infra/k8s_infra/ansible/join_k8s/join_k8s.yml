@@ -10,6 +10,7 @@
     - name: Save join command globally
       set_fact:
         global_join_command: "{{ k8s_join_command.stdout }}"
+      delegate_to: localhost
 - name: Join worker nodes to the cluster
   hosts: worker_nodes
   gather_facts: no

@@ -83,6 +83,31 @@ module "join_k8s" {
   }
 }
 
+module "set_taints_labels" {
+  source     = "../ansible/set_taints_labels"
+  group_name = var.node_group_name
+
+  host_groups = {
+    "master" = [
+      {
+        name                         = var.master_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+    "worker_nodes" = [
+      for _, worker in aws_instance.workers : {
+        name                         = worker.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+
+  labels = var.labels
+  taints = var.taints
+}
+
 output "worker_public_ips" {
   value = [for _, worker in aws_instance.workers : worker.public_ip]
 }
