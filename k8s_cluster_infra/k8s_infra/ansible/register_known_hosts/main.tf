@@ -1,0 +1,17 @@
+locals {
+
+  playbook_path = "${path.module}/register_known_hosts.yml"
+
+  log_dir_path = "${path.root}/logs"
+}
+
+
+
+module "set_kernel_modules" {
+  source       = "../ansible_module"
+  log_dir_path = local.log_dir_path
+  playing_name = "register_known_hosts_${var.group_name}"
+
+  host_groups   = var.host_groups
+  playbook_path = "${path.module}/register_known_hosts.yml"
+}

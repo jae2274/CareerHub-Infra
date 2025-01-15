@@ -55,6 +55,7 @@ module "worker_nodes" {
   source     = "./k8s_infra/workers"
 
   node_group_name = "app"
+  region          = local.region
   vpc_id          = local.vpc_id
   cluster_name    = local.cluster_name
   key_name        = aws_key_pair.k8s_keypair.key_name

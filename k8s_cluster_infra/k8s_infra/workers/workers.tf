@@ -8,13 +8,6 @@ resource "aws_instance" "workers" {
   subnet_id = each.value.subnet_id
   key_name  = var.key_name
 
-  user_data              = <<EOT
-#!/bin/bash
-
-${local.install_k8s_sh}
-
-${local.join_k8s_sh}
-  EOT
   vpc_security_group_ids = [var.common_cluster_sg_id, aws_security_group.k8s_worker_sg.id]
 
   tags = {
@@ -24,6 +17,12 @@ ${local.join_k8s_sh}
   root_block_device {
     volume_size = var.volume_gb_size
   }
+}
+
+resource "null_resource" "wait_for_workers" {
+  for_each = aws_instance.workers
+
+  provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${each.value.id}" }
 }
 
 terraform {
@@ -36,8 +35,8 @@ terraform {
   }
 }
 
-module "install_k8s_ansible" {
-  source = "../install_k8s_ansible"
+module "register_known_hosts" {
+  source = "../ansible/register_known_hosts"
 
   group_name = var.node_group_name
 
@@ -50,6 +49,26 @@ module "install_k8s_ansible" {
       }
     ]
   }
+
+  depends_on = [null_resource.wait_for_workers]
+}
+
+module "install_k8s_ansible" {
+  source = "../ansible/install_k8s"
+
+  group_name = var.node_group_name
+
+  host_groups = {
+    "worker_nodes" = [
+      for _, worker in aws_instance.workers : {
+        name                         = worker.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+
+  depends_on = [module.register_known_hosts]
 }
 
 output "worker_public_ips" {
