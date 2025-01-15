@@ -1,0 +1,19 @@
+---
+- name: Generate and use token across hosts
+  hosts: master
+  gather_facts: no
+  tasks:
+    - name: Generate join command on master
+      command: kubeadm token create --print-join-command --ttl 1h
+      register: k8s_join_command
+      run_once: yes
+    - name: Save join command globally
+      set_fact:
+        global_join_command: "{{ k8s_join_command.stdout }}"
+- name: Join worker nodes to the cluster
+  hosts: worker_nodes
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: Use join command from master
+      command: "{{ hostvars[groups['master'][0]]['global_join_command'] }}"

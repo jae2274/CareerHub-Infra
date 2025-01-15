@@ -25,6 +25,7 @@ resource "aws_secretsmanager_secret_version" "k8s_node_private_key_version" {
 module "k8s_infra" {
   source = "./k8s_infra/cluster"
 
+  region       = local.region
   vpc_id       = local.vpc_id
   cluster_name = local.cluster_name
 
@@ -37,8 +38,9 @@ module "k8s_infra" {
 
   ami      = local.ami
   key_name = aws_key_pair.k8s_keypair.key_name
-}
 
+  ssh_private_key_path = var.ssh_private_key_path
+}
 
 locals {
   master_private_ip    = module.k8s_infra.master_private_ip
@@ -61,9 +63,9 @@ module "worker_nodes" {
   key_name        = aws_key_pair.k8s_keypair.key_name
 
   common_cluster_sg_id = local.common_cluster_sg_id
-  master_ip            = local.master_private_ip
-  master_private_key   = file(var.ssh_private_key_path)
-  instance_type        = "t4g.small"
+  master_ip            = local.master_public_ip
+
+  instance_type = "t4g.small"
 
   labels = {
     "usage" = "app"

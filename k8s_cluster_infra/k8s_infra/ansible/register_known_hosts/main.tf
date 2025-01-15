@@ -7,7 +7,7 @@ locals {
 
 
 
-module "set_kernel_modules" {
+module "play_ansible" {
   source       = "../ansible_module"
   log_dir_path = local.log_dir_path
   playing_name = "register_known_hosts_${var.group_name}"

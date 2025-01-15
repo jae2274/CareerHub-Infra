@@ -26,9 +26,6 @@ variable "master_ip" {
   type = string
 }
 
-variable "master_private_key" {
-  type = string
-}
 
 variable "instance_type" {
   type = string
@@ -63,16 +60,4 @@ variable "volume_gb_size" {
 }
 variable "ssh_private_key_path" {
   type = string
-}
-
-
-locals {
-  install_k8s_sh = file("${path.module}/../init_scripts/install_k8s.sh")
-
-  join_k8s_sh = templatefile("${path.module}/init_scripts/join_k8s.sh", {
-    master_ip          = var.master_ip,
-    master_private_key = var.master_private_key
-    labels             = var.labels
-    taints             = var.taints
-  })
 }

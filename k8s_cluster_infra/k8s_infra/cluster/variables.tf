@@ -1,3 +1,7 @@
+variable "region" {
+  type = string
+}
+
 variable "vpc_id" {
   type = string
 }
@@ -25,6 +29,10 @@ variable "ecrs" {
 }
 
 variable "ami" {
+  type = string
+}
+
+variable "ssh_private_key_path" {
   type = string
 }
 
