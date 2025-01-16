@@ -3,6 +3,11 @@ variable "log_dir_path" {
   type        = string
 }
 
+variable "group_name" {
+  description = "Name of the target"
+  type        = string
+}
+
 variable "playing_name" {
   description = "What to play"
   type        = string

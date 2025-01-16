@@ -8,6 +8,8 @@ locals {
     groups = var.host_groups
   })
   vars_content = yamlencode(var.ansible_vars)
+
+  log_dir_path = "${var.log_dir_path}/${var.group_name}"
 }
 
 resource "null_resource" "pve_maintenance_playbook" {
@@ -29,12 +31,12 @@ cat <<EOF | tee ${local.vars_path} > /dev/null
 ${local.vars_content}
 EOF
 
-mkdir -p ${var.log_dir_path}
+mkdir -p ${local.log_dir_path}
     EOT
   }
 
   provisioner "local-exec" {
-    command    = "ansible-playbook -i ${local.inventory_path} --extra-vars \"@${local.vars_path}\" ${var.playbook_path} > ${var.log_dir_path}/${replace(var.playing_name, " ", "_")}.log 2>&1"
+    command    = "ansible-playbook -i ${local.inventory_path} --extra-vars \"@${local.vars_path}\" ${var.playbook_path} > ${local.log_dir_path}/${replace(var.playing_name, " ", "_")}.log 2>&1"
     on_failure = continue
   }
 

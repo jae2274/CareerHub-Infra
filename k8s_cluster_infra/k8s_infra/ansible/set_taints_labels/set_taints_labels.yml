@@ -10,7 +10,7 @@
         - "{{ labels }}"
       delegate_to: "{{ groups['master'][0] }}"
     - name: Set taints
-      command: kubectl taint nodes {{ hostname.stdout }} {{ item.key }}={{ item.value }}:{{ item.effect }}
+      command: kubectl taint nodes {{ hostname.stdout }} {{ item.key }}={{ item.value }}:{{ item.effect }} --overwrite
       with_items:
         - "{{ taints }}"
       delegate_to: "{{ groups['master'][0] }}"
