@@ -20,6 +20,10 @@
         url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ (dpkg_arch.stdout == 'x86_64')|ternary('x86_64', 'aarch64') }}.zip"
         dest: /tmp/awscliv2.zip
         status_code: [200, 304]
+    - name: Download unzip
+      apt:
+        name: unzip
+        state: present
     - name: Unzip awscli
       unarchive:
         remote_src: yes

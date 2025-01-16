@@ -32,3 +32,7 @@ variable "taints" {
 
   default = []
 }
+
+variable "log_dir_path" {
+  type = string
+}

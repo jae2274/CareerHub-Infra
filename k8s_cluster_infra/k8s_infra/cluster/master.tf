@@ -65,7 +65,14 @@ ${local.set_secret_sh}
   }
 }
 
+resource "aws_eip" "master_public_ip" {
+  domain = "vpc"
+}
 
+resource "aws_eip_association" "master_public_ip" {
+  instance_id   = aws_instance.master_instance.id
+  allocation_id = aws_eip.master_public_ip.id
+}
 
 resource "null_resource" "wait_for_ok" {
   provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${aws_instance.master_instance.id}" }
@@ -79,7 +86,7 @@ module "register_known_hosts" {
   host_groups = {
     "master" = [
       {
-        name                         = aws_instance.master_instance.public_ip
+        name                         = aws_eip.master_public_ip.public_ip
         ansible_user                 = "ubuntu"
         ansible_ssh_private_key_file = var.ssh_private_key_path
       }
@@ -87,17 +94,12 @@ module "register_known_hosts" {
   }
 
   depends_on = [null_resource.wait_for_ok]
+
+  log_dir_path = var.log_dir_path
 }
 
 
-resource "aws_eip" "master_public_ip" {
-  domain = "vpc"
-}
 
-resource "aws_eip_association" "master_public_ip" {
-  instance_id   = aws_instance.master_instance.id
-  allocation_id = aws_eip.master_public_ip.id
-}
 
 output "master_public_ip" {
   value = aws_eip.master_public_ip.public_ip

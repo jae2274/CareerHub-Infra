@@ -40,7 +40,8 @@ module "register_known_hosts" {
     ]
   }
 
-  depends_on = [null_resource.wait_for_workers]
+  log_dir_path = var.log_dir_path
+  depends_on   = [null_resource.wait_for_workers]
 }
 
 module "install_k8s_ansible" {
@@ -58,7 +59,8 @@ module "install_k8s_ansible" {
     ]
   }
 
-  depends_on = [module.register_known_hosts]
+  log_dir_path = var.log_dir_path
+  depends_on   = [module.register_known_hosts]
 }
 
 module "join_k8s" {
@@ -81,6 +83,9 @@ module "join_k8s" {
       }
     ]
   }
+
+  log_dir_path = var.log_dir_path
+  depends_on   = [module.install_k8s_ansible]
 }
 
 module "set_taints_labels" {
@@ -106,6 +111,9 @@ module "set_taints_labels" {
 
   labels = var.labels
   taints = var.taints
+
+  log_dir_path = var.log_dir_path
+  depends_on   = [module.join_k8s]
 }
 
 output "worker_public_ips" {

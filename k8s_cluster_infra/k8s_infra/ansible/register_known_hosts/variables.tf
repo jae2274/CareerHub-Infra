@@ -15,3 +15,7 @@ variable "host_groups" {
     )
   )
 }
+
+variable "log_dir_path" {
+  type = string
+}

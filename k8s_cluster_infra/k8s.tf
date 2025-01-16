@@ -4,6 +4,8 @@ locals {
   cluster_name = local.prefix_service_name
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
   ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${local.region}.amazonaws.com"
+
+  log_dir_path = "${path.root}/logs/${timestamp()}"
 }
 
 
@@ -21,6 +23,8 @@ resource "aws_secretsmanager_secret_version" "k8s_node_private_key_version" {
   secret_id     = aws_secretsmanager_secret.k8s_node_private_key.id
   secret_string = file(var.ssh_private_key_path)
 }
+
+
 
 module "k8s_infra" {
   source = "./k8s_infra/cluster"
@@ -40,6 +44,8 @@ module "k8s_infra" {
   key_name = aws_key_pair.k8s_keypair.key_name
 
   ssh_private_key_path = var.ssh_private_key_path
+
+  log_dir_path = local.log_dir_path
 }
 
 locals {
@@ -53,8 +59,7 @@ locals {
 
 
 module "worker_nodes" {
-  depends_on = [module.k8s_infra]
-  source     = "./k8s_infra/workers"
+  source = "./k8s_infra/workers"
 
   node_group_name = "app"
   region          = local.region
@@ -82,14 +87,15 @@ module "worker_nodes" {
 
   ami                  = local.ami
   ssh_private_key_path = var.ssh_private_key_path
+  log_dir_path         = local.log_dir_path
+  depends_on           = [module.k8s_infra]
 }
 
 # output "inventory_content" {
 #   value = module.worker_nodes.inventory_content
 # }
 module "monitoring_nodes" {
-  depends_on = [module.k8s_infra]
-  source     = "./k8s_infra/workers"
+  source = "./k8s_infra/workers"
 
   node_group_name = "monitoring"
   region          = local.region
@@ -98,7 +104,7 @@ module "monitoring_nodes" {
   key_name        = aws_key_pair.k8s_keypair.key_name
 
   common_cluster_sg_id = local.common_cluster_sg_id
-  master_ip            = local.master_private_ip
+  master_ip            = local.master_public_ip
 
   instance_type = "t4g.medium"
 
@@ -122,6 +128,8 @@ module "monitoring_nodes" {
 
   ami                  = local.ami
   ssh_private_key_path = var.ssh_private_key_path
+  log_dir_path         = local.log_dir_path
+  depends_on           = [module.k8s_infra]
 }
 
 output "worker_ips" {

@@ -2,14 +2,13 @@ locals {
 
   playbook_path = "${path.module}/register_known_hosts.yml"
 
-  log_dir_path = "${path.root}/logs"
 }
 
 
 
 module "play_ansible" {
   source       = "../ansible_module"
-  log_dir_path = local.log_dir_path
+  log_dir_path = var.log_dir_path
   playing_name = "register_known_hosts_${var.group_name}"
 
   host_groups   = var.host_groups

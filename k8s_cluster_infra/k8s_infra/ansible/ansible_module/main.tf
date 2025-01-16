@@ -20,7 +20,6 @@ resource "null_resource" "pve_maintenance_playbook" {
 
   provisioner "local-exec" {
     command = <<EOT
-    
 cat <<EOF | tee ${local.inventory_path} > /dev/null
 ${local.inventory_content}
 EOF
@@ -31,8 +30,16 @@ ${local.vars_content}
 EOF
 
 mkdir -p ${var.log_dir_path}
-ansible-playbook -i ${local.inventory_path} --extra-vars "@${local.vars_path}" ${var.playbook_path} > ${var.log_dir_path}/${replace(var.playing_name, " ", "_")}.log 2>&1
+    EOT
+  }
 
+  provisioner "local-exec" {
+    command    = "ansible-playbook -i ${local.inventory_path} --extra-vars \"@${local.vars_path}\" ${var.playbook_path} > ${var.log_dir_path}/${replace(var.playing_name, " ", "_")}.log 2>&1"
+    on_failure = continue
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
 rm -f ${local.inventory_path}
 rm -f ${local.vars_path}
     EOT

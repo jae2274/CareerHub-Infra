@@ -61,3 +61,7 @@ variable "volume_gb_size" {
 variable "ssh_private_key_path" {
   type = string
 }
+
+variable "log_dir_path" {
+  type = string
+}
