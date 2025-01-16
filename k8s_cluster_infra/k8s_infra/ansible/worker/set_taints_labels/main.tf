@@ -7,7 +7,7 @@ locals {
 
 
 module "set_taints_labels" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
   group_name   = var.group_name
   playing_name = "set_taints_labels_${var.group_name}"

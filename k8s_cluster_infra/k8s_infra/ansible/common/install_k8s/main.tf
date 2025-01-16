@@ -7,7 +7,7 @@ locals {
 
 
 module "set_kernel_modules" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
   group_name   = var.group_name
   playing_name = "1_set_kernel_modules_${var.group_name}"
@@ -17,7 +17,7 @@ module "set_kernel_modules" {
 }
 
 module "install_docker" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
   group_name   = var.group_name
   playing_name = "2_install_docker_${var.group_name}"
@@ -29,7 +29,7 @@ module "install_docker" {
 }
 
 module "install_k8s" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
   group_name   = var.group_name
   playing_name = "3_install_k8s_${var.group_name}"
@@ -41,7 +41,7 @@ module "install_k8s" {
 }
 
 module "install_commands" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
   group_name   = var.group_name
   playing_name = "4_install_commands_${var.group_name}"

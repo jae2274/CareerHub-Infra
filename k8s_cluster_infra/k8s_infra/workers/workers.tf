@@ -26,7 +26,7 @@ resource "null_resource" "wait_for_workers" {
 }
 
 module "register_known_hosts" {
-  source = "../ansible/register_known_hosts"
+  source = "../ansible/common/register_known_hosts"
 
   group_name = var.node_group_name
 
@@ -45,7 +45,7 @@ module "register_known_hosts" {
 }
 
 module "install_k8s_ansible" {
-  source = "../ansible/install_k8s"
+  source = "../ansible/common/install_k8s"
 
   group_name = var.node_group_name
 
@@ -64,7 +64,7 @@ module "install_k8s_ansible" {
 }
 
 module "join_k8s" {
-  source     = "../ansible/join_k8s"
+  source     = "../ansible/worker/join_k8s"
   group_name = var.node_group_name
 
   host_groups = {
@@ -89,7 +89,7 @@ module "join_k8s" {
 }
 
 module "set_taints_labels" {
-  source     = "../ansible/set_taints_labels"
+  source     = "../ansible/worker/set_taints_labels"
   group_name = var.node_group_name
 
   host_groups = {

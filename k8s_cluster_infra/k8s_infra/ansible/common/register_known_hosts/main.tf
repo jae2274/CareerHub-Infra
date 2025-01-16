@@ -5,11 +5,11 @@ locals {
 }
 
 
- 
+
 module "play_ansible" {
-  source       = "../ansible_module"
+  source       = "../../ansible_module"
   log_dir_path = var.log_dir_path
-  group_name = var.group_name
+  group_name   = var.group_name
   playing_name = "register_known_hosts_${var.group_name}"
 
   host_groups   = var.host_groups

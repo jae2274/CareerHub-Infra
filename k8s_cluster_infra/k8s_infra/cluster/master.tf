@@ -79,7 +79,7 @@ resource "null_resource" "wait_for_ok" {
 }
 
 module "register_known_hosts" {
-  source = "../ansible/register_known_hosts"
+  source = "../ansible/common/register_known_hosts"
 
   group_name = "master"
 
