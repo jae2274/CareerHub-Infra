@@ -1,0 +1,8 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Add metrics-server repo
+      command: helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
+    - name: Update helm repo
+      command: helm upgrade metrics-server metrics-server/metrics-server --set args="{--kubelet-insecure-tls}" --namespace kube-metrics --install --create-namespace

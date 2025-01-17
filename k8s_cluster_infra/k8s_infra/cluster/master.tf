@@ -46,18 +46,6 @@ resource "aws_instance" "master_instance" {
 
   iam_instance_profile = aws_iam_instance_profile.iam_instance_profile.name
 
-  user_data = <<EOT
-#!/bin/bash
-
-${local.install_k8s_sh}
-
-${local.init_k8s_sh}
-
-${local.login_ecr_sh}
-
-${local.set_secret_sh}
-  EOT
-
   vpc_security_group_ids = [aws_security_group.k8s_master_sg.id, aws_security_group.k8s_node_sg.id]
 
   tags = {
@@ -98,7 +86,45 @@ module "register_known_hosts" {
   log_dir_path = var.log_dir_path
 }
 
+module "install_k8s" {
+  source = "../ansible/common/install_k8s"
 
+  group_name = "master"
+
+  host_groups = {
+    "master" = [
+      {
+        name                         = aws_eip.master_public_ip.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+
+
+
+  depends_on = [module.register_known_hosts]
+
+  log_dir_path = var.log_dir_path
+}
+
+module "init_k8s" {
+  source = "../ansible/master/init_k8s"
+
+  group_name = "master"
+  host_groups = {
+    "master" = [
+      {
+        name                         = aws_eip.master_public_ip.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+  depends_on = [module.install_k8s]
+
+  log_dir_path = var.log_dir_path
+}
 
 
 output "master_public_ip" {

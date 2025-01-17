@@ -20,9 +20,9 @@ resource "aws_instance" "workers" {
 }
 
 resource "null_resource" "wait_for_workers" {
-  for_each = aws_instance.workers
+  for_each = var.workers
 
-  provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${each.value.id}" }
+  provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${aws_instance.workers[each.key].id}" }
 }
 
 module "register_known_hosts" {

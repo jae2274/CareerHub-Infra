@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Check if sa default exists
+      command: kubectl get serviceaccount default
+      register: sa_default
+      ignore_errors: yes
+      run_once: true
+    - name: Create service account default
+      command: kubectl create serviceaccount default
+      when: sa_default.rc != 0
+      run_once: true

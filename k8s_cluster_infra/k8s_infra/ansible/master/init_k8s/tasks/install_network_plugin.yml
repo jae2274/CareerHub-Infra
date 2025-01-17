@@ -1,0 +1,7 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install network plugin
+      command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+      run_once: true

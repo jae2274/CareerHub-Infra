@@ -1,0 +1,36 @@
+---
+- name: Install k8s
+  hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Check if kubeadm init has already run
+      stat:
+        path: /etc/kubernetes/admin.conf
+      register: kubeadm_config
+    - name: Init kubeadm
+      command: kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-cert-extra-sans={{ ansible_host }}
+      run_once: true
+      when: not kubeadm_config.stat.exists
+    - name: mkdir .kube
+      file:
+        path: /root/.kube
+        state: directory
+        mode: '0755'
+      file:
+        path: /home/ubuntu/.kube
+        state: directory
+        mode: '0755'    
+    - name: Copy kube config
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /root/.kube/config
+        remote_src: yes
+        owner: root
+        mode: '0644'
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/ubuntu/.kube/config
+        remote_src: yes
+        owner: ubuntu
+        mode: '0644'

@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: Download helm
+      uri:
+        url: "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3"
+        dest: /tmp/get_helm.sh
+        status_code: [200, 304]
+    - name: Chmod helm
+      command: chmod +x /tmp/get_helm.sh
+    - name: Install helm
+      command: /tmp/get_helm.sh
