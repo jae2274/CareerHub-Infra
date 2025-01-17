@@ -25,25 +25,6 @@ resource "null_resource" "wait_for_workers" {
   provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${aws_instance.workers[each.key].id}" }
 }
 
-module "register_known_hosts" {
-  source = "../ansible/common/register_known_hosts"
-
-  group_name = var.node_group_name
-
-  host_groups = {
-    "worker_nodes" = [
-      for _, worker in aws_instance.workers : {
-        name                         = worker.public_ip
-        ansible_user                 = "ubuntu"
-        ansible_ssh_private_key_file = var.ssh_private_key_path
-      }
-    ]
-  }
-
-  log_dir_path = var.log_dir_path
-  depends_on   = [null_resource.wait_for_workers]
-}
-
 module "install_k8s_ansible" {
   source = "../ansible/common/install_k8s"
 
@@ -60,7 +41,7 @@ module "install_k8s_ansible" {
   }
 
   log_dir_path = var.log_dir_path
-  depends_on   = [module.register_known_hosts]
+  depends_on   = [null_resource.wait_for_workers]
 }
 
 module "join_k8s" {

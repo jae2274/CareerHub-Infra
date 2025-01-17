@@ -66,26 +66,6 @@ resource "null_resource" "wait_for_ok" {
   provisioner "local-exec" { command = "aws ec2 wait instance-status-ok --region ${var.region} --instance-ids ${aws_instance.master_instance.id}" }
 }
 
-module "register_known_hosts" {
-  source = "../ansible/common/register_known_hosts"
-
-  group_name = "master"
-
-  host_groups = {
-    "master" = [
-      {
-        name                         = aws_eip.master_public_ip.public_ip
-        ansible_user                 = "ubuntu"
-        ansible_ssh_private_key_file = var.ssh_private_key_path
-      }
-    ]
-  }
-
-  depends_on = [null_resource.wait_for_ok]
-
-  log_dir_path = var.log_dir_path
-}
-
 module "install_k8s" {
   source = "../ansible/common/install_k8s"
 
@@ -101,11 +81,9 @@ module "install_k8s" {
     ]
   }
 
-
-
-  depends_on = [module.register_known_hosts]
-
   log_dir_path = var.log_dir_path
+
+  depends_on = [null_resource.wait_for_ok]
 }
 
 module "init_k8s" {

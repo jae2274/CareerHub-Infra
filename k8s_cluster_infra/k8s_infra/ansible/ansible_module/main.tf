@@ -38,7 +38,7 @@ mkdir -p ${local.log_dir_path}
 
   provisioner "local-exec" {
     command = <<EOT
-    ansible-playbook -i ${local.inventory_path} --extra-vars "@${local.vars_path}" ${var.playbook_path} > ${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log 2>&1
+    ansible-playbook -i ${local.inventory_path} --extra-vars "@${local.vars_path}" ${var.playbook_path} > ${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log --ssh-extra-args="-o StrictHostKeyChecking=no" 2>&1
     ANSIBLE_EXIT_CODE=$?
 
     rm -f ${local.inventory_path}
