@@ -99,9 +99,9 @@ module "init_k8s" {
       }
     ]
   }
-  depends_on = [module.install_k8s]
 
   log_dir_path = var.log_dir_path
+  depends_on   = [module.install_k8s]
 }
 
 module "login_ecr" {
@@ -117,10 +117,29 @@ module "login_ecr" {
       }
     ]
   }
-  depends_on = [module.init_k8s]
 
   log_dir_path = var.log_dir_path
   ecrs         = var.ecrs
+  depends_on   = [module.init_k8s]
+}
+
+module "set_kubecfg_secret" {
+  source = "../ansible/master/set_kubecfg_secret"
+
+  group_name = "master"
+  host_groups = {
+    "master" = [
+      {
+        name                         = aws_eip.master_public_ip.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+
+  log_dir_path = var.log_dir_path
+  secret_id    = aws_secretsmanager_secret.kubeconfig.id
+  depends_on   = [module.init_k8s]
 }
 
 output "master_public_ip" {
