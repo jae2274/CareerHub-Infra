@@ -104,6 +104,24 @@ module "init_k8s" {
   log_dir_path = var.log_dir_path
 }
 
+module "login_ecr" {
+  source = "../ansible/master/login_ecr"
+
+  group_name = "master"
+  host_groups = {
+    "master" = [
+      {
+        name                         = aws_eip.master_public_ip.public_ip
+        ansible_user                 = "ubuntu"
+        ansible_ssh_private_key_file = var.ssh_private_key_path
+      }
+    ]
+  }
+  depends_on = [module.init_k8s]
+
+  log_dir_path = var.log_dir_path
+  ecrs         = var.ecrs
+}
 
 output "master_public_ip" {
   value = aws_eip.master_public_ip.public_ip

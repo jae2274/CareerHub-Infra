@@ -1,0 +1,23 @@
+---
+- name: Login to ECR
+  hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - name: move login_ecr.sh
+      copy:
+        src: "{{replace_ecr_token_sh_path}}"
+        dest: /etc/init.d/replace_ecr_token.sh
+        mode: 0755
+    - name: move check_namespaces.sh
+      copy:
+        src: "{{check_namespaces_sh_path}}"
+        dest: /etc/init.d/check_namespaces.sh
+        mode: 0755
+    - name: create cron job
+      copy:
+        dest: /etc/cron.d/cron_docker
+        content: |
+          * 0 * * * root /etc/init.d/replace_ecr_token.sh
+          * * * * * root /etc/init.d/check_namespaces.sh
+        mode: 0644

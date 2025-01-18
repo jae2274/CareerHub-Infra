@@ -12,25 +12,27 @@
       command: kubeadm init --pod-network-cidr=192.168.0.0/16 --apiserver-cert-extra-sans={{ ansible_host }}
       run_once: true
       when: not kubeadm_config.stat.exists
-    - name: mkdir .kube
+    - name: mkdir .kube for root
       file:
         path: /root/.kube
         state: directory
-        mode: '0755'
+        mode: "0755"
+    - name: mkdir .kube for ubuntu
       file:
         path: /home/ubuntu/.kube
         state: directory
-        mode: '0755'    
-    - name: Copy kube config
+        mode: "0755"
+    - name: Copy kube config to root
       copy:
         src: /etc/kubernetes/admin.conf
         dest: /root/.kube/config
         remote_src: yes
         owner: root
-        mode: '0644'
+        mode: "0644"
+    - name: Copy kube config to ubuntu
       copy:
         src: /etc/kubernetes/admin.conf
         dest: /home/ubuntu/.kube/config
         remote_src: yes
         owner: ubuntu
-        mode: '0644'
+        mode: "0644"

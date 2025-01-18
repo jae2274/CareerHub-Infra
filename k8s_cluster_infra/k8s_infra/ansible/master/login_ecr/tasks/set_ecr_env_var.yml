@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: no
+  become: yes
+  tasks:
+    - debug:
+        var: "{{ecr_list_json}}"
+    - name: set environment variables
+      lineinfile:
+        path: /etc/environment
+        line: "ECRS_JSON={{ecr_list_json}}"
