@@ -11,6 +11,7 @@ locals {
   vars_content = yamlencode(var.ansible_vars)
 
   log_dir_path = "${var.log_dir_path}/${var.group_name}"
+  log_path     = "${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log"
 }
 
 resource "null_resource" "pve_maintenance_playbook" {
@@ -38,7 +39,7 @@ mkdir -p ${local.log_dir_path}
 
   provisioner "local-exec" {
     command = <<EOT
-    ansible-playbook -i ${local.inventory_path} --extra-vars "@${local.vars_path}" ${var.playbook_path} > ${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log --ssh-extra-args="-o StrictHostKeyChecking=no" 2>&1
+    ansible-playbook -i ${local.inventory_path} --extra-vars "@${local.vars_path}" --ssh-extra-args="-o StrictHostKeyChecking=no" ${var.playbook_path} > ${local.log_path} 2>&1
     ANSIBLE_EXIT_CODE=$?
 
     rm -f ${local.inventory_path}

@@ -1,11 +1,3 @@
-locals {
-
-  playbook_path = "${path.module}/join_k8s.yml"
-
-}
-
-
-
 module "set_taints_labels" {
   source       = "../../ansible_module"
   log_dir_path = var.log_dir_path

@@ -19,6 +19,26 @@ resource "aws_instance" "workers" {
   }
 }
 
+module "remove_node_when_destroy" {
+  for_each = var.workers
+
+  source       = "../ansible/worker/remove_node"
+  group_name   = var.node_group_name
+  log_dir_path = var.log_dir_path
+
+  master = {
+    name                         = var.master_ip
+    ansible_user                 = "ubuntu"
+    ansible_ssh_private_key_file = var.ssh_private_key_path
+  }
+
+  target_node = {
+    name                         = aws_instance.workers[each.key].public_ip
+    ansible_user                 = "ubuntu"
+    ansible_ssh_private_key_file = var.ssh_private_key_path
+  }
+}
+
 resource "null_resource" "wait_for_workers" {
   for_each = var.workers
 

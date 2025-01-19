@@ -1,0 +1,12 @@
+---
+- hosts: target_node
+  tasks:
+    - name: Get the host name
+      command: echo {{ ansible_facts.hostname }}
+      register: hostname
+    - name: Drain the node
+      command: kubectl drain {{ hostname.stdout }} --ignore-daemonsets --delete-local-data
+      delegate_to: "{{ groups['master'][0] }}"
+    - name: Remove the node
+      command: kubectl delete node {{ hostname.stdout }}
+      delegate_to: "{{ groups['master'][0] }}"
