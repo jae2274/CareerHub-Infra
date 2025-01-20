@@ -4,26 +4,40 @@
   become: yes
   gather_facts: no
   tasks:
+    - name: Check if UFW is enabled
+      shell: ufw status
+      register: ufw_status
+      changed_when: false
     - name: Disable UFW
       shell: ufw disable
+      when: "'inactive' not in ufw_status.stdout"
+
     - name: Set kernel modules for Kubernetes
       copy:
         dest: /etc/modules-load.d/k8s.conf
         content: |
           overlay
           br_netfilter
+      register: set_kernel_modules
+    - name: Load kernel modules
+      shell: |
+        modprobe overlay
+        modprobe br_netfilter
+      when: set_kernel_modules.changed
 
+    - name: Check if any swap is active
+      command: swapon --show
+      register: swap_status
+      changed_when: false
+    - name: Disable swap if active
+      shell: swapoff -a
+      when: swap_status.stdout != ""
     - name: Disable swap
       lineinfile:
         path: /etc/fstab
         regexp: '\sswap\s'
         line: '#\g<0>'
         backrefs: yes
-
-    - name: Load kernel modules
-      shell: |
-        modprobe overlay
-        modprobe br_netfilter
 
     - name: Apply sysctl settings
       copy:
@@ -32,17 +46,18 @@
           net.bridge.bridge-nf-call-iptables  = 1
           net.bridge.bridge-nf-call-ip6tables = 1
           net.ipv4.ip_forward                 = 1
-
+      register: set_sysctl
     - name: Reload sysctl
       shell: sysctl --system
+      when: set_sysctl.changed
 
     - name: Install dependencies for Kubernetes
       apt:
         update_cache: yes
         name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - lsb-release
+          - apt-transport-https=2.0.10
+          - ca-certificates=20230311ubuntu0.20.04.1
+          - curl=7.68.0-1ubuntu2.20
+          - gnupg=2.2.19-3ubuntu2.2
+          - lsb-release=11.1.0ubuntu2
         state: present

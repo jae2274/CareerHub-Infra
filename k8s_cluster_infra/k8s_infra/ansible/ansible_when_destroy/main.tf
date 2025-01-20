@@ -26,6 +26,7 @@ resource "terraform_data" "pve_maintenance_playbook" {
     log_dir_path   = local.log_dir_path
     log_path       = "${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log"
     stop_if_failed = var.stop_if_failed
+    log_dir_path   = local.log_dir_path
   }
 
   provisioner "local-exec" {
@@ -39,6 +40,7 @@ cat <<EOF | tee ${self.input.vars_path} > /dev/null
 ${self.input.vars_content}
 EOF
 
+mkdir -p ${self.input.log_dir_path}
     EOT
 
     when = destroy
