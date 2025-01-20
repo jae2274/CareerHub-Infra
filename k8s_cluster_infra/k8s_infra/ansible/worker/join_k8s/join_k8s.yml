@@ -8,11 +8,13 @@
       register: k8s_join_command
       run_once: yes
       delegate_to: "{{ groups['master'][0] }}"
+      changed_when: false
     - name: Check if the node is already part of the cluster
       shell: kubectl get nodes | grep {{ ansible_facts.hostname }}
       register: node_status
       ignore_errors: yes
       delegate_to: "{{ groups['master'][0] }}"
+      changed_when: false
     - name: Use join command from master
       command: "{{ k8s_join_command.stdout }}"
       when: node_status is failed
