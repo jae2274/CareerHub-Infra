@@ -23,10 +23,10 @@ resource "terraform_data" "pve_maintenance_playbook" {
 
     playbook_path = var.playbook_path
 
-    log_dir_path   = local.log_dir_path
-    log_path       = "${local.log_dir_path}/${timestamp()}_${replace(var.playing_name, " ", "_")}.log"
+    log_dir_path = local.log_dir_path
+    log_file     = "${replace(var.playing_name, " ", "_")}.log"
+
     stop_if_failed = var.stop_if_failed
-    log_dir_path   = local.log_dir_path
   }
 
   provisioner "local-exec" {
@@ -48,7 +48,7 @@ mkdir -p ${self.input.log_dir_path}
 
   provisioner "local-exec" {
     command = <<EOT
-    ansible-playbook -i ${self.input.inventory_path} --extra-vars "@${self.input.vars_path}" --ssh-extra-args="-o StrictHostKeyChecking=no" ${self.input.playbook_path} > ${self.input.log_path} 2>&1
+    ansible-playbook -i ${self.input.inventory_path} --extra-vars "@${self.input.vars_path}" --ssh-extra-args="-o StrictHostKeyChecking=no" ${self.input.playbook_path} > ${self.input.log_dir_path}/$(date +"%Y%m%d_%H%M%S")_${self.input.log_file} 2>&1
     ANSIBLE_EXIT_CODE=$?
 
     rm -f ${self.input.inventory_path}

@@ -5,7 +5,7 @@ locals {
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
   ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${local.region}.amazonaws.com"
 
-  log_dir_path = "${path.root}/logs/${timestamp()}"
+  log_dir_path = "${path.root}/logs"
 }
 
 
@@ -80,9 +80,9 @@ module "worker_nodes" {
     "3" = {
       subnet_id = local.public_subnets[local.public_subnet_key_1].id
     }
-    # "4" = {
-    #   subnet_id = local.public_subnets[local.public_subnet_key_2].id
-    # }
+    "5" = {
+      subnet_id = local.public_subnets[local.public_subnet_key_2].id
+    }
   }
 
   ami                  = local.ami
