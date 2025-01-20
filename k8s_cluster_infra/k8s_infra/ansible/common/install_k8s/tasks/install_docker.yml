@@ -4,28 +4,23 @@
   become: yes
   gather_facts: no
   tasks:
-    - name: Install dependencies for Docker
-      apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - lsb-release
-          - net-tools
-        state: present
-
+    - name: Check if Docker GPG key exists
+      stat:
+        path: /usr/share/keyrings/docker-archive-keyring.gpg
+      register: gpg_key_status
     - name: Add Docker GPG key
-      shell: |
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg --yes
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg --yes
+      when: not gpg_key_status.stat.exists
 
     - name: Get the architecture
       shell: dpkg --print-architecture
       register: dpkg_arch
+      changed_when: false
 
     - name: Get the release codename
       shell: lsb_release -cs
       register: lsb_release
+      changed_when: false
 
     - name: Add Docker repository
       copy:
@@ -36,11 +31,12 @@
     - name: Install Docker
       apt:
         name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
+          - docker-ce=5:27.5.0-1~ubuntu.20.04~focal
+          - docker-ce-cli=5:27.5.0-1~ubuntu.20.04~focal
+          - containerd.io=1.7.25-1
         state: present
         update_cache: yes
+      register: install_docker
 
     - name: Configure Docker daemon
       copy:
@@ -49,11 +45,15 @@
           {
               "data-root": "/data/docker"
           }
+      register: configure_docker_daemon
 
     - name: Reload Docker daemon
       systemd:
         daemon_reload: yes
+      when: configure_docker_daemon.changed or install_docker.changed
+      register: reload_docker_daemon
     - name: Restart Docker
       systemd:
         name: docker
         state: restarted
+      when: reload_docker_daemon.changed
