@@ -1,20 +1,18 @@
 ---
-- name: Generate and use token across hosts
-  hosts: master
-  gather_facts: no
+- name: Join worker nodes to the cluster
+  hosts: worker_nodes
+  become: yes
   tasks:
     - name: Generate join command on master
       command: kubeadm token create --print-join-command --ttl 1h
       register: k8s_join_command
       run_once: yes
-    - name: Save join command globally
-      set_fact:
-        global_join_command: "{{ k8s_join_command.stdout }}"
-      delegate_to: localhost
-- name: Join worker nodes to the cluster
-  hosts: worker_nodes
-  gather_facts: no
-  become: yes
-  tasks:
+      delegate_to: "{{ groups['master'][0] }}"
+    - name: Check if the node is already part of the cluster
+      shell: kubectl get nodes | grep {{ ansible_facts.hostname }}
+      register: node_status
+      ignore_errors: yes
+      delegate_to: "{{ groups['master'][0] }}"
     - name: Use join command from master
-      command: "{{ hostvars[groups['master'][0]]['global_join_command'] }}"
+      command: "{{ k8s_join_command.stdout }}"
+      when: node_status is failed
