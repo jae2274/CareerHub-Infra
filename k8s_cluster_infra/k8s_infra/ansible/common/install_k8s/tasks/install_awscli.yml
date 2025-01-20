@@ -6,7 +6,9 @@
   tasks:
     - name: Install jq
       apt:
-        name: jq
+        name:
+          - jq=1.6-1ubuntu0.20.04.1
+          - unzip
         state: present
     - name: Install yq via snap
       snap:
@@ -15,19 +17,25 @@
     - name: Get the architecture
       shell: dpkg --print-architecture
       register: dpkg_arch
+      changed_when: false
+    - name: Check if awscli is already installed
+      command: aws --version
+      register: aws_version_check
+      ignore_errors: yes
+      changed_when: false
+
     - name: Download awscli
       uri:
         url: "https://awscli.amazonaws.com/awscli-exe-linux-{{ (dpkg_arch.stdout == 'x86_64')|ternary('x86_64', 'aarch64') }}.zip"
         dest: /tmp/awscliv2.zip
         status_code: [200, 304]
-    - name: Download unzip
-      apt:
-        name: unzip
-        state: present
+      when: aws_version_check.failed
     - name: Unzip awscli
       unarchive:
         remote_src: yes
         src: /tmp/awscliv2.zip
         dest: /tmp
+      when: aws_version_check.failed
     - name: Install awscli
       command: /tmp/aws/install --update
+      when: aws_version_check.failed
