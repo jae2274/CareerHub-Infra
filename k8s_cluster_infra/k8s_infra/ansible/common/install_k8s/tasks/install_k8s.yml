@@ -4,10 +4,18 @@
   become: yes
   gather_facts: no
   tasks:
+    - name: Make dir /etc/apt/keyrings
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+    - name: Check if Kubernetes GPG key exists
+      stat:
+        path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      register: gpg_key_status
     - name: Add Kubernetes GPG key and repository
-      shell: |
-        mkdir -p -m 755 /etc/apt/keyrings
-        curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg --yes
+      shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg --yes
+      when: not gpg_key_status.stat.exists
 
     - name: Add Kubernetes repository
       copy:
@@ -18,9 +26,9 @@
     - name: Install Kubernetes components
       apt:
         name:
-          - kubelet
-          - kubeadm
-          - kubectl
+          - kubelet=1.29.13-1.1
+          - kubeadm=1.29.13-1.1
+          - kubectl=1.29.13-1.1
         state: present
         update_cache: yes
 
@@ -28,8 +36,10 @@
       file:
         path: /etc/containerd/config.toml
         state: absent
+      register: remove_containerd_config
 
     - name: Restart containerd
       systemd:
         name: containerd
         state: restarted
+      when: remove_containerd_config.changed
