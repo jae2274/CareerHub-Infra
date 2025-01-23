@@ -80,7 +80,7 @@ module "worker_nodes" {
     "3" = {
       subnet_id = local.public_subnets[local.public_subnet_key_1].id
     }
-    "5" = {
+    "4" = {
       subnet_id = local.public_subnets[local.public_subnet_key_2].id
     }
   }
