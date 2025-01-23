@@ -72,16 +72,9 @@ resource "mongodbatlas_database_user" "admin_db_user" {
 
 }
 
-
-
-resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
-  count = length(var.access_ip_list)
-
-  project_id = mongodbatlas_project.project.id
-  cidr_block = "${var.access_ip_list[count.index]}/32"
-  comment    = "Access from ${var.access_ip_list[count.index]}"
+output "mongodb_project_id" {
+  value = mongodbatlas_project.project.id
 }
-
 
 output "public_endpoint" {
   value = { for key, mongodb in mongodbatlas_serverless_instance.mongodb_serverless : key => mongodb.connection_strings_standard_srv }

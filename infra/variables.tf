@@ -11,13 +11,6 @@ variable "atlas_private_key" {
   type = string
 }
 
-variable "admin_db_username" {
-  type = string
-}
-
-variable "admin_db_password" {
-  type = string
-}
 
 variable "mysql_db_name" {
   type = string

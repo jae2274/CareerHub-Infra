@@ -1,6 +1,6 @@
 provider "mongodbatlas" {
-  public_key  = var.atlas_key.public_key
-  private_key = var.atlas_key.private_key
+  public_key  = var.atlas_public_key
+  private_key = var.atlas_private_key
 }
 
 
@@ -25,34 +25,12 @@ resource "aws_security_group" "mongodb_security_group" {
   }
 }
 
-locals {
-  jobposting_db = "${local.prefix_service_name}-jobposting"
-  userinfo_db   = "${local.prefix_service_name}-userinfo"
-  review_db     = "${local.prefix_service_name}-review"
-}
+resource "mongodbatlas_project_ip_access_list" "ip_access_list" {
+  count = length(local.worker_ips)
 
-module "mongodb_atlas" {
-  source = "./mongodb_atlas"
-
-  mongodb_region = local.region
-  project_name   = "${local.prefix_service_name}-project"
-  access_ip_list = local.worker_ips
-
-  admin_db_user = {
-    username = var.admin_db_username
-    password = var.admin_db_password
-  }
-
-  atlas_key = {
-    public_key  = var.atlas_public_key
-    private_key = var.atlas_private_key
-  }
-
-  serverless_databases = [local.jobposting_db, local.userinfo_db, local.review_db]
-
-  tags = {
-    env = local.env
-  }
+  project_id = local.mongodb_project_id
+  cidr_block = "${local.worker_ips[count.index]}/32"
+  comment    = "Access from ${local.worker_ips[count.index]}"
 }
 
 resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
@@ -62,7 +40,7 @@ resource "aws_secretsmanager_secret" "jobposting_mongodb_endpoint" {
 
 resource "aws_secretsmanager_secret_version" "jobposting_mongodb_endpoint" {
   secret_id     = aws_secretsmanager_secret.jobposting_mongodb_endpoint.id
-  secret_string = module.mongodb_atlas.public_endpoint[local.jobposting_db]
+  secret_string = local.jobposting_mongodb_endpoint
 }
 
 resource "aws_secretsmanager_secret" "userinfo_mongodb_endpoint" {
@@ -72,7 +50,7 @@ resource "aws_secretsmanager_secret" "userinfo_mongodb_endpoint" {
 
 resource "aws_secretsmanager_secret_version" "userinfo_mongodb_endpoint" {
   secret_id     = aws_secretsmanager_secret.userinfo_mongodb_endpoint.id
-  secret_string = module.mongodb_atlas.public_endpoint[local.userinfo_db]
+  secret_string = local.userinfo_mongodb_endpoint
 }
 
 resource "aws_secretsmanager_secret" "review_mongodb_endpoint" {
@@ -82,34 +60,13 @@ resource "aws_secretsmanager_secret" "review_mongodb_endpoint" {
 
 resource "aws_secretsmanager_secret_version" "review_mongodb_endpoint" {
   secret_id     = aws_secretsmanager_secret.review_mongodb_endpoint.id
-  secret_string = module.mongodb_atlas.public_endpoint[local.review_db]
+  secret_string = local.review_mongodb_endpoint
 }
 
-resource "aws_secretsmanager_secret" "username_secret" {
-  name                    = "${local.prefix_service_name}-mongo-username"
-  recovery_window_in_days = 0
-}
 
-resource "aws_secretsmanager_secret_version" "username_secret" {
-  secret_id     = aws_secretsmanager_secret.username_secret.id
-  secret_string = var.admin_db_username
-}
-
-resource "aws_secretsmanager_secret" "password_secret" {
-  name                    = "${local.prefix_service_name}-mongo-password"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "password_secret" {
-  secret_id     = aws_secretsmanager_secret.password_secret.id
-  secret_string = var.admin_db_password
-}
 
 locals {
   jobposting_mongodb_endpoint_secret_id = aws_secretsmanager_secret.jobposting_mongodb_endpoint.name
   userinfo_mongodb_endpoint_secret_id   = aws_secretsmanager_secret.userinfo_mongodb_endpoint.name
   review_mongodb_endpoint_secret_id     = aws_secretsmanager_secret.review_mongodb_endpoint.name
-
-  mongodb_username_secret_id = aws_secretsmanager_secret.username_secret.name
-  mongodb_password_secret_id = aws_secretsmanager_secret.password_secret.name
 }

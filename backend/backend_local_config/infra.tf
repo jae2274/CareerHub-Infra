@@ -71,6 +71,17 @@ data "terraform_remote_state" "k8s_cluster_infra" {
   }
 }
 
+data "terraform_remote_state" "db_infra" {
+  backend = "s3"
+
+  config = {
+    bucket = "${local.db_infra_backend_bucket}"
+    key = "${local.key}"
+    region = "${local.db_infra_backend_region}"
+    encrypt= ${local.backend_encrypt}
+  }
+}
+
 // This file is generated automatically by backend/backend_local_config and should not be modified manually
 // 이 파일은 backend/backend_local_config에 의해 자동으로 생성되며 수동으로 수정하지 마십시오.
 
