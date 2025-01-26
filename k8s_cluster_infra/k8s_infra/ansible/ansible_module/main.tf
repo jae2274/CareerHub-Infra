@@ -14,7 +14,7 @@ locals {
   log_file     = "${replace(var.playing_name, " ", "_")}.log"
 }
 
-resource "null_resource" "pve_maintenance_playbook" {
+resource "null_resource" "execute_ansible_playbook" {
   triggers = {
     # SHA256 hash of the file to detect changes
     inventory_hash = sha256(local.inventory_content)

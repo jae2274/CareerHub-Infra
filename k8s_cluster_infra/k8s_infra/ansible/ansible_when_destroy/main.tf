@@ -14,7 +14,7 @@ resource "random_string" "for_logfile" {
   special = false
 }
 
-resource "terraform_data" "pve_maintenance_playbook" {
+resource "terraform_data" "execute_ansible_playbook_when_destroy" {
   input = {
     inventory_path    = "${path.module}/${random_string.for_logfile.result}_inventory.ini"
     inventory_content = local.inventory_content
