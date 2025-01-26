@@ -1,9 +1,5 @@
-
 locals {
-  uuid                = uuid()
   intentory_temp_path = "${path.module}/inventory.tpl"
-  inventory_path      = "${path.module}/${local.uuid}_inventory.ini"
-  vars_path           = "${path.module}/${local.uuid}_vars.yaml"
 
   inventory_content = templatefile(local.intentory_temp_path, {
     groups = var.host_groups
@@ -13,12 +9,17 @@ locals {
   log_dir_path = "${var.log_dir_path}/${var.group_name}"
 }
 
+resource "random_string" "for_logfile" {
+  length  = 8
+  special = false
+}
+
 resource "terraform_data" "pve_maintenance_playbook" {
   input = {
-    inventory_path    = local.inventory_path
+    inventory_path    = "${path.module}/${random_string.for_logfile.result}_inventory.ini"
     inventory_content = local.inventory_content
 
-    vars_path    = local.vars_path
+    vars_path    = "${path.module}/${random_string.for_logfile.result}_vars.yaml"
     vars_content = local.vars_content
 
     playbook_path = var.playbook_path

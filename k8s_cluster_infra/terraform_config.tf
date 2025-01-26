@@ -8,16 +8,22 @@ terraform {
       source  = "hashicorp/local"
       version = "2.5.1"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.3"
+    }
   }
 }
+
 
 locals {
   service_name        = "careerhub"
   prefix_service_name = "${local.prefix}${local.service_name}"
 }
 
-provider "local" {
-}
+provider "local" {}
+
+provider "random" {}
 
 provider "aws" {
   assume_role {
