@@ -1,9 +1,10 @@
 locals {
   env_vars = yamldecode(file("env.yaml"))
+  secret_vars = yamldecode(file("secret.yaml"))
 
-  region = "ap-south-1"
+  region = local.secret_vars.region
   service_name = "careerhub"
-  terraform_role = "arn:aws:iam::986069063944:role/terraform_role"
+  terraform_role = local.secret_vars.terraform_role
 }
 
 remote_state {

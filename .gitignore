@@ -172,3 +172,4 @@ memo*
 env.hcl
 *backend.tf
 *provider.tf
+secret.yaml
