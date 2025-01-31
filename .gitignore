@@ -169,7 +169,7 @@ terraform.rc
 memo*
 *.log
 
-env.hcl
+env.yaml
 *backend.tf
 *provider.tf
 secret.yaml

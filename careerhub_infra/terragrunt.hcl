@@ -1,21 +1,29 @@
 locals {
   env_vars = yamldecode(file("env.yaml"))
+  env = local.env_vars.env
+
   secret_vars = yamldecode(file("secret.yaml"))
 
   region = local.secret_vars.region
   service_name = "careerhub"
   terraform_role = local.secret_vars.terraform_role
+
+  backend_config = local.secret_vars.backend_config
 }
 
 remote_state {
-    backend = "local"
+    backend = "s3"
     generate = {
         path = "backend.tf"
         if_exists = "overwrite_terragrunt"
     }
 
     config = {
-        path = "${local.env_vars.env}/${path_relative_to_include()}/terraform.tfstate"
+      bucket = local.backend_config.bucket
+      region = local.backend_config.region
+      encrypt = local.backend_config.encrypt
+      dynamodb_table = local.backend_config.dynamodb_table
+      key = "${local.env_vars.env}/${path_relative_to_include()}/terraform.tfstate"
     }
 }
 
@@ -68,6 +76,7 @@ resource "terraform_data" "validate_env" {
 }
 
 locals {
+  env = module.git_branch.env
   prefix = module.git_branch.prefix
 }
 
