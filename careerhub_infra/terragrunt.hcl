@@ -1,6 +1,7 @@
 locals {
   env_vars = yamldecode(file("env.yaml"))
   env = local.env_vars.env
+  prefix = local.env_vars.prefix
 
   secret_vars = yamldecode(file("secret.yaml"))
 
@@ -73,11 +74,6 @@ resource "terraform_data" "validate_env" {
       error_message = "Environment and branch are not matched each other, please execute set_backend_config.sh"
     }
   }
-}
-
-locals {
-  env = module.git_branch.env
-  prefix = module.git_branch.prefix
 }
 
 EOF

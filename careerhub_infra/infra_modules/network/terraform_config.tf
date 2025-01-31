@@ -12,7 +12,7 @@ terraform {
 }
 
 locals {
-  prefix_service_name = "${local.prefix}${var.service_name}"
+  prefix_service_name = "${var.prefix}${var.service_name}"
 }
 
 provider "local" {
