@@ -57,7 +57,7 @@ resource "terraform_data" "validate_env" {
   lifecycle {
     precondition {
       condition = module.git_branch.env == var.env
-      error_message = "Different environments, please execute set_backend_config.sh"
+      error_message = "Environment and branch are not matched each other, please execute set_backend_config.sh"
     }
   }
 }
