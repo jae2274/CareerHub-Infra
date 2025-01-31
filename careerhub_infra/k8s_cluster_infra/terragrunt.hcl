@@ -12,7 +12,15 @@ include "aws_provider" {
 }
 
 dependency "network" {
-  config_path = "../network_infra"  # VPC 모듈의 Terragrunt 설정 파일 위치
+    config_path = "../network_infra"  # VPC 모듈의 Terragrunt 설정 파일 위치
+    mock_outputs = {
+        region = ""
+        vpc_id = ""
+        public_subnet_ids = {}
+        public_subnet_key_1 = ""
+        public_subnet_key_2 = ""
+        public_subnet_key_3 = ""
+    }
 }
 
 inputs = {
