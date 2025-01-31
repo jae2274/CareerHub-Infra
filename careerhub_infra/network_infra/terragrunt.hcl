@@ -7,8 +7,9 @@ include "root" {
     expose = true
 }
 
-
-
+include "aws_provider" {
+    path = find_in_parent_folders("aws_provider.hcl")
+}
 
 
 inputs = {

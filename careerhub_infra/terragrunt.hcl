@@ -28,32 +28,10 @@ remote_state {
     }
 }
 
-
-
-
-
-generate "provider" {
-    path = "provider.tf"
+generate "env_validator" {
+    path = "env_validator.tf"
     if_exists = "overwrite_terragrunt"
-    #if_exists = "skip"
     contents = <<EOF
-provider "aws" {
-  assume_role {
-    role_arn = var.terraform_role
-    tags = {
-      env = var.env
-    }
-  }
-
-  default_tags {
-    tags = {
-      env = var.env
-    }
-  }
-
-  region = var.region
-}
-
 // GET CURRENT BRANCH
 module "git_branch" {
   source = "github.com/jae2274/terraform_modules/git_branch"
@@ -75,7 +53,5 @@ resource "terraform_data" "validate_env" {
     }
   }
 }
-
 EOF
 }
-

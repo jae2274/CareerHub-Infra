@@ -173,3 +173,4 @@ env.yaml
 *backend.tf
 *provider.tf
 secret.yaml
+env_validator.tf
