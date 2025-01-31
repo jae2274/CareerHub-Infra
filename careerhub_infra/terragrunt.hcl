@@ -1,3 +1,11 @@
+locals {
+  env_vars = yamldecode(file("env.yaml"))
+
+  region = "ap-south-1"
+  service_name = "careerhub"
+  terraform_role = "arn:aws:iam::986069063944:role/terraform_role"
+}
+
 remote_state {
     backend = "local"
     generate = {
@@ -6,17 +14,13 @@ remote_state {
     }
 
     config = {
-        path = "${path_relative_to_include()}/terraform.tfstate"
+        path = "${local.env_vars.env}/${path_relative_to_include()}/terraform.tfstate"
     }
 }
 
 
 
-locals {
-  region = "ap-south-1"
-  service_name = "careerhub"
-  terraform_role = "arn:aws:iam::986069063944:role/terraform_role"
-}
+
 
 generate "provider" {
     path = "provider.tf"
