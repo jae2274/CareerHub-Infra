@@ -102,16 +102,15 @@ locals { //가져온 helm chart 목록을 list로 변환
   chart_list = split(",", data.external.helm_charts.result.list)
 }
 
-
 module "cd_infra" {
   source = "./helm_repo_infra"
 
   for_each = toset(local.chart_list)
 
-  prefix       = local.prefix
+  prefix       = var.prefix
   helm_path    = "${path.module}/${each.key}"
   chart_values = local.charts
-  env_value    = local.env
+  env_value    = var.env
 }
 
 output "careerhub_node_port" {
