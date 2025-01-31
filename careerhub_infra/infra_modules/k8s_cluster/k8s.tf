@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {}
 locals {
   cluster_name = local.prefix_service_name
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
-  ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${local.region}.amazonaws.com"
+  ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
 
   log_dir_path = "${path.root}/logs"
 }
@@ -29,15 +29,15 @@ resource "aws_secretsmanager_secret_version" "k8s_node_private_key_version" {
 module "k8s_infra" {
   source = "./k8s_infra/cluster"
 
-  region       = local.region
-  vpc_id       = local.vpc_id
+  region       = var.region
+  vpc_id       = var.vpc_id
   cluster_name = local.cluster_name
 
-  ecrs = [{ domain = local.ecr_domain, region = local.region }]
+  ecrs = [{ domain = local.ecr_domain, region = var.region }]
 
   master = {
     instance_type = "t4g.small"
-    subnet_id     = local.public_subnets[local.public_subnet_key_2].id
+    subnet_id     = var.public_subnet_ids[var.public_subnet_key_2]
   }
 
   ami      = local.ami
@@ -62,8 +62,8 @@ module "worker_nodes" {
   source = "./k8s_infra/workers"
 
   node_group_name = "app"
-  region          = local.region
-  vpc_id          = local.vpc_id
+  region          = var.region
+  vpc_id          = var.vpc_id
   cluster_name    = local.cluster_name
   key_name        = aws_key_pair.k8s_keypair.key_name
 
@@ -78,10 +78,10 @@ module "worker_nodes" {
 
   workers = {
     "3" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_1].id
+      subnet_id = var.public_subnet_ids[var.public_subnet_key_1]
     }
     "4" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_2].id
+      subnet_id = var.public_subnet_ids[var.public_subnet_key_2]
     }
   }
 
@@ -98,8 +98,8 @@ module "monitoring_nodes" {
   source = "./k8s_infra/workers"
 
   node_group_name = "monitoring"
-  region          = local.region
-  vpc_id          = local.vpc_id
+  region          = var.region
+  vpc_id          = var.vpc_id
   cluster_name    = local.cluster_name
   key_name        = aws_key_pair.k8s_keypair.key_name
 
@@ -122,7 +122,7 @@ module "monitoring_nodes" {
 
   workers = {
     "monitoring" = {
-      subnet_id = local.public_subnets[local.public_subnet_key_3].id
+      subnet_id = var.public_subnet_ids[var.public_subnet_key_3]
     }
   }
 

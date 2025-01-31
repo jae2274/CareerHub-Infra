@@ -10,6 +10,9 @@ locals {
   terraform_role = local.secret_vars.terraform_role
 
   backend_config = local.secret_vars.backend_config
+
+  k8s_ssh_public_key_path = local.secret_vars.k8s_ssh_public_key_path
+  k8s_ssh_private_key_path = local.secret_vars.k8s_ssh_private_key_path
 }
 
 remote_state {

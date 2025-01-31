@@ -26,8 +26,8 @@ output "public_subnet_key_3" {
   value = local.public_subnet_key_3
 }
 
-output "public_subnets" {
-  value = local.public_subnets
+output "public_subnet_ids" {
+  value = { for k, v in local.public_subnets : k => v.id }
 }
 
 output "private_subnets" {
