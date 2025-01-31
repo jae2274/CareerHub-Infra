@@ -161,7 +161,6 @@ terraform.rc
 !backend/backend_infra/terraform.tfstate
 !backend/backend_infra/terraform.tfstate.backup
 
-*backend.tf
 *.terraform.lock.hcl
 *.pem
 .DS_Store
@@ -169,3 +168,7 @@ terraform.rc
 *_chart.zip
 memo*
 *.log
+
+env.hcl
+*backend.tf
+*provider.tf
