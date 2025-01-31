@@ -13,6 +13,12 @@ locals {
 
   k8s_ssh_public_key_path = local.secret_vars.k8s_ssh_public_key_path
   k8s_ssh_private_key_path = local.secret_vars.k8s_ssh_private_key_path
+
+  
+  admin_db_username = local.secret_vars.mongodb_username
+  admin_db_password = local.secret_vars.mongodb_password
+  atlas_private_key = local.secret_vars.atlas_private_key
+  atlas_public_key  = local.secret_vars.atlas_public_key
 }
 
 remote_state {

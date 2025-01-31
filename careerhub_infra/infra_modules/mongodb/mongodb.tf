@@ -23,7 +23,7 @@ module "mongodb_atlas" {
   serverless_databases = [local.jobposting_db, local.userinfo_db, local.review_db]
 
   tags = {
-    env = local.env
+    env = var.env
   }
 }
 
