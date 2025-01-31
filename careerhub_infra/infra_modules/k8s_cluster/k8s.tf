@@ -4,8 +4,6 @@ locals {
   cluster_name = local.prefix_service_name
   ami          = "ami-025a235c91853ccbe" # ubuntu 20.04 LTS arm64
   ecr_domain   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com"
-
-  log_dir_path = "${path.root}/logs"
 }
 
 
@@ -45,7 +43,7 @@ module "k8s_infra" {
 
   ssh_private_key_path = var.ssh_private_key_path
 
-  log_dir_path = local.log_dir_path
+  log_dir_path = var.ansible_log_dir
 }
 
 locals {
@@ -87,7 +85,7 @@ module "worker_nodes" {
 
   ami                  = local.ami
   ssh_private_key_path = var.ssh_private_key_path
-  log_dir_path         = local.log_dir_path
+  log_dir_path         = var.ansible_log_dir
   depends_on           = [module.k8s_infra]
 }
 
@@ -128,7 +126,7 @@ module "monitoring_nodes" {
 
   ami                  = local.ami
   ssh_private_key_path = var.ssh_private_key_path
-  log_dir_path         = local.log_dir_path
+  log_dir_path         = var.ansible_log_dir
   depends_on           = [module.k8s_infra]
 }
 

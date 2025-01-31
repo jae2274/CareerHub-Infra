@@ -31,4 +31,6 @@ inputs = {
     public_subnet_key_1 = dependency.network.outputs.public_subnet_key_1
     public_subnet_key_2 = dependency.network.outputs.public_subnet_key_2
     public_subnet_key_3 = dependency.network.outputs.public_subnet_key_3
+
+    ansible_log_dir = "${get_original_terragrunt_dir()}/logs"
 }
