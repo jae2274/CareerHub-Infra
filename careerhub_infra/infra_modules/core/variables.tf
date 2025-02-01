@@ -1,3 +1,14 @@
+variable "env" {
+  type = string
+}
+
+variable "branch" {
+  type = string
+}
+
+variable "prefix" {
+  type = string
+}
 
 variable "terraform_role" {
   type = string

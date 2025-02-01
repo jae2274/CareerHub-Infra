@@ -2,6 +2,7 @@ locals {
   env_vars = yamldecode(file("env.yaml"))
   env = local.env_vars.env
   prefix = local.env_vars.prefix
+  branch = local.env_vars.branch
 
   secret_vars = yamldecode(file("secret.yaml"))
 
@@ -13,12 +14,22 @@ locals {
 
   k8s_ssh_public_key_path = local.secret_vars.k8s_ssh_public_key_path
   k8s_ssh_private_key_path = local.secret_vars.k8s_ssh_private_key_path
-
   
   admin_db_username = local.secret_vars.mongodb_username
   admin_db_password = local.secret_vars.mongodb_password
   atlas_private_key = local.secret_vars.atlas_private_key
   atlas_public_key  = local.secret_vars.atlas_public_key
+
+  google_client_id = local.secret_vars.google_client_id
+  google_client_secret = local.secret_vars.google_client_secret
+  google_redirect_path = local.secret_vars.google_redirect_path
+
+  initialAdminPassword = local.secret_vars.initialAdminPassword
+  jwt_secretkey = local.secret_vars.jwt_secretkey
+  mysql_admin_password = local.secret_vars.mysql_admin_password
+  mysql_admin_username = local.secret_vars.mysql_admin_username
+  mysql_db_name = local.secret_vars.mysql_db_name
+  root_domain_name = local.secret_vars.root_domain_name
 }
 
 remote_state {

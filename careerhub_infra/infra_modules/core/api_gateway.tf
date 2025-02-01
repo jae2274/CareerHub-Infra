@@ -66,7 +66,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.careerhub_node_port}/{proxy}"
+            uri                  = "http://${var.master_public_ip}:${var.careerhub_node_port}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }
@@ -87,7 +87,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             httpMethod           = "ANY"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}"
+            uri                  = "http://${var.master_public_ip}:${var.auth_service_node_port}${local.auth_service_path}"
           }
         }
       }
@@ -98,7 +98,7 @@ resource "aws_api_gateway_rest_api" "rest_api_gateway" {
             path                 = "proxy"
             payloadFormatVersion = "1.0"
             type                 = "HTTP_PROXY"
-            uri                  = "http://${local.master_public_ip}:${local.auth_service_node_port}${local.auth_service_path}/{proxy}"
+            uri                  = "http://${var.master_public_ip}:${var.auth_service_node_port}${local.auth_service_path}/{proxy}"
             requestParameters = {
               "integration.request.path.proxy" = "method.request.path.proxy"
             }
@@ -133,8 +133,6 @@ resource "aws_api_gateway_stage" "prod_stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.rest_api_gateway.id
   stage_name    = "prod"
-
-
 }
 
 resource "aws_api_gateway_method_settings" "root_path_specific" {
@@ -160,6 +158,7 @@ resource "aws_api_gateway_method_settings" "api_path_specific" {
     throttling_burst_limit = 3
   }
 }
+
 resource "aws_api_gateway_method_settings" "auth_path_specific" {
   for_each = local.ALL_METHODS
 
@@ -172,47 +171,3 @@ resource "aws_api_gateway_method_settings" "auth_path_specific" {
     throttling_burst_limit = 3
   }
 }
-# resource "aws_api_gateway_usage_plan" "usage_plan" {
-#   name        = "${local.prefix_service_name}-plan"
-
-#   description = "limits the number of requests that can be made to the API"
-
-#   api_stages {
-#     api_id = aws_api_gateway_rest_api.rest_api_gateway.id
-#     stage  = aws_api_gateway_stage.prod_stage.stage_name
-#   }
-
-#   quota_settings {
-#     limit  = 5
-#     offset = 0
-#     period = "DAY"
-#   }
-
-#   throttle_settings {
-#     burst_limit = 1
-#     rate_limit  = 1
-#   }
-# }
-
-# resource "aws_api_gateway_domain_name" "api_gateway_domain_name" {
-#   certificate_arn = aws_acm_certificate.acm_certificate.arn
-#   domain_name     = local.careerhub_domain_name
-# }
-
-# resource "aws_route53_record" "route53_record" {
-#   name    = aws_api_gateway_domain_name.api_gateway_domain_name.domain_name
-#   type    = "A"
-#   zone_id = aws_route53_zone.route53_zone.id
-
-#   alias {
-#     evaluate_target_health = true
-#     name                   = aws_api_gateway_domain_name.api_gateway_domain_name.cloudfront_domain_name
-#     zone_id                = aws_api_gateway_domain_name.api_gateway_domain_name.cloudfront_zone_id
-#   }
-# }
-
-# resource "aws_api_gateway_base_path_mapping" "example" {
-#   api_id      = aws_api_gateway_rest_api.rest_api_gateway.id
-#   stage_name  = aws_api_gateway_stage.prod_stage.stage_name
-#   domain_name = aws_api_gateway_domain_name.api_gateway_domain_name.domain_name
-# }

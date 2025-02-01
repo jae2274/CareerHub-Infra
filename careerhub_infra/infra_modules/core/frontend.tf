@@ -9,8 +9,8 @@ module "frontend_cicd" {
   build_arch = "arm64"
 
   repository_path = "jae2274/Careerhub-Front"
-  branch_name     = local.branch
-  vpc_id          = local.vpc_id
+  branch_name     = var.branch
+  vpc_id          = var.vpc_id
   subnet_ids      = local.private_subnet_ids
   subnet_arns     = local.private_subnet_arns
 

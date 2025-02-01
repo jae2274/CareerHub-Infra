@@ -34,6 +34,10 @@ output "private_subnets" {
   value = local.private_subnets
 }
 
+output "private_subnet_ids" {
+  value = { for k, v in local.private_subnets : k => v.id }
+}
+
 output "private_route_table" {
   value = module.private_subnet_infra.private_route_table
 }

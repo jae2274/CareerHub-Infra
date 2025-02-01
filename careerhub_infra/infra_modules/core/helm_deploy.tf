@@ -1,23 +1,3 @@
-locals {
-  helm_infra_outputs = data.terraform_remote_state.helm_infra.outputs
-
-  namespace                                      = local.helm_infra_outputs.namespace
-  careerhub_posting_service_helm_chart_repo      = local.helm_infra_outputs.careerhub_posting_service_helm_chart_repo
-  careerhub_posting_provider_helm_chart_repo     = local.helm_infra_outputs.careerhub_posting_provider_helm_chart_repo
-  careerhub_posting_skillscanner_helm_chart_repo = local.helm_infra_outputs.careerhub_posting_skillscanner_helm_chart_repo
-  careerhub_userinfo_service_helm_chart_repo     = local.helm_infra_outputs.careerhub_userinfo_service_helm_chart_repo
-  careerhub_api_composer_helm_chart_repo         = local.helm_infra_outputs.careerhub_api_composer_helm_chart_repo
-  careerhub_review_service_helm_chart_repo       = local.helm_infra_outputs.careerhub_review_service_helm_chart_repo
-  careerhub_review_crawler_helm_chart_repo       = local.helm_infra_outputs.careerhub_review_crawler_helm_chart_repo
-
-  log_system_helm_chart_repo = local.helm_infra_outputs.log_system_helm_chart_repo
-
-
-  auth_service_helm_chart_repo = local.helm_infra_outputs.auth_service_helm_chart_repo
-  careerhub_node_port          = local.helm_infra_outputs.careerhub_node_port
-  auth_service_node_port       = local.helm_infra_outputs.auth_service_node_port
-
-}
 
 resource "aws_secretsmanager_secret" "jwt_secretkey" {
   name                    = "${local.prefix_service_name}-jwt-secretkey"
@@ -35,32 +15,32 @@ locals {
 
 module "careerhub_posting_service_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-posting-service-helm"
-  chart_repo           = local.careerhub_posting_service_helm_chart_repo
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  deploy_name          = "${var.prefix}-careerhub-posting-service-helm"
+  chart_repo           = var.careerhub_posting_service_helm_chart_repo
+  kubeconfig_secret_id = var.kubeconfig_secret_id
   ecr_repo_name        = local.careerhub_posting_service_ecr_name
-  vpc_id               = local.vpc_id
+  vpc_id               = var.vpc_id
   subnet_ids           = local.private_subnet_ids
   subnet_arns          = local.private_subnet_arns
 
   helm_value_secret_ids = {
     "mongoUri"   = local.jobposting_mongodb_endpoint_secret_id
-    "dbUsername" = local.mongodb_username_secret_id
-    "dbPassword" = local.mongodb_password_secret_id
+    "dbUsername" = var.mongodb_username_secret_id
+    "dbPassword" = var.mongodb_password_secret_id
   }
 }
 
 module "careerhub_posting_provider_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-posting-provider-helm"
-  chart_repo           = local.careerhub_posting_provider_helm_chart_repo
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  deploy_name          = "${var.prefix}-careerhub-posting-provider-helm"
+  chart_repo           = var.careerhub_posting_provider_helm_chart_repo
+  kubeconfig_secret_id = var.kubeconfig_secret_id
   ecr_repo_name        = local.careerhub_posting_provider_ecr_name
-  vpc_id               = local.vpc_id
+  vpc_id               = var.vpc_id
   subnet_ids           = local.private_subnet_ids
   subnet_arns          = local.private_subnet_arns
 
@@ -69,14 +49,14 @@ module "careerhub_posting_provider_helm_deploy" {
 
 module "careerhub_posting_skillscanner_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-posting-skillscanner-helm"
-  chart_repo           = local.careerhub_posting_skillscanner_helm_chart_repo
+  deploy_name          = "${var.prefix}-careerhub-posting-skillscanner-helm"
+  chart_repo           = var.careerhub_posting_skillscanner_helm_chart_repo
   ecr_repo_name        = local.careerhub_posting_skillscanner_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
@@ -85,33 +65,34 @@ module "careerhub_posting_skillscanner_helm_deploy" {
 
 module "careerhub_userinfo_service_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix}careerhub-userinfo-service-helm"
-  chart_repo           = local.careerhub_userinfo_service_helm_chart_repo
+  deploy_name          = "${var.prefix}careerhub-userinfo-service-helm"
+  chart_repo           = var.careerhub_userinfo_service_helm_chart_repo
   ecr_repo_name        = local.careerhub_userinfo_service_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
   helm_value_secret_ids = {
     "mongoUri"   = local.userinfo_mongodb_endpoint_secret_id
-    "dbUsername" = local.mongodb_username_secret_id
-  "dbPassword" = local.mongodb_password_secret_id }
+    "dbUsername" = var.mongodb_username_secret_id
+    "dbPassword" = var.mongodb_password_secret_id
+  }
 }
 
 module "careerhub_api_composer_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-api-composer-helm"
-  chart_repo           = local.careerhub_api_composer_helm_chart_repo
+  deploy_name          = "${var.prefix}-careerhub-api-composer-helm"
+  chart_repo           = var.careerhub_api_composer_helm_chart_repo
   ecr_repo_name        = local.careerhub_api_composer_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
@@ -122,14 +103,14 @@ module "careerhub_api_composer_helm_deploy" {
 
 module "auth_service_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-auth-service-helm"
-  chart_repo           = local.auth_service_helm_chart_repo
+  deploy_name          = "${var.prefix}-auth-service-helm"
+  chart_repo           = var.auth_service_helm_chart_repo
   ecr_repo_name        = local.auth_service_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
@@ -148,33 +129,33 @@ module "auth_service_helm_deploy" {
 
 module "careerhub_review_service_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-review-service-helm"
-  chart_repo           = local.careerhub_review_service_helm_chart_repo
+  deploy_name          = "${var.prefix}-careerhub-review-service-helm"
+  chart_repo           = var.careerhub_review_service_helm_chart_repo
   ecr_repo_name        = local.careerhub_review_service_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
   helm_value_secret_ids = {
     "mongoUri"   = local.review_mongodb_endpoint_secret_id
-    "dbUsername" = local.mongodb_username_secret_id
-    "dbPassword" = local.mongodb_password_secret_id
+    "dbUsername" = var.mongodb_username_secret_id
+    "dbPassword" = var.mongodb_password_secret_id
   }
 }
 module "careerhub_review_crawler_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
-  deploy_name          = "${local.prefix_service_name}-careerhub-review-crawler-helm"
-  chart_repo           = local.careerhub_review_crawler_helm_chart_repo
+  deploy_name          = "${var.prefix}-careerhub-review-crawler-helm"
+  chart_repo           = var.careerhub_review_crawler_helm_chart_repo
   ecr_repo_name        = local.careerhub_review_crawler_ecr_name
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
@@ -194,13 +175,13 @@ resource "aws_secretsmanager_secret_version" "initial_admin_password" {
 
 module "log_system_helm_deploy" {
   source    = "./helm_deploy_infra"
-  namespace = local.namespace
+  namespace = var.namespace
 
   deploy_name          = "${local.prefix_service_name}-log-system-helm"
-  chart_repo           = local.log_system_helm_chart_repo
-  kubeconfig_secret_id = local.kubeconfig_secret_id
+  chart_repo           = var.log_system_helm_chart_repo
+  kubeconfig_secret_id = var.kubeconfig_secret_id
 
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
   subnet_ids  = local.private_subnet_ids
   subnet_arns = local.private_subnet_arns
 
