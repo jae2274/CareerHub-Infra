@@ -1,5 +1,5 @@
 terraform {
-    source = "../infra_modules/k8s_cluster"
+    source = "../../infra_modules/k8s_cluster"
 }
 
 include "root" {

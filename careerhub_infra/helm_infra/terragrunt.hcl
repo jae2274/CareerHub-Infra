@@ -1,5 +1,5 @@
 terraform {
-    source = "../infra_modules/helm"
+    source = "../../infra_modules/helm"
 }
 
 include "root" {

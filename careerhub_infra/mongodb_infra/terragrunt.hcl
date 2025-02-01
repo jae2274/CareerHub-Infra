@@ -1,5 +1,5 @@
 terraform {
-    source = "../infra_modules/mongodb"
+    source = "../../infra_modules/mongodb"
 }
 
 include "root" {
