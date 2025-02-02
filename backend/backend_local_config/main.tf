@@ -1,7 +1,7 @@
 module "git_branch" {
   source = "github.com/jae2274/terraform_modules/git_branch"
   branch_map = {
-    main = {
+    prod = {
       prefix = ""
       env    = "prod"
     }
@@ -10,18 +10,15 @@ module "git_branch" {
 }
 
 locals {
-  prefix = module.git_branch.prefix
-
   terraform_root_dir = "${path.root}/../../"
-  project_root_dir   = local.terraform_root_dir
-
-  key = "${local.prefix}terraform.tfstate"
 }
 
-data "terraform_remote_state" "backend" {
-  backend = "local"
+resource "local_file" "env_yaml" {
+  filename = "${local.terraform_root_dir}careerhub_infra/env.yaml"
 
-  config = {
-    path = "${local.terraform_root_dir}/backend/backend_infra/terraform.tfstate"
-  }
+  content = <<EOF
+env: "${module.git_branch.env}"
+prefix: "${module.git_branch.prefix}"
+branch: "${module.git_branch.branch}"
+EOF
 }

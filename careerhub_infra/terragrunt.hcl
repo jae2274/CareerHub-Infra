@@ -52,23 +52,15 @@ generate "env_validator" {
     path = "env_validator.tf"
     if_exists = "overwrite_terragrunt"
     contents = <<EOF
-// GET CURRENT BRANCH
-module "git_branch" {
-  source = "github.com/jae2274/terraform_modules/git_branch"
-  branch_map = {
-    prod = {
-      prefix = ""
-      env    = "prod"
-    }
-  }
-  prefix_separator = "-"
+    
+data external git_branch{
+  program = ["sh", "-c", "git branch | grep '^\\*' | cut -c3- | awk '{print \"{\\\"branch\\\":\\\"\" $0 \"\\\"}\"}'"]
 }
-// END CURRENT BRANCH
 
-resource "terraform_data" "validate_env" {
+resource "terraform_data" "validate_branch" {
   lifecycle {
     precondition {
-      condition = module.git_branch.env == var.env
+      condition = data.external.git_branch.result["branch"] == var.env
       error_message = "Environment and branch are not matched each other, please execute set_backend_config.sh"
     }
   }
