@@ -17,7 +17,7 @@ module "careerhub_posting_service_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-posting-service-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-service-helm"
   chart_repo           = var.careerhub_posting_service_helm_chart_repo
   kubeconfig_secret_id = var.kubeconfig_secret_id
   ecr_repo_name        = local.careerhub_posting_service_ecr_name
@@ -36,7 +36,7 @@ module "careerhub_posting_provider_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-posting-provider-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-provider-helm"
   chart_repo           = var.careerhub_posting_provider_helm_chart_repo
   kubeconfig_secret_id = var.kubeconfig_secret_id
   ecr_repo_name        = local.careerhub_posting_provider_ecr_name
@@ -51,7 +51,7 @@ module "careerhub_posting_skillscanner_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-posting-skillscanner-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-posting-skillscanner-helm"
   chart_repo           = var.careerhub_posting_skillscanner_helm_chart_repo
   ecr_repo_name        = local.careerhub_posting_skillscanner_ecr_name
   kubeconfig_secret_id = var.kubeconfig_secret_id
@@ -87,7 +87,7 @@ module "careerhub_api_composer_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-api-composer-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-api-composer-helm"
   chart_repo           = var.careerhub_api_composer_helm_chart_repo
   ecr_repo_name        = local.careerhub_api_composer_ecr_name
   kubeconfig_secret_id = var.kubeconfig_secret_id
@@ -105,7 +105,7 @@ module "auth_service_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-auth-service-helm"
+  deploy_name          = "${local.prefix_service_name}-auth-service-helm"
   chart_repo           = var.auth_service_helm_chart_repo
   ecr_repo_name        = local.auth_service_ecr_name
   kubeconfig_secret_id = var.kubeconfig_secret_id
@@ -131,7 +131,7 @@ module "careerhub_review_service_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-review-service-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-review-service-helm"
   chart_repo           = var.careerhub_review_service_helm_chart_repo
   ecr_repo_name        = local.careerhub_review_service_ecr_name
   kubeconfig_secret_id = var.kubeconfig_secret_id
@@ -150,7 +150,7 @@ module "careerhub_review_crawler_helm_deploy" {
   source    = "./helm_deploy_infra"
   namespace = var.namespace
 
-  deploy_name          = "${var.prefix}-careerhub-review-crawler-helm"
+  deploy_name          = "${local.prefix_service_name}-careerhub-review-crawler-helm"
   chart_repo           = var.careerhub_review_crawler_helm_chart_repo
   ecr_repo_name        = local.careerhub_review_crawler_ecr_name
   kubeconfig_secret_id = var.kubeconfig_secret_id

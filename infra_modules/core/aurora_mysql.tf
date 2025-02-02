@@ -1,7 +1,7 @@
 resource "aws_rds_cluster" "user_mysql" {
   cluster_identifier     = "${local.prefix_service_name}-usermysql"
   engine                 = "aurora-mysql"
-  engine_version         = "8.0.mysql_aurora.3.08.0"
+  engine_version         = "5.7.mysql_aurora.2.11.4"
   db_subnet_group_name   = aws_db_subnet_group.user_mysql_subnet_group.name
   vpc_security_group_ids = [aws_security_group.user_mysql_sg.id]
   master_username        = var.mysql_admin_username
@@ -10,11 +10,11 @@ resource "aws_rds_cluster" "user_mysql" {
   skip_final_snapshot    = true
 
   // To enable serverless
-  engine_mode = "provisioned"
+  engine_mode = "serverless"
 
-  serverlessv2_scaling_configuration {
+  scaling_configuration {
     max_capacity             = 32
-    min_capacity             = 0
+    min_capacity             = 1
     seconds_until_auto_pause = 300
   }
 }
