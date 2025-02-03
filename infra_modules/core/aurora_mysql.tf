@@ -1,7 +1,24 @@
+resource "aws_rds_cluster_parameter_group" "connection_config" {
+  name   = "${local.prefix_service_name}-usermysql-connection-config"
+  family = "aurora-mysql8.0"
+
+  parameter {
+    name  = "max_connections"
+    value = "100"
+  }
+
+  parameter {
+    name  = "wait_timeout"
+    value = "600"
+  }
+}
+
 resource "aws_rds_cluster" "user_mysql" {
-  cluster_identifier     = "${local.prefix_service_name}-usermysql"
-  engine                 = "aurora-mysql"
-  engine_version         = "8.0.mysql_aurora.3.08.0"
+  cluster_identifier              = "${local.prefix_service_name}-usermysql"
+  engine                          = "aurora-mysql"
+  engine_version                  = "8.0.mysql_aurora.3.08.0"
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.connection_config.name
+
   db_subnet_group_name   = aws_db_subnet_group.user_mysql_subnet_group.name
   vpc_security_group_ids = [aws_security_group.user_mysql_sg.id]
   master_username        = var.mysql_admin_username
