@@ -86,17 +86,30 @@ const collections = [
       },
     ],
   },
+  {
+    name: "site",
+    indexes: [
+      {
+        name: "siteName_1",
+        index: {
+          siteName: 1,
+        },
+        options: {
+          unique: true,
+        },
+      },
+    ],
+  },
 ];
 
 // Create a new database.
 use(database);
 
 for (const collection of collections) {
-  db.createCollection(collection.name);
-
-  for (const index of collection.indexes) {
-    db[collection.name].createIndex(index.index, index.options);
-  }
+  try {
+    db.createCollection(collection.name);
+    for (const index of collection.indexes) {
+      db[collection.name].createIndex(index.index, index.options);
+    }
+  } catch (e) {}
 }
-
-db["jobPostingInfo"].getIndexes();

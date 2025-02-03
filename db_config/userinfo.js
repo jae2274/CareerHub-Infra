@@ -18,13 +18,29 @@ const collections = [
       },
     ],
   },
+  {
+    name: "scrapJob",
+    indexes: [
+      {
+        name: "userId_1_site_1_postingId_1",
+        index: {
+          userId: 1,
+          site: 1,
+          postingId: 1,
+        },
+        options: {
+          unique: true,
+        },
+      },
+    ],
+  },
 ];
 
 // Create a new database.
 use(database);
 
 for (const collection of collections) {
-  db.createCollection(collection.name);
+  // db.createCollection(collection.name);
 
   for (const index of collection.indexes) {
     db[collection.name].createIndex(index.index, index.options);
