@@ -141,8 +141,8 @@ resource "aws_api_gateway_method_settings" "root_path_specific" {
   method_path = "*/*"
 
   settings {
-    throttling_rate_limit  = 1
-    throttling_burst_limit = 1
+    throttling_rate_limit  = 5
+    throttling_burst_limit = 5
   }
 }
 
@@ -154,8 +154,8 @@ resource "aws_api_gateway_method_settings" "api_path_specific" {
   method_path = "${trimprefix(local.backend_root_proxy_path, "/")}/${each.key}"
 
   settings {
-    throttling_rate_limit  = 5
-    throttling_burst_limit = 3
+    throttling_rate_limit  = 25
+    throttling_burst_limit = 15
   }
 }
 
@@ -167,7 +167,7 @@ resource "aws_api_gateway_method_settings" "auth_path_specific" {
   method_path = "${trimprefix(local.auth_service_proxy_path, "/")}/${each.key}"
 
   settings {
-    throttling_rate_limit  = 5
-    throttling_burst_limit = 3
+    throttling_rate_limit  = 25
+    throttling_burst_limit = 15
   }
 }

@@ -30,9 +30,8 @@ resource "aws_rds_cluster" "user_mysql" {
   engine_mode = "provisioned"
 
   serverlessv2_scaling_configuration {
-    max_capacity             = 32
-    min_capacity             = 0
-    seconds_until_auto_pause = 300
+    max_capacity = 32
+    min_capacity = 0.5
   }
 }
 resource "aws_rds_cluster_instance" "user_mysql_instance" {
